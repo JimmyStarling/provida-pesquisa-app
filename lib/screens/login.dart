@@ -5,6 +5,7 @@
  */
 
 import 'package:flutter/material.dart';
+import '../constants.dart';
 
 // Define a custom Form widget.
 class LoginPage extends StatefulWidget {
@@ -25,10 +26,12 @@ class LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     // Build a Form widget using the _formKey created above.
-    return Form(
-      key: _formKey,
+    return 
+    Scaffold(
+      body: Padding(padding: EdgeInsets.all(50),
       child: 
-        Card(  
+        Form(
+          key: _formKey,
           child: Column(  
             mainAxisSize: MainAxisSize.min,  
             children: <Widget>[  
@@ -43,7 +46,7 @@ class LoginPageState extends State<LoginPage> {
                       }
                       return null;
                     },
-                  ),
+                  ),// Name Field
                   TextFormField(
                     decoration: const InputDecoration(labelText: 'Contato'),
                     keyboardType: inputType,
@@ -60,36 +63,30 @@ class LoginPageState extends State<LoginPage> {
                       }
                       return null;
                     },
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 35.0, horizontal: 35.0),
-                    child: ElevatedButton(
+                  ),// Contact Field
+                  Container(
+                    width: 8.0,
+                    child: TextButton(
                       onPressed: () {
                         if (_formKey.currentState.validate()) {
                           ScaffoldMessenger.of(context)
                               .showSnackBar(SnackBar(content: Text('Iniciando a Pesquisa')));
                         }
                       },
+                      style: TextButton.styleFrom(
+                        backgroundColor: Colors.blue[400]
+                      ),
                       child: Text(
                         'Iniciar Pesquisa',
-                        textScaleFactor: 2,
-                        style: TextStyle(color: Colors.black),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        textStyle: TextStyle(fontSize: 12.0),
-                        primary: Colors.white,
-                        padding: EdgeInsets.symmetric(horizontal: 25.0),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18.0),
-                          side: BorderSide(color: Colors.blue[600])
-                        )
+                        style: TextStyle(color: Colors.white),
                       ),
                     ),
-                  ),
+                  )
                 ],
-              ),
-        ])
-      )// Login card.
-    );
+              ),// Column Child
+          ])// Column Form
+        )// Form 
+      )// Padding
+    );// Scaffold
   }
 }
