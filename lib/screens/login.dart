@@ -5,6 +5,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:app_pesquisa_de_satisfacao/screens/questions.dart';
 import '../constants.dart';
 
 // Define a custom Form widget.
@@ -33,10 +34,14 @@ class LoginPageState extends State<LoginPage> {
         Form(
           key: _formKey,
           child: Column(  
-            mainAxisSize: MainAxisSize.min,  
+            mainAxisSize: MainAxisSize.min,
             children: <Widget>[  
               Column(
                 children: <Widget>[
+                  Image.asset(
+                    'images/provida_logomarca.png',
+                  ),
+                  Padding(padding: EdgeInsets.only(top: 40.0)),
                   TextFormField(
                     decoration: const InputDecoration(labelText: 'Nome Completo'),
                     keyboardType: TextInputType.text,
@@ -65,17 +70,25 @@ class LoginPageState extends State<LoginPage> {
                     },
                   ),// Contact Field
                   Container(
+                    margin: const EdgeInsets.only(top: 40.0),
                     width: double.infinity,
-                    height: 60,
-                    color: Colors.indigo[900],
+                    height: 40,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
                     child: TextButton(
                       onPressed: () {
                         if (_formKey.currentState.validate()) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => Question1()),
+                          );
                           ScaffoldMessenger.of(context)
                               .showSnackBar(SnackBar(content: Text('Iniciando a Pesquisa')));
                         }
                       },
                       style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(Colors.indigo[900]),
                         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                           RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(18.0),
