@@ -65,7 +65,9 @@ class LoginPageState extends State<LoginPage> {
                     },
                   ),// Contact Field
                   Container(
-                    width: 8.0,
+                    width: double.infinity,
+                    height: 60,
+                    color: Colors.indigo[900],
                     child: TextButton(
                       onPressed: () {
                         if (_formKey.currentState.validate()) {
@@ -73,8 +75,13 @@ class LoginPageState extends State<LoginPage> {
                               .showSnackBar(SnackBar(content: Text('Iniciando a Pesquisa')));
                         }
                       },
-                      style: TextButton.styleFrom(
-                        backgroundColor: Colors.blue[400]
+                      style: ButtonStyle(
+                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0),
+                            side: BorderSide(color: Colors.indigo[900]),
+                          )
+                        )
                       ),
                       child: Text(
                         'Iniciar Pesquisa',
