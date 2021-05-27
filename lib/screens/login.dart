@@ -27,8 +27,7 @@ class LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     // Build a Form widget using the _formKey created above.
-    return 
-    Scaffold(
+    return Scaffold(
       body: Padding(padding: EdgeInsets.all(50),
       child: 
         Form(
@@ -79,10 +78,7 @@ class LoginPageState extends State<LoginPage> {
                     child: TextButton(
                       onPressed: () {
                         if (_formKey.currentState.validate()) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => Question1()),
-                          );
+                          Navigator.pushNamed(context, '/question/1');
                           ScaffoldMessenger.of(context)
                               .showSnackBar(SnackBar(content: Text('Iniciando a Pesquisa')));
                         }
@@ -101,7 +97,39 @@ class LoginPageState extends State<LoginPage> {
                         style: TextStyle(color: Colors.white),
                       ),
                     ),
-                  )
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(top: 40.0),
+                    width: double.infinity,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: TextButton(
+                      onPressed: () {
+                        if (_formKey.currentState.validate()) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => Question1()),
+                          );
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(SnackBar(content: Text('Iniciando a Pesquisa')));
+                        }
+                      },
+                      style: ButtonStyle(
+                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0),
+                            side: BorderSide(color: Colors.indigo[900]),
+                          )
+                        )
+                      ),
+                      child: Text(
+                        'Carregar Pesquisa',
+                        style: TextStyle(color: Colors.indigo[900]),
+                      ),
+                    ),
+                  ),
                 ],
               ),// Column Child
           ])// Column Form
