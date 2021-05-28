@@ -1,9 +1,9 @@
-import 'package:app_pesquisa_de_satisfacao/screens/questions.dart';
+import 'package:app_pesquisa_de_satisfacao/screens/nurse_questions.dart';
 import 'package:flutter/material.dart';
 
 class SlideRightRoute extends PageRouteBuilder {
   final Widget page;
-  SlideRightRoute(Question2 question2, {this.page})
+  SlideRightRoute({this.page})
       : super(
           pageBuilder: (
             BuildContext context,
