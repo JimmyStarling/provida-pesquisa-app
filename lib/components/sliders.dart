@@ -1,4 +1,3 @@
-import 'package:app_pesquisa_de_satisfacao/screens/questions.dart';
 import 'package:flutter/material.dart';
 
 
@@ -11,6 +10,7 @@ class QuestionSlider extends StatefulWidget {
 
 class _QuestionSliderState extends State<QuestionSlider> {
   double _currentSliderValue = 3;
+  String _currentSlideStringValue = "";
 
   @override
   Widget build(BuildContext context) {
@@ -19,10 +19,20 @@ class _QuestionSliderState extends State<QuestionSlider> {
       min: 0,
       max: 10,
       divisions: 3,
-      label: ( _currentSliderValue == 3 )? (_currentSliderValue+4).round().toString()  : (_currentSliderValue).round().toString(),
+      label: _currentSlideStringValue,
       onChanged: (double value) {
         setState(() {
+          var slideValues = value.toString();
           _currentSliderValue = value;
+          if ( slideValues == '10'){
+            _currentSlideStringValue = 'otimo';
+          } else if ( slideValues == '7'){
+            _currentSlideStringValue = 'bom';
+          } else if ( slideValues == '4'){
+            _currentSlideStringValue = 'regular';
+          } else if ( slideValues == '0'){
+            _currentSlideStringValue = 'ruim';
+          }
         });
       },
     );
