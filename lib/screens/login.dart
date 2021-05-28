@@ -5,7 +5,7 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:app_pesquisa_de_satisfacao/screens/questions.dart';
+import 'package:app_pesquisa_de_satisfacao/screens/nurse_questions.dart';
 import '../constants.dart';
 
 // Define a custom Form widget.
@@ -78,7 +78,7 @@ class LoginPageState extends State<LoginPage> {
                     child: TextButton(
                       onPressed: () {
                         if (_formKey.currentState.validate()) {
-                          Navigator.pushNamed(context, '/question/1');
+                          Navigator.pushNamed(context, '/nurse/question1');
                           ScaffoldMessenger.of(context)
                               .showSnackBar(SnackBar(content: Text('Iniciando a Pesquisa')));
                         }
@@ -110,7 +110,7 @@ class LoginPageState extends State<LoginPage> {
                         if (_formKey.currentState.validate()) {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => Question1()),
+                            MaterialPageRoute(builder: (context) => NurseQuestion1()),
                           );
                           ScaffoldMessenger.of(context)
                               .showSnackBar(SnackBar(content: Text('Iniciando a Pesquisa')));
