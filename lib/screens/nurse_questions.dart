@@ -31,7 +31,9 @@ class NurseQuestion1 extends StatelessWidget {
                   Container(  
                     margin: const EdgeInsets.only(top: 20.0),
                     child: Text(
-                      'Em uma escala de 0 à 10\nQual sua avaliação geral quanto ao\nATENDIMENTO DAS EQUIPES\n',
+                      'Em uma escala de 0 à 10\n'+
+                      'Qual sua satisfação com o atendimento da\n'+
+                      'EQUIPE DE ENFERMAGEM\n',
                       textAlign: TextAlign.center,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
@@ -132,7 +134,7 @@ class NurseQuestion2 extends StatelessWidget {
                   Container(  
                     margin: const EdgeInsets.only(top: 20.0),
                     child: Text(
-                      'Em uma escala de 0 à 10\nQual sua avaliação geral quanto ao\nAGILIDADE NO ATENDIMENTO DAS EQUIPES\n',
+                      'Em uma escala de 0 à 10\nQual sua avaliação geral quanto ao\nAGILIDADE NO ATENDIMENTO DA EQUIPE DE ENFERMAGEM\n',
                       textAlign: TextAlign.center,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
