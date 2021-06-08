@@ -4,10 +4,11 @@
  * 
  */
 
-import 'package:app_pesquisa_de_satisfacao/models/client_model.dart';
+import 'package:app_pesquisa_de_satisfacao/models/client.dart';
 import 'package:app_pesquisa_de_satisfacao/services/database.dart';
 import 'package:flutter/material.dart';
 import 'package:app_pesquisa_de_satisfacao/screens/nurse_questions.dart';
+import 'dart:developer';
 import '../constants.dart';
 
 // Define a custom Form widget.
@@ -24,19 +25,19 @@ class LoginPageState extends State<LoginPage> {
   var onlyNumber = RegExp(r'^[0-9]+$');
   var onlyEmail = RegExp(r'^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$');
 
+  DatabaseHelper database;
+
   // Local variables to database
   Map<String, String> _client = {
     'name':'name',
-    'surname':'surname'
+    'complete':'complete'
   };
-	List<Client> _clients = [];
-  List<Client> _fakeClients = [];
+	List<Clients> _clients = [];
 
   // Visual list of clients registered
   // What occurs if there isn't data
-	List<Widget> get _clientList => 
-    (_clients != null)? 
-      _clients.map((client) => format(client)).toList(): _fakeClients.map((client) => format(client)).toList();
+	List<Widget> get _clientList => _clients.map((client) => format(client)).toList();
+
 	TextStyle _style = TextStyle(color: Colors.white, fontSize: 24);
 
   bool isEmailOrNumber;
@@ -68,8 +69,9 @@ class LoginPageState extends State<LoginPage> {
                       if (value == null || value.isEmpty) {
                         return 'Porfavor insira o nome completo';
                       } else {
-                        _client['name'] = fullName[0].toString();
-                        _client['surname'] = fullName[1].toString();
+                        log('D/ The value of variable fullName is ${fullName.toString()}');//[0]+fullName[1]}');
+                        //_client['name'] = (fullName[0]).toString();
+                        //_client['surname'] = (fullName[1]).toString();
                       }
                       return null;
                     },
@@ -80,8 +82,6 @@ class LoginPageState extends State<LoginPage> {
                     // Validating the text input
                     validator: (value) {
                       // Get readable string
-                      var contactAdress = value.toString();
-
                       if (value == null || value.isEmpty) {
                         return 'Porfavor insira o numero ou endereço de email válido.';
                       } else if (onlyEmail.hasMatch(value)) {
@@ -158,18 +158,7 @@ class LoginPageState extends State<LoginPage> {
                       ),
                     ),
                   ),
-                  TextButton(
-                    onPressed: (){
-                      _client['name'] = 'testing';
-                      _client['surname'] = 'testing2';
-                      _save();
-                    },
-                    child: Text(
-                      'Insert Fake Data',
-                      style: TextStyle(color: Colors.indigo[900]),
-                    ),
-                  ),
-                  ListView( children: _clientList )
+                  //ListView( children: _clientList )
                 ],
               ),// Column Child
           ])// Column Form
@@ -177,9 +166,9 @@ class LoginPageState extends State<LoginPage> {
       )// Padding
     );// Scaffold
   }
-  Widget format(Client client) {
+  Widget format(Clients client) {
     return Dismissible(
-          key: Key(client.id.toString()),
+          key: Key((client.id).toString()),
           child: Padding(
             padding: EdgeInsets.fromLTRB(12, 6, 12, 4),
             child: TextButton(
@@ -187,62 +176,45 @@ class LoginPageState extends State<LoginPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Text(client.name, style: _style),
-                  Text(client.surname, style: _style),
                   Icon(client.complete == true ? Icons.radio_button_checked : Icons.radio_button_unchecked, color: Colors.white)
                 ]
               ),
-              onPressed: () => _completed(client),
+              onPressed: () => print(client),
             )
           ),
           onDismissed: (DismissDirection direction) => _delete(client),
         );
   }
 
-  void _completed(Client client) async {
-
-		client.complete = !client.complete;
-		dynamic result = await DB.update(Client.table, client);
-		print(result);
-		refresh();
-	}
-
-
-  void _delete(Client client) async {
-		
-		DB.delete(Client.table, client);
+  void _delete(Clients client) async {
+		database.deleteClient(client.id);
 		refresh();
 	}
 
 	void _save() async {
 
 		Navigator.of(context).pop();
-		Client client = Client(
+		Clients client = Clients(
 			name: _client[0],
-      surname: _client[1],
 			complete: false
 		);
 
-    // Inserting and refreshing the cache
-		await DB.insert(Client.table, client);
+    // Console
+    log('D/ The client table:${(Clients.table).toString()}'+', the client variable data: ${client.toString()}');
 		setState(() => _client = {} );
 		refresh();
 	}
 
 	@override
 	void initState() {
-
-    _client['name'] = 'Jimmy';
-    _client['surname'] = 'Starling';
-    _save();
-
 		refresh();
 		super.initState();
 	}
 
 	void refresh() async {
-
-		List<Map<String, dynamic>> _results = await DB.query(Client.table);
-		_clients = _results.map((client) => Client.fromMap(client)).toList();
+    log('Client table data: ${database.getClients().toString()}');
+		List<Map<String, dynamic>> _results = (await database.getClients()).cast<Map<String, dynamic>>();
+		_clients = _results.map((client) => Clients.fromMap(client)).toList();
 		setState(() { });
 	}
 }
