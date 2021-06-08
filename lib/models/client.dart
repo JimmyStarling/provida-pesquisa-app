@@ -1,21 +1,19 @@
 import 'package:app_pesquisa_de_satisfacao/models/model.dart';
 
-class Client extends Model {
+class Clients extends Model {
 
-	static String table = 'client';
+	static String table = 'clients';
 
 	int id;
 	String name;
-  String surname;
 	bool complete;
 
-	Client({ this.id, this.name, this.surname, this.complete });
+	Clients({ this.id, this.name, this.complete });
 
 	Map<String, dynamic> toMap() {
 
 		Map<String, dynamic> map = {
 			'name': name,
-      'surname': surname,
 			'complete': complete
 		};
 
@@ -23,12 +21,11 @@ class Client extends Model {
 		return map;
 	}
 
-	static Client fromMap(Map<String, dynamic> map) {
+	static Clients fromMap(Map<String, dynamic> map) {
 		
-		return Client(
+		return Clients(
 			id: map['id'],
 			name: map['name'],
-      surname: map['surname'],
 			complete: map['complete'] == 1
 		);
 	}
