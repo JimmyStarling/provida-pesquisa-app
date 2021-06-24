@@ -6,14 +6,16 @@ class Clients extends Model {
 
 	int id;
 	String name;
+  String questions;
 	bool complete;
 
-	Clients({ this.id, this.name, this.complete });
+	Clients({ this.id, this.name, this.questions, this.complete });
 
 	Map<String, dynamic> toMap() {
 
 		Map<String, dynamic> map = {
 			'name': name,
+      'questions': questions,
 			'complete': complete
 		};
 
@@ -26,6 +28,7 @@ class Clients extends Model {
 		return Clients(
 			id: map['id'],
 			name: map['name'],
+      questions: map['questions'],
 			complete: map['complete'] == 1
 		);
 	}
