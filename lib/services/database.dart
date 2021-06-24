@@ -15,6 +15,7 @@ abstract class DatabaseHelper {
 
   static final columnId = '_id';
   static final columnName = 'name';
+  static final columnQuestions = 'questions';
   static final columnComplete = 'complete';
 
   Future<Database> get database async {
@@ -36,7 +37,8 @@ abstract class DatabaseHelper {
         return db.execute(
           'CREATE TABLE client ('
                           '$columnId INTEGER PRIMARY KEY NOT NULL,'
-                          '$columnName STRING, ' 
+                          '$columnName STRING, '
+                          '$columnQuestions STRING,' 
                           '$columnComplete BOOLEAN)',
         );
       },
@@ -76,6 +78,7 @@ abstract class DatabaseHelper {
       return Clients(
         id: maps[i]['id'],
         name: maps[i]['name'],
+        questions: maps[i]['questions'],
         complete: maps[i]['complete'],
       );
     });
