@@ -212,8 +212,8 @@ class LoginPageState extends State<LoginPage> {
 	}
 
 	void refresh() async {
-    log('Client table data: ${database.getClients().toString()}');
 		List<Map<String, dynamic>> _results = (await database.getClients()).cast<Map<String, dynamic>>();
+    log('Client table data: ${_results.toString()}');
 		_clients = _results.map((client) => Clients.fromMap(client)).toList();
 		setState(() { });
 	}
