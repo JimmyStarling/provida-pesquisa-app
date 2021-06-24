@@ -70,8 +70,7 @@ class LoginPageState extends State<LoginPage> {
                         return 'Porfavor insira o nome completo';
                       } else {
                         log('D/ The value of variable fullName is ${fullName.toString()}');//[0]+fullName[1]}');
-                        //_client['name'] = (fullName[0]).toString();
-                        //_client['surname'] = (fullName[1]).toString();
+                        _client['name'] = (fullName[0]).toString();
                       }
                       return null;
                     },
@@ -196,6 +195,7 @@ class LoginPageState extends State<LoginPage> {
 		Navigator.of(context).pop();
 		Clients client = Clients(
 			name: _client[0],
+      questions: _client[1].toString(),
 			complete: false
 		);
 
@@ -212,6 +212,7 @@ class LoginPageState extends State<LoginPage> {
 	}
 
 	void refresh() async {
+    // Return a list of clients into database converting into Map<String, dynamic> = 
 		List<Map<String, dynamic>> _results = (await database.getClients()).cast<Map<String, dynamic>>();
     log('Client table data: ${_results.toString()}');
 		_clients = _results.map((client) => Clients.fromMap(client)).toList();
