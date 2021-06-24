@@ -27,6 +27,7 @@ abstract class DatabaseHelper {
   }
 
   initDatabase () async {
+    log('D/ Init the database.');
     WidgetsFlutterBinding.ensureInitialized();
     // Open database
     _database = await openDatabase(
