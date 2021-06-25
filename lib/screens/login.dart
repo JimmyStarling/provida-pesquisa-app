@@ -30,13 +30,13 @@ class LoginPageState extends State<LoginPage> {
   // Local variables to database
   Map<String, String> _client = {
     'name':'name',
+    'questions':'questions',
     'complete':'complete'
   };
-	List<Clients> _clients = [];
 
   // Visual list of clients registered
   // What occurs if there isn't data
-	List<Widget> get _clientList => _clients.map((client) => format(client)).toList();
+	// List<Widget> get _clientList => _clients.map((client) => format(client)).toList();
 
 	TextStyle _style = TextStyle(color: Colors.white, fontSize: 24);
 
@@ -165,6 +165,7 @@ class LoginPageState extends State<LoginPage> {
       )// Padding
     );// Scaffold
   }
+  /*
   Widget format(Clients client) {
     return Dismissible(
           key: Key((client.id).toString()),
@@ -184,11 +185,12 @@ class LoginPageState extends State<LoginPage> {
           onDismissed: (DismissDirection direction) => _delete(client),
         );
   }
+  */
 
-  void _delete(Clients client) async {
+  /*void _delete(Clients client) async {
 		database.deleteClient(client.id);
 		refresh();
-	}
+	}*/
 
 	void _save() async {
 
@@ -198,6 +200,8 @@ class LoginPageState extends State<LoginPage> {
       questions: _client[1].toString(),
 			complete: false
 		);
+    // Save into database
+    database.insertClient(client);
 
     // Console
     log('D/ The client table:${(Clients.table).toString()}'+', the client variable data: ${client.toString()}');
@@ -215,7 +219,7 @@ class LoginPageState extends State<LoginPage> {
     // Return a list of clients into database converting into Map<String, dynamic> = 
 		List<Map<String, dynamic>> _results = (await database.getClients()).cast<Map<String, dynamic>>();
     log('Client table data: ${_results.toString()}');
-		_clients = _results.map((client) => Clients.fromMap(client)).toList();
+		_client = _results.map((client) => Clients.fromMap(client)).toList() as Map<String, String>;
 		setState(() { });
 	}
 }
