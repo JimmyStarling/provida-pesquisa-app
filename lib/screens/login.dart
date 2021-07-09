@@ -165,46 +165,22 @@ class LoginPageState extends State<LoginPage> {
       )// Padding
     );// Scaffold
   }
-  /*
-  Widget format(Clients client) {
-    return Dismissible(
-          key: Key((client.id).toString()),
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(12, 6, 12, 4),
-            child: TextButton(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text(client.name, style: _style),
-                  Icon(client.complete == true ? Icons.radio_button_checked : Icons.radio_button_unchecked, color: Colors.white)
-                ]
-              ),
-              onPressed: () => print(client),
-            )
-          ),
-          onDismissed: (DismissDirection direction) => _delete(client),
-        );
-  }
-  */
-
-  /*void _delete(Clients client) async {
-		database.deleteClient(client.id);
-		refresh();
-	}*/
 
 	void _save() async {
 
 		Navigator.of(context).pop();
-		Clients client = Clients(
-			name: _client[0],
-      questions: _client[1].toString(),
-			complete: false
+		Client client = Client(
+			_client[0].toString(),
+      _client[1].toString(),
+      DateTime.now(),
+			false
 		);
+
     // Save into database
     database.insertClient(client);
 
     // Console
-    log('D/ The client table:${(Clients.table).toString()}'+', the client variable data: ${client.toString()}');
+    log('D/ The client table:${(Client).toString()}'+', the client variable data: ${client.toString()}');
 		setState(() => _client = {} );
 		refresh();
 	}
@@ -217,9 +193,10 @@ class LoginPageState extends State<LoginPage> {
 
 	void refresh() async {
     // Return a list of clients into database converting into Map<String, dynamic> = 
-		List<Map<String, dynamic>> _results = (await database.getClients()).cast<Map<String, dynamic>>();
+		//List<Map<String, dynamic>> _results = (await database.getClients()).cast<Map<String, dynamic>>();
+    var _results = await database.getClients();
     log('Client table data: ${_results.toString()}');
-		_client = _results.map((client) => Clients.fromMap(client)).toList() as Map<String, String>;
+		//_client = _results.map((client) => Client.fromMap(client)).toList() as Map<String, String>;
 		setState(() { });
 	}
 }
