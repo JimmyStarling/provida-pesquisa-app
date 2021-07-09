@@ -2,11 +2,14 @@ import 'dart:async';
 import 'dart:developer';
 import 'package:app_pesquisa_de_satisfacao/models/client.dart';
 import 'package:flutter/widgets.dart';
+import 'package:hive/hive.dart';
 import 'package:idb_sqflite/idb_sqflite.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:idb_sqflite/idb_sqflite.dart' as mDatabase; 
 abstract class DatabaseHelper {
+
+  static var databox;
 
 	static int get _version => 1;
 
@@ -34,120 +37,46 @@ abstract class DatabaseHelper {
   }
 
   initDatabase () async {
-    var factory = getIdbFactorySqflite(databaseFactory);
+    //var factory = getIdbFactorySqflite(databaseFactory);
 
-    log('D/ Init the database.');
-    WidgetsFlutterBinding.ensureInitialized();
+    //log('D/ Init the database.');
+    //WidgetsFlutterBinding.ensureInitialized();
+    
     // Open database
-    _database = await factory.open(
-      _databaseName, 
-      version: _version,
-      onUpgradeNeeded: (VersionChangeEvent event){
-        mDatabase.Database databaseEvent = event.database;
-        databaseEvent.createObjectStore(table, autoIncrement: true);
-      }
-    );
-    
-    /**
-    await openDatabase(
-      join(await getDatabasesPath(), _databaseName),
-      onCreate: (db, version) {
-        return db.execute(
-          'CREATE TABLE client ('
-                          '$columnId INTEGER PRIMARY KEY NOT NULL,'
-                          '$columnName STRING, '
-                          '$columnQuestions STRING,' 
-                          '$columnComplete BOOLEAN)',
-        );
-      },
-      version: _version,
-    );
-    **/
-    
-    var kafka = Clients(
-      id: 0,
-      name: 'Kafka',
-      complete: true,
+    databox = await Hive.openBox('clientBox');
+    // Inserting fake data
+    var kafka = Client(
+      'Kafka',
+      'questions:{question1:{"Paths are made by walking?":true}}',
+      DateTime.now(),
+      true,
     );
     await insertClient(kafka);
     print(await getClients());
   }
   // Define a function that inserts clients into the database
-  Future<void> insertClient(Clients client) async {
-    // Get a reference to the database.
-    final db = await database;
-    // Transaction variable
-    final mTransaction = db.transaction(table, idbModeReadWrite);
-    // Update client table via transaction
-    key = await store.put(client.toMap());
-    await mTransaction.completed; 
-
-    /*await db.insert(
-      'clients',
-      client.toMap(),
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );*/
+  Future<void> insertClient(Client client) async {
+    databox.add(client);
   }
 
   // A method that retrieves all the clients from the clients table.
-  Future<List<Clients>> getClients() async {
-    // Get a reference to the database.
-    final db = await database;
-
+  getClients() async {
+    initDatabase();
     // Getting transactioned client as List
-    final clients =  db.transaction(table, idbModeReadOnly) as List<Map<String, dynamic>>;
-    // It returns a object and convert it to maps
-    final List<Map<String, dynamic>> maps = clients;// Here was .query()
-
-    log('The transaction value is ${db.transaction(table, idbModeReadOnly)}');
-    log('The clients value is ${clients.toString()}');
-
-    var value = await store.getObject(key);
-    
+    final clients =  databox.getAt(0); //as List<Map<String, dynamic>>;
+    log('D/ clients data from databox is ${clients.toString()}');
+    return clients;
+    /* It returns a object and convert it to maps
+    final List<Map<String, dynamic>> maps = clients;
     // Convert the List<Map<String, dynamic> into a List<Client>.
     return List.generate(maps.length, (i) {
-      return Clients(
-        id: maps[i]['id'],
-        name: maps[i]['name'],
-        questions: maps[i]['questions'],
-        complete: maps[i]['complete'],
+      return Client(
+        maps[i]['id'],
+        maps[i]['name'],
+        maps[i]['questions'],
+        maps[i]['complete'],
       );
-    });
+    });*/
   }
-
-  /**
-  Future<void> updateClient(Clients client) async {
-    // Get a reference to the database.
-    final db = await database;
-    // Transaction variable
-    final mTransaction = db.transaction(table, idbModeReadWrite);
-    // Update client table via transaction
-    var store = mTransaction.objectStore(table);
-    var key = await store.put(client.toMap());
-    await mTransaction.completed; 
-
-    await db.update(
-      'clients',
-      client.toMap(),
-      // Ensure that the Clients has a matching id.
-      where: 'id = ?',
-      // Pass the Client's id as a whereArg to prevent SQL injection.
-      whereArgs: [client.id],
-    );
-    
-  }
-  **/
-
-  /**
-  Future<void> deleteClient(int id) async {
-    final db = await database;
-
-    await db.delete(
-      'clients',
-      where: 'id = ?',
-      whereArgs: [id],
-    );
-  }
-  **/
 
 }
