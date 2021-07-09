@@ -1,17 +1,22 @@
 import 'package:app_pesquisa_de_satisfacao/models/model.dart';
+import 'package:hive/hive.dart';
+part 'client.g.dart';
 
-class Clients extends Model {
+@HiveType(typeId: 0)
+class Client extends HiveObject {
 
-	static String table = 'clients';
-
-	int id;
+  @HiveField(0)
 	String name;
+  @HiveField(1)
   String questions;
-	bool complete;
+  @HiveField(2)
+  DateTime created;
+  @HiveField(3)
+	bool complete = false;
 
-	Clients({ this.id, this.name, this.questions, this.complete });
+	Client(this.name, this.questions, this.created, this.complete);
 
-	Map<String, dynamic> toMap() {
+  Map<String, dynamic> toMap() {
 
 		Map<String, dynamic> map = {
 			'name': name,
@@ -19,17 +24,16 @@ class Clients extends Model {
 			'complete': complete
 		};
 
-		if (id != null) { map['id'] = id; }
 		return map;
 	}
 
-	static Clients fromMap(Map<String, dynamic> map) {
-		
-		return Clients(
-			id: map['id'],
-			name: map['name'],
-      questions: map['questions'],
-			complete: map['complete'] == 1
+	static Client fromMap(Map<String, dynamic> map) {
+		return Client(
+			map['id'],
+			map['name'],
+      map['questions'],
+			map['complete'] == 1
 		);
 	}
+
 }
