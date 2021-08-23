@@ -32,7 +32,7 @@ class Routes extends StatelessWidget {
               builder: (_) => LoginPage(), settings: settings);
           case '/nurse/question1':
             return CupertinoPageRoute(
-              builder: (_) => NurseQuestion1(), settings: settings);
+              builder: (_) => NurseQuestion1(user: null,), settings: settings);
           case '/nurse/question2':
             return CupertinoPageRoute(
               builder: (_) => NurseQuestion2(), settings: settings);
