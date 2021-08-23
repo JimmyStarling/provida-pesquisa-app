@@ -9,7 +9,12 @@ import 'package:flutter/material.dart';
 
 import '../components/sliders.dart';
 
+import '../models/user.dart';
+
 class NurseQuestion1 extends StatelessWidget {
+  final User user;
+  NurseQuestion1({ Key key, @required this.user }): super(key: key);
+
   final _formQuestionKey = GlobalKey<FormState>();
 
   @override
