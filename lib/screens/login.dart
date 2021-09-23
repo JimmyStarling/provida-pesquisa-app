@@ -4,11 +4,16 @@
  * 
  */
 
+import 'dart:html';
+
 import 'package:app_pesquisa_de_satisfacao/models/client.dart';
 import 'package:app_pesquisa_de_satisfacao/services/database.dart';
 import 'package:flutter/material.dart';
 import 'package:app_pesquisa_de_satisfacao/screens/nurse_questions.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'dart:developer';
+import 'package:flutter/foundation.dart';
+import '../boxes.dart';
 import '../constants.dart';
 
 // Define a custom Form widget.
@@ -20,6 +25,11 @@ class LoginPage extends StatefulWidget {
 }
 
 class LoginPageState extends State<LoginPage> {
+  @override void dispose(){
+    Hive.box('client').close();
+    super.dispose();
+  }
+
   final _formKey = GlobalKey<FormState>();
   var inputType = TextInputType.text;
   var onlyNumber = RegExp(r'^[0-9]+$');
@@ -34,12 +44,7 @@ class LoginPageState extends State<LoginPage> {
     'complete':'complete'
   };
 
-  // Visual list of clients registered
-  // What occurs if there isn't data
-	// List<Widget> get _clientList => _clients.map((client) => format(client)).toList();
-
 	TextStyle _style = TextStyle(color: Colors.white, fontSize: 24);
-
   bool isEmailOrNumber;
 
   @override
@@ -102,9 +107,7 @@ class LoginPageState extends State<LoginPage> {
                     ),
                     child: TextButton(
                       onPressed: () {
-                        if (_formKey.currentState.validate()) {
-                          // Saving all local informations to the database
-                          _save();
+                        if (_formKey.currentState.validate()) _save();
                           Navigator.pushNamed(context, '/nurse/question1');
                           ScaffoldMessenger.of(context)
                               .showSnackBar(SnackBar(content: Text('Iniciando a Pesquisa')));
@@ -166,21 +169,21 @@ class LoginPageState extends State<LoginPage> {
     );// Scaffold
   }
 
+  Future addClient(String name, String questions) async{
+    final client = Client()
+      ..name = name
+      ..questions = questions
+      ..completed = false
+      ..createdDate = DateTime.now();
+
+    final box = Boxes.getClients();
+    box.add(client);
+  }
+
 	void _save() async {
 
 		Navigator.of(context).pop();
-		Client client = Client(
-			_client[0].toString(),
-      _client[1].toString(),
-      DateTime.now(),
-			false
-		);
-
-    // Save into database
-    database.insertClient(client);
-
-    // Console
-    log('D/ The client table:${(Client).toString()}'+', the client variable data: ${client.toString()}');
+    
 		setState(() => _client = {} );
 		refresh();
 	}
@@ -192,11 +195,20 @@ class LoginPageState extends State<LoginPage> {
 	}
 
 	void refresh() async {
+    initState();
+    /* Inserting fake data
+    var kafka = Client()
+      ..name = 'Kafka'
+      ..questions = 'questions:{question1:{"Paths are made by walking?":true}}'
+      ..created = DateTime.now()
+      ..completed = true;
+      
+    dataBox.add(kafka);*/
+
     // Return a list of clients into database converting into Map<String, dynamic> = 
-		//List<Map<String, dynamic>> _results = (await database.getClients()).cast<Map<String, dynamic>>();
-    var _results = await database.getClients();
-    log('Client table data: ${_results.toString()}');
+    //var _results = dataBox.get('kafka');//database.getClients();
+    //debugPrint('Client table data: ${_results.toString()}');
 		//_client = _results.map((client) => Client.fromMap(client)).toList() as Map<String, String>;
-		setState(() { });
+		//setState(() { });
 	}
 }
