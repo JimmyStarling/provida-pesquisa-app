@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:app_pesquisa_de_satisfacao/models/client.dart';
 import 'package:flutter/widgets.dart';
 import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:idb_sqflite/idb_sqflite.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
@@ -27,32 +28,22 @@ abstract class DatabaseHelper {
   static final columnQuestions = 'questions';
   static final columnComplete = 'complete';
 
-  Future<mDatabase.Database> get database async {
-    if (_database != null)
-    return _database;
-
-    // if _database is null we instantiate it
-    _database = await initDatabase();
-    return _database;
-  }
-
-  initDatabase () async {
-    //var factory = getIdbFactorySqflite(databaseFactory);
-
-    //log('D/ Init the database.');
-    //WidgetsFlutterBinding.ensureInitialized();
-    
+  Future<void> initDatabase () async {
+    // Registering the client adapter
+    Hive.registerAdapter(ClientAdapter());
+    // Initializing Flutter
+    await Hive.initFlutter();
     // Open database
     databox = await Hive.openBox('clientBox');
     // Inserting fake data
-    var kafka = Client(
-      'Kafka',
-      'questions:{question1:{"Paths are made by walking?":true}}',
-      DateTime.now(),
-      true,
-    );
+    var kafka = Client()
+      ..name = 'Kafka'
+      ..questions = 'questions:{question1:{"Paths are made by walking?":true}}'
+      ..created = DateTime.now()
+      ..completed = true
+    ;
     await insertClient(kafka);
-    print(await getClients());
+    print(getClients());
   }
   // Define a function that inserts clients into the database
   Future<void> insertClient(Client client) async {
@@ -60,23 +51,12 @@ abstract class DatabaseHelper {
   }
 
   // A method that retrieves all the clients from the clients table.
-  getClients() async {
+  Future<void> getClients() async {
     initDatabase();
     // Getting transactioned client as List
-    final clients =  databox.getAt(0); //as List<Map<String, dynamic>>;
+    final clients =  databox;//.getAt(0); //as List<Map<String, dynamic>>;
     log('D/ clients data from databox is ${clients.toString()}');
     return clients;
-    /* It returns a object and convert it to maps
-    final List<Map<String, dynamic>> maps = clients;
-    // Convert the List<Map<String, dynamic> into a List<Client>.
-    return List.generate(maps.length, (i) {
-      return Client(
-        maps[i]['id'],
-        maps[i]['name'],
-        maps[i]['questions'],
-        maps[i]['complete'],
-      );
-    });*/
   }
 
 }
