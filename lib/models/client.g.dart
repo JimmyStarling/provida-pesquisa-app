@@ -16,12 +16,11 @@ class ClientAdapter extends TypeAdapter<Client> {
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return Client(
-      fields[0] as String,
-      fields[1] as String,
-      fields[2] as DateTime,
-      fields[3] as bool,
-    );
+    return Client()
+      ..name = fields[0] as String
+      ..questions = fields[1] as String
+      ..createdDate = fields[2] as DateTime
+      ..completed = fields[3] as bool;
   }
 
   @override
@@ -33,9 +32,9 @@ class ClientAdapter extends TypeAdapter<Client> {
       ..writeByte(1)
       ..write(obj.questions)
       ..writeByte(2)
-      ..write(obj.created)
+      ..write(obj.createdDate)
       ..writeByte(3)
-      ..write(obj.complete);
+      ..write(obj.completed);
   }
 
   @override
