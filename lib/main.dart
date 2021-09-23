@@ -1,10 +1,22 @@
 import 'package:app_pesquisa_de_satisfacao/screens/nurse_questions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 import './screens/login.dart';
+import 'models/client.dart';
 
-void main() => runApp(Root());
+Future main() async {
+
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Hive.initFlutter();
+  Hive.registerAdapter(ClientAdapter());
+  var dataBox = Hive.openBox<Client>('client');
+
+  runApp(Root());
+} 
 
 class Root extends StatelessWidget {
   // This widget is the root of your application.
@@ -32,7 +44,7 @@ class Routes extends StatelessWidget {
               builder: (_) => LoginPage(), settings: settings);
           case '/nurse/question1':
             return CupertinoPageRoute(
-              builder: (_) => NurseQuestion1(), settings: settings);
+              builder: (_) => NurseQuestionPage(), settings: settings);
           case '/nurse/question2':
             return CupertinoPageRoute(
               builder: (_) => NurseQuestion2(), settings: settings);
