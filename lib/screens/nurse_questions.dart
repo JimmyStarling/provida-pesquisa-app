@@ -4,15 +4,40 @@
  * 
  */
 
+import 'package:app_pesquisa_de_satisfacao/models/client.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../components/sliders.dart';
 
-class NurseQuestion1 extends StatelessWidget {
-  final _formQuestionKey = GlobalKey<FormState>();
 
+void editClientQuestion(
+    Client client,
+    String name,
+    Object questions,
+  ) {
+    client.name = name;
+    client.questions = questions.toString();
+    client.completed = false;
+
+    client.save();
+  }
+
+void deleteTransaction(Client client) {
+  client.delete();
+}
+
+
+class NurseQuestionPage extends StatefulWidget {
   @override
+  NurseQuestion1 createState() {
+    return NurseQuestion1();
+  }
+}
+
+class NurseQuestion1 extends State<NurseQuestionPage> {
+  final _formQuestionKey = GlobalKey<FormState>();
+  
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
@@ -57,6 +82,7 @@ class NurseQuestion1 extends StatelessWidget {
                       child: TextButton(
                         onPressed: () {
                           if (_formQuestionKey.currentState.validate()) {
+                            editClientQuestion(client);
                             Navigator.pushNamed(context, '/nurse/question2');
 
                             ScaffoldMessenger.of(context)
@@ -109,6 +135,12 @@ class NurseQuestion1 extends StatelessWidget {
           ),
       ),
     );
+  }
+
+  @override
+  State<StatefulWidget> createState() {
+    // TODO: implement createState
+    throw UnimplementedError();
   }
 }
 
@@ -209,5 +241,14 @@ class NurseQuestion2 extends StatelessWidget {
           ),
       ),
     );
+  }
+	@override
+	void initState() {
+		refresh();
+		super.initState();
+	}
+
+	void refresh() async {
+    initState();
   }
 }
