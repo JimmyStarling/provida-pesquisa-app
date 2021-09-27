@@ -13,7 +13,7 @@ Future main() async {
 
   await Hive.initFlutter();
   Hive.registerAdapter(ClientAdapter());
-  var dataBox = Hive.openBox<Client>('client');
+  await Hive.openBox<Client>('clients');
 
   runApp(Root());
 } 
