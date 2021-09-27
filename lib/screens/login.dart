@@ -107,7 +107,8 @@ class LoginPageState extends State<LoginPage> {
                     ),
                     child: TextButton(
                       onPressed: () {
-                        if (_formKey.currentState.validate()) _save();
+                        if (_formKey.currentState.validate()){ 
+                          _save();
                           Navigator.pushNamed(context, '/nurse/question1');
                           ScaffoldMessenger.of(context)
                               .showSnackBar(SnackBar(content: Text('Iniciando a Pesquisa')));
@@ -140,7 +141,7 @@ class LoginPageState extends State<LoginPage> {
                         if (_formKey.currentState.validate()) {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => NurseQuestion1()),
+                            MaterialPageRoute(builder: (context) => NurseQuestionPage()),
                           );
                           ScaffoldMessenger.of(context)
                               .showSnackBar(SnackBar(content: Text('Iniciando a Pesquisa')));
