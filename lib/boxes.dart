@@ -3,5 +3,5 @@ import 'package:hive/hive.dart';
 
 class Boxes {
   static Box<Client> getClients() =>
-      Hive.box<Client>('client');
+      Hive.box<Client>('clients');
 }
