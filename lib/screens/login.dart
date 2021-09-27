@@ -10,7 +10,11 @@ import 'package:app_pesquisa_de_satisfacao/models/client.dart';
 import 'package:app_pesquisa_de_satisfacao/services/database.dart';
 import 'package:flutter/material.dart';
 import 'package:app_pesquisa_de_satisfacao/screens/nurse_questions.dart';
+<<<<<<< HEAD
 import 'package:hive_flutter/hive_flutter.dart';
+=======
+import 'package:hive/hive.dart';
+>>>>>>> 99b48a470a14e5f7edc974b4bb2e46c5035fcc9d
 import 'dart:developer';
 import 'package:flutter/foundation.dart';
 import '../boxes.dart';
@@ -196,6 +200,7 @@ class LoginPageState extends State<LoginPage> {
 	}
 
 	void refresh() async {
+<<<<<<< HEAD
     initState();
     /* Inserting fake data
     var kafka = Client()
@@ -209,6 +214,24 @@ class LoginPageState extends State<LoginPage> {
     // Return a list of clients into database converting into Map<String, dynamic> = 
     //var _results = dataBox.get('kafka');//database.getClients();
     //debugPrint('Client table data: ${_results.toString()}');
+=======
+
+    var databox = await Hive.openBox('clientBox');
+    // Inserting fake data
+    var kafka = Client(
+      'Kafka',
+      'questions:{question1:{"Paths are made by walking?":true}}',
+      DateTime.now(),
+      true,
+    );
+    databox.add(kafka);
+    final clients =  databox.getAt(0);
+    log('D/ clients data from databox is ${clients.toString()}');
+    // Return a list of clients into database converting into Map<String, dynamic> = 
+		// List<Map<String, dynamic>> _results = (await database.getClients()).cast<Map<String, dynamic>>();
+    var _results = await database.getClients();
+    log('Client table data: ${_results.toString()}');
+>>>>>>> 99b48a470a14e5f7edc974b4bb2e46c5035fcc9d
 		//_client = _results.map((client) => Client.fromMap(client)).toList() as Map<String, String>;
 		//setState(() { });
 	}

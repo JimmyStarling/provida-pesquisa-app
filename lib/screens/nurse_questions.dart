@@ -13,6 +13,16 @@ import 'package:hive/hive.dart';
 import '../boxes.dart';
 import '../components/sliders.dart';
 
+<<<<<<< HEAD
+=======
+import '../models/user.dart';
+
+class NurseQuestion1 extends StatelessWidget {
+  final User user;
+  NurseQuestion1({ Key key, @required this.user }): super(key: key);
+
+  final _formQuestionKey = GlobalKey<FormState>();
+>>>>>>> 99b48a470a14e5f7edc974b4bb2e46c5035fcc9d
 
 void editClientQuestion(
     Client client,

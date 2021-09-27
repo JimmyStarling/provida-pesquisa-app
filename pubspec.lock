@@ -208,7 +208,11 @@ packages:
       name: flutter_redux
       url: "https://pub.dartlang.org"
     source: hosted
+<<<<<<< HEAD
     version: "0.8.2"
+=======
+    version: "0.5.4"
+>>>>>>> 99b48a470a14e5f7edc974b4bb2e46c5035fcc9d
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -437,7 +441,11 @@ packages:
       name: redux
       url: "https://pub.dartlang.org"
     source: hosted
+<<<<<<< HEAD
     version: "5.0.0"
+=======
+    version: "3.0.0"
+>>>>>>> 99b48a470a14e5f7edc974b4bb2e46c5035fcc9d
   sembast:
     dependency: transitive
     description:
