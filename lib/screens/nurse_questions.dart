@@ -13,16 +13,6 @@ import 'package:hive/hive.dart';
 import '../boxes.dart';
 import '../components/sliders.dart';
 
-<<<<<<< HEAD
-=======
-import '../models/user.dart';
-
-class NurseQuestion1 extends StatelessWidget {
-  final User user;
-  NurseQuestion1({ Key key, @required this.user }): super(key: key);
-
-  final _formQuestionKey = GlobalKey<FormState>();
->>>>>>> 99b48a470a14e5f7edc974b4bb2e46c5035fcc9d
 
 void editClientQuestion(
     Client client,
@@ -61,15 +51,14 @@ class _NurseQuestionPageState extends State<NurseQuestionPage> {
           builder: (context, box, _) {
             final clients = box.values.toList().cast<Client>();
 
-            return buildContent(context, clients, 1);
+            return buildContent(context, 1);
           }
       ),
   );
 
-  Widget buildContent(BuildContext context, List<Client> clients, var question){
-    final _formQuestionKey = GlobalKey<FormState>();
+  Widget buildContent(BuildContext context, int question){
     if (question == 1) {
-      
+      final _formQuestionKey = GlobalKey<FormState>();
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text("Realizando Novo Cadastro!"),
       ));
@@ -106,7 +95,7 @@ class _NurseQuestionPageState extends State<NurseQuestionPage> {
                       'images/enfermagem.png',
                     ),
                     QuestionSlider(),
-                    buttonBuilder(_formQuestionKey, context, client, 1),
+                    buttonBuilder(_formQuestionKey ,context, 2),
                   ]
               ),
             ), 
@@ -146,61 +135,7 @@ class _NurseQuestionPageState extends State<NurseQuestionPage> {
                     'images/enfermagem.png',
                   ),
                   QuestionSlider(),
-                  Container(
-                      margin: const EdgeInsets.only(top: 40.0, left: 20.0, right: 20.0),
-                      width: double.infinity,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: TextButton(
-                        onPressed: () {
-                          if (_formQuestion2Key.currentState.validate()) {
-                            Navigator.pushNamed(context, '/infrastructure/question1');
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(SnackBar(content: Text('Agora vamos falar sobre a estrutura')));
-                          }
-                        },
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all(Colors.indigo[900]),
-                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(18.0),
-                              side: BorderSide(color: Colors.indigo[900]),
-                            )
-                          )
-                        ),
-                        child: Text(
-                          'Continuar',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
-                  ),
-                  Container(
-                      margin: const EdgeInsets.only(top: 20.0, left: 20.0, right: 20.0),
-                      width: double.infinity,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: TextButton(
-                        onPressed: () {
-                          Navigator.popUntil(context, ModalRoute.withName('/nurse/question1'));
-                        },
-                        style: ButtonStyle(
-                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(18.0),
-                              side: BorderSide(color: Colors.indigo[900]),
-                            )
-                          )
-                        ),
-                        child: Text(
-                          'Voltar',
-                          style: TextStyle(color: Colors.indigo[900]),
-                        ),
-                      ),
-                    )
+                  buttonBuilder(_formQuestion2Key, context, 3)  
                 ]
               ),
             ), 
@@ -208,7 +143,7 @@ class _NurseQuestionPageState extends State<NurseQuestionPage> {
       ),
       );
     } else if(question == 3){
-      final _formQuestion2Key = GlobalKey<FormState>();
+      final _formQuestion3Key = GlobalKey<FormState>();
       return Scaffold(
       body: Center(
         child: 
@@ -216,7 +151,7 @@ class _NurseQuestionPageState extends State<NurseQuestionPage> {
             padding: EdgeInsets.only(top: 40.0),
             child:
             Form(
-              key: _formQuestion2Key,
+              key: _formQuestion3Key,
               child:
               Column(
                 children: <Widget>[
@@ -240,61 +175,7 @@ class _NurseQuestionPageState extends State<NurseQuestionPage> {
                     'images/enfermagem.png',
                   ),
                   QuestionSlider(),
-                  Container(
-                      margin: const EdgeInsets.only(top: 40.0, left: 20.0, right: 20.0),
-                      width: double.infinity,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: TextButton(
-                        onPressed: () {
-                          if (_formQuestion2Key.currentState.validate()) {
-                            Navigator.pushNamed(context, '/infrastructure/question1');
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(SnackBar(content: Text('Agora vamos falar sobre a estrutura')));
-                          }
-                        },
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all(Colors.indigo[900]),
-                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(18.0),
-                              side: BorderSide(color: Colors.indigo[900]),
-                            )
-                          )
-                        ),
-                        child: Text(
-                          'Continuar',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
-                  ),
-                  Container(
-                      margin: const EdgeInsets.only(top: 20.0, left: 20.0, right: 20.0),
-                      width: double.infinity,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: TextButton(
-                        onPressed: () {
-                          Navigator.popUntil(context, ModalRoute.withName('/nurse/question1'));
-                        },
-                        style: ButtonStyle(
-                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(18.0),
-                              side: BorderSide(color: Colors.indigo[900]),
-                            )
-                          )
-                        ),
-                        child: Text(
-                          'Voltar',
-                          style: TextStyle(color: Colors.indigo[900]),
-                        ),
-                      ),
-                    )
+                  buttonBuilder(_formQuestion3Key, context, 1),
                 ]
               ),
             ), 
@@ -304,7 +185,7 @@ class _NurseQuestionPageState extends State<NurseQuestionPage> {
     }
   }
 
-  Widget buttonBuilder(GlobalKey<FormState> _formQuestionKey, BuildContext context, Client clients, var question) => Column(
+  Widget buttonBuilder(GlobalKey<FormState> _formQuestionKey, BuildContext context, var question) => Column(
     children: [
       Container(
         margin: const EdgeInsets.only(top: 40.0, left: 20.0, right: 20.0),
@@ -321,7 +202,7 @@ class _NurseQuestionPageState extends State<NurseQuestionPage> {
               ScaffoldMessenger.of(context)
                   .showSnackBar(SnackBar(content: Text('Agora vamos falar sobre a estrutura')));
                   
-              buildContent();
+              return buildContent(context, question);
             }
           },
           style: ButtonStyle(
@@ -339,31 +220,35 @@ class _NurseQuestionPageState extends State<NurseQuestionPage> {
           ),
         ),
     ),
-    Container(
-        margin: const EdgeInsets.only(top: 20.0, left: 20.0, right: 20.0),
-        width: double.infinity,
-        height: 40,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: TextButton(
-          onPressed: () {
-            Navigator.popUntil(context, ModalRoute.withName('/'));// Go back to login
-          },
-          style: ButtonStyle(
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-              RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(18.0),
-                side: BorderSide(color: Colors.indigo[900]),
+      Container(
+          margin: const EdgeInsets.only(top: 20.0, left: 20.0, right: 20.0),
+          width: double.infinity,
+          height: 40,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: TextButton(
+            onPressed: () {
+              if(question == 1){
+                Navigator.popUntil(context, ModalRoute.withName('/'));// Go back to login
+              } else {
+                return buildContent(context, question);
+              }
+            },
+            style: ButtonStyle(
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18.0),
+                  side: BorderSide(color: Colors.indigo[900]),
+                )
               )
-            )
+            ),
+            child: Text(
+              'Voltar',
+              style: TextStyle(color: Colors.indigo[900]),
+            ),
           ),
-          child: Text(
-            'Voltar',
-            style: TextStyle(color: Colors.indigo[900]),
-          ),
-        ),
-      )
+        )
     ],
   );
 
