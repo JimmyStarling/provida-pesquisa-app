@@ -106,7 +106,7 @@ class _NurseQuestionPageState extends State<NurseQuestionPage> {
                       'images/enfermagem.png',
                     ),
                     QuestionSlider(),
-                    buttonBuilder(_formQuestionKey, context, client),
+                    buttonBuilder(_formQuestionKey, context, client, 1),
                   ]
               ),
             ), 
@@ -366,15 +366,5 @@ class _NurseQuestionPageState extends State<NurseQuestionPage> {
       )
     ],
   );
-}
-
-
-
-
-class NurseQuestion2 extends StatelessWidget {
-
-  @override
-  Widget build(BuildContext context) {
-    }
 
 }
