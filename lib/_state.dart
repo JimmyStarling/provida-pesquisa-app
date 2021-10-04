@@ -1,6 +1,6 @@
 import 'package:app_pesquisa_de_satisfacao/item.dart';
 import 'package:flutter/foundation.dart';
-import 'package:provida-pesquisa-app/item.dart';
+import 'package:app_pesquisa_de_satisfacao/item.dart';
 
 class AppState with ChangeNotifier {
   List<Question> _items = sampleQuestions;
