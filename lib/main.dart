@@ -49,9 +49,6 @@ class Routes extends StatelessWidget {
 =======
               builder: (_) => NurseQuestion1(user: null,), settings: settings);
 >>>>>>> 99b48a470a14e5f7edc974b4bb2e46c5035fcc9d
-          case '/nurse/question2':
-            return CupertinoPageRoute(
-              builder: (_) => NurseQuestion2(), settings: settings);
         }
       },
     );
