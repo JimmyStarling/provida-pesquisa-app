@@ -9,12 +9,8 @@ import 'dart:html';
 import 'package:app_pesquisa_de_satisfacao/models/client.dart';
 import 'package:app_pesquisa_de_satisfacao/services/database.dart';
 import 'package:flutter/material.dart';
-import 'package:app_pesquisa_de_satisfacao/screens/nurse_questions.dart';
-<<<<<<< HEAD
+import 'package:app_pesquisa_de_satisfacao/screens/questions/nurse_questions.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-=======
-import 'package:hive/hive.dart';
->>>>>>> 99b48a470a14e5f7edc974b4bb2e46c5035fcc9d
 import 'dart:developer';
 import 'package:flutter/foundation.dart';
 import '../boxes.dart';
@@ -113,7 +109,7 @@ class LoginPageState extends State<LoginPage> {
                       onPressed: () {
                         if (_formKey.currentState.validate()){ 
                           _save();
-                          Navigator.pushNamed(context, '/nurse/question1');
+                          Navigator.pushNamed(context, '/nurse/question');
                           ScaffoldMessenger.of(context)
                               .showSnackBar(SnackBar(content: Text('Iniciando a Pesquisa')));
                         }
@@ -204,7 +200,7 @@ class LoginPageState extends State<LoginPage> {
     /* Inserting fake data
     var kafka = Client()
       ..name = 'Kafka'
-      ..questions = 'questions:{question1:{"Paths are made by walking?":true}}'
+      ..questions = 'questions:{question:{"Paths are made by walking?":true}}'
       ..created = DateTime.now()
       ..completed = true;
       
