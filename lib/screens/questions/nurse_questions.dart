@@ -10,8 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hive/hive.dart';
 
-import '../boxes.dart';
-import '../components/sliders.dart';
+import '../../boxes.dart';
+import '../../components/sliders.dart';
 
 
 void editClientQuestion(
@@ -37,6 +37,8 @@ class NurseQuestionPage extends StatefulWidget {
 }
 
 class _NurseQuestionPageState extends State<NurseQuestionPage> {
+  Client clients;
+
   
   @override
   void dispose() {
@@ -55,7 +57,8 @@ class _NurseQuestionPageState extends State<NurseQuestionPage> {
           }
       ),
   );
-
+  // Build content according to questions choosed when call buttonBuilder.
+  // @TODO: Link to callcenter_questions
   Widget buildContent(BuildContext context, int question){
     if (question == 1) {
       final _formQuestionKey = GlobalKey<FormState>();
@@ -182,6 +185,8 @@ class _NurseQuestionPageState extends State<NurseQuestionPage> {
           ),
       ),
     );
+    } else {
+      return throw Exception;
     }
   }
 

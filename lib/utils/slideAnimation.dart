@@ -1,4 +1,4 @@
-import 'package:app_pesquisa_de_satisfacao/screens/nurse_questions.dart';
+import 'package:app_pesquisa_de_satisfacao/screens/questions/nurse_questions.dart';
 import 'package:flutter/material.dart';
 
 class SlideRightRoute extends PageRouteBuilder {

@@ -39,7 +39,7 @@ abstract class DatabaseHelper {
     var kafka = Client()
       ..name = 'Kafka'
       ..questions = 'questions:{question1:{"Paths are made by walking?":true}}'
-      ..created = DateTime.now()
+      ..createdDate = DateTime.now()
       ..completed = true
     ;
     await insertClient(kafka);
