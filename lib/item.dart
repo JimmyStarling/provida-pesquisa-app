@@ -1,5 +1,5 @@
 class Question {
-  final String question;
+  final Object question;
 
   Question({
     this.question,
@@ -7,7 +7,7 @@ class Question {
 }
 
 final List<Question> sampleQuestions = [
-  Question(question: 'Question 1'),
-  Question(question: 'Question 2'),
-  Question(question: 'Question 3')
+  Question(question: {'Question 1':"5"}),
+  Question(question: {'Question 1':"2"}),
+  Question(question: {'Question 1':"3"}),
 ];
