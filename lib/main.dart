@@ -1,4 +1,4 @@
-import 'package:app_pesquisa_de_satisfacao/screens/nurse_questions.dart';
+import 'package:app_pesquisa_de_satisfacao/screens/questions/nurse_questions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
@@ -42,16 +42,9 @@ class Routes extends StatelessWidget {
           case '/':
             return CupertinoPageRoute(
               builder: (_) => LoginPage(), settings: settings);
-          case '/nurse/question1':
+          case '/nurse/question':
             return CupertinoPageRoute(
-<<<<<<< HEAD
               builder: (_) => NurseQuestionPage(), settings: settings);
-=======
-              builder: (_) => NurseQuestion1(user: null,), settings: settings);
->>>>>>> 99b48a470a14e5f7edc974b4bb2e46c5035fcc9d
-          case '/nurse/question2':
-            return CupertinoPageRoute(
-              builder: (_) => NurseQuestion2(), settings: settings);
         }
       },
     );
