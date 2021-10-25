@@ -5,10 +5,12 @@
  */
 
 import 'package:app_pesquisa_de_satisfacao/models/client.dart';
+import 'package:app_pesquisa_de_satisfacao/models/question.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hive/hive.dart';
+import 'package:provider/provider.dart';
 
 import '../../boxes.dart';
 import '../../components/sliders.dart';
@@ -52,6 +54,7 @@ class _NurseQuestionPageState extends State<NurseQuestionPage> {
           valueListenable: Boxes.getClients().listenable(),
           builder: (context, box, _) {
             final clients = box.values.toList().cast<Client>();
+            var question = context.watch<QuestionModel>();
 
             return buildContent(context, 1);
           }
