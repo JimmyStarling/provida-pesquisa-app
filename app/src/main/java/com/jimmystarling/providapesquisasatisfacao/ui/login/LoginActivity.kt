@@ -1,6 +1,7 @@
 package com.jimmystarling.providapesquisasatisfacao.ui.login
 
 import android.app.Activity
+import android.content.Context
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
@@ -15,116 +16,71 @@ import android.widget.Toast
 import com.jimmystarling.providapesquisasatisfacao.databinding.ActivityLoginBinding
 
 import com.jimmystarling.providapesquisasatisfacao.R
+import com.jimmystarling.providapesquisasatisfacao.ui.login.viewmodel.LoginViewModel
 
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var loginViewModel: LoginViewModel
     private lateinit var binding: ActivityLoginBinding
 
+    lateinit var context: Context
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        context = this@LoginActivity
+
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        loginViewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
 
         val username = binding.username
         val password = binding.password
         val login = binding.login
         val loading = binding.loading
 
-        loginViewModel = ViewModelProvider(this, LoginViewModelFactory())
-                .get(LoginViewModel::class.java)
-        // Observer error
-        loginViewModel.loginFormState.observe(this@LoginActivity, Observer {
-            val loginState = it ?: return@Observer
+        lateinit var strUsername: String
+        lateinit var strPassword: String
 
-            // disable login button unless both username / password is valid
-            login.isEnabled = loginState.isDataValid
+        login.setOnClickListener{
+            loginViewModel.getLoginDetails(context, username.text.toString().trim())!!.observe(this, Observer {
+                strUsername = username.text.toString().trim()
+                strPassword = password.text.toString().trim()
+                when {
+                    it == null -> {
+                        when {
+                            username.text.isEmpty() -> {
+                                Toast.makeText(
+                                    context,
+                                    "Porfavor insira seu nome de usuario!",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                            password.text.isEmpty() -> {
+                                Toast.makeText(
+                                    context,
+                                    "Porfavor insira sua senha!",
+                                    Toast.LENGTH_SHORT
+                                )
+                                    .show()
+                            }
+                            else -> {
+                                loginViewModel.insertData(context, username.text.toString().trim(), password.text.toString().trim())
+                                Toast.makeText(context, "Bem vindo!", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                    }
+                    else -> {
+                        strUsername = it.Username
+                        strPassword = it.Password
 
-            if (loginState.usernameError != null) {
-                username.error = getString(loginState.usernameError)
-            }
-            if (loginState.passwordError != null) {
-                password.error = getString(loginState.passwordError)
-            }
-        })
-        // Observer login
-        loginViewModel.loginResult.observe(this@LoginActivity, Observer {
-            val loginResult = it ?: return@Observer
-
-            loading.visibility = View.GONE
-            if (loginResult.error != null) {
-                showLoginFailed(loginResult.error)
-            }
-            if (loginResult.success != null) {
-                updateUiWithUser(loginResult.success)
-            }
-            setResult(Activity.RESULT_OK)
-
-            //Complete and destroy login activity once successful
-            finish()
-        })
-
-        username.afterTextChanged {
-            loginViewModel.loginDataChanged(
-                    username.text.toString(),
-                    password.text.toString()
-            )
-        }
-
-        password.apply {
-            afterTextChanged {
-                loginViewModel.loginDataChanged(
-                        username.text.toString(),
-                        password.text.toString()
-                )
-            }
-
-            setOnEditorActionListener { _, actionId, _ ->
-                when (actionId) {
-                    EditorInfo.IME_ACTION_DONE ->
-                        loginViewModel.login(
-                                username.text.toString(),
-                                password.text.toString()
-                        )
+                        Toast.makeText(context, "Bem vindo novamente!", Toast.LENGTH_SHORT).show()
+                    }
                 }
-                false
-            }
-
-            login.setOnClickListener {
-                loading.visibility = View.VISIBLE
-                loginViewModel.login(username.text.toString(), password.text.toString())
-            }
-        }
-    }
-
-    private fun updateUiWithUser(model: LoggedInUserView) {
-        val welcome = getString(R.string.welcome)
-        val displayName = model.displayName
-        // TODO : initiate successful logged in experience
-        Toast.makeText(
-                applicationContext,
-                "$welcome $displayName",
-                Toast.LENGTH_LONG
-        ).show()
-    }
-
-    private fun showLoginFailed(@StringRes errorString: Int) {
-        Toast.makeText(applicationContext, errorString, Toast.LENGTH_SHORT).show()
-    }
-}
-
-/**
- * Extension function to simplify setting an afterTextChanged action to EditText components.
- */
-fun EditText.afterTextChanged(afterTextChanged: (String) -> Unit) {
-    this.addTextChangedListener(object : TextWatcher {
-        override fun afterTextChanged(editable: Editable?) {
-            afterTextChanged.invoke(editable.toString())
+            })
         }
 
-        override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
 
-        override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
-    })
+    }
 }
