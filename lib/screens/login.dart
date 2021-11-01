@@ -9,11 +9,7 @@ import 'dart:html';
 import 'package:app_pesquisa_de_satisfacao/models/client.dart';
 import 'package:app_pesquisa_de_satisfacao/services/database.dart';
 import 'package:flutter/material.dart';
-<<<<<<< HEAD
 import 'package:app_pesquisa_de_satisfacao/screens/questions/nurse_questions.dart';
-=======
-import 'package:app_pesquisa_de_satisfacao/screens/nurse_questions.dart';
->>>>>>> 280f87b0d03843ed235dbb6d9c6f5fc6d1f7e9ef
 import 'package:hive_flutter/hive_flutter.dart';
 import 'dart:developer';
 import 'package:flutter/foundation.dart';
@@ -201,22 +197,5 @@ class LoginPageState extends State<LoginPage> {
 
 	void refresh() async {
     initState();
-<<<<<<< HEAD
-    /* Inserting fake data
-    var kafka = Client()
-      ..name = 'Kafka'
-      ..questions = 'questions:{question:{"Paths are made by walking?":true}}'
-      ..created = DateTime.now()
-      ..completed = true;
-      
-    dataBox.add(kafka);*/
-
-    // Return a list of clients into database converting into Map<String, dynamic> = 
-    //var _results = dataBox.get('kafka');//database.getClients();
-    //debugPrint('Client table data: ${_results.toString()}');
-		//_client = _results.map((client) => Client.fromMap(client)).toList() as Map<String, String>;
-		//setState(() { });
-=======
->>>>>>> 280f87b0d03843ed235dbb6d9c6f5fc6d1f7e9ef
 	}
 }
