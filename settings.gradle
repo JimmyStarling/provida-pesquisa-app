@@ -1,0 +1,2 @@
+rootProject.name = "Provida Pesquisa Satisfacao"
+include ':app'
