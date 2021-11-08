@@ -2,9 +2,7 @@ package com.jimmystarling.providapesquisasatisfacao.ui.login.viewmodel
 
 import android.content.Context
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.jimmystarling.providapesquisasatisfacao.data.model.LoginTableModel
 import com.jimmystarling.providapesquisasatisfacao.data.model.PesquisadorEntity
 import com.jimmystarling.providapesquisasatisfacao.data.repository.LoginRepository
 
