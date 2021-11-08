@@ -2,45 +2,56 @@ package com.jimmystarling.providapesquisasatisfacao.data.repository
 
 import android.content.Context
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import com.jimmystarling.providapesquisasatisfacao.data.database.LoginDatabase
-import com.jimmystarling.providapesquisasatisfacao.data.model.LoginTableModel
+import com.jimmystarling.providapesquisasatisfacao.data.database.ProvidaDatabase
+import com.jimmystarling.providapesquisasatisfacao.data.model.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class LoginRepository {
 
     companion object {
 
-        var loginDatabase: LoginDatabase? = null
+        var providaDatabase: ProvidaDatabase? = null
 
-        var loginTableModel: LiveData<LoginTableModel>? = null
+        var pesquisadorEntity: LiveData<PesquisadorEntity>? = null
 
-        fun initializeDB(context: Context) : LoginDatabase {
-            return LoginDatabase.getDataseClient(context)
+        // Initial data to insert to new Pesquisador entity
+        var matriculaPesquisador = (0..10).random()
+        var listaPesquisa = mutableListOf(
+            QuestaoEntity(1, "Equipe da Enfermagem", "Qual a nota de 0 a 5", "0"),
+            QuestaoEntity(2, "Equipe da Vacina", "Qual a nota de 0 a 5", "0"),
+            QuestaoEntity(3, "Equipe da Administração", "Qual a nota de 0 a 5", "0")
+        )
+        var pesquisasIniciais = mutableListOf(
+            PesquisaEntity(
+                listaPesquisa,
+                PacienteEntity("Rodrigo Alves", "071983565628", "07/11/2021")
+            )
+        )
+
+        fun initializeDB(context: Context) : ProvidaDatabase {
+            return ProvidaDatabase.getDataseClient(context)
         }
 
-        fun insertData(context: Context, username: String, password: String) {
+        fun registerPesquisador(context: Context, name: String, password: String) {
 
-            loginDatabase = initializeDB(context)
+            providaDatabase = initializeDB(context)
 
             CoroutineScope(IO).launch {
-                val loginDetails = LoginTableModel(username, password)
-                loginDatabase!!.loginDao().InsertData(loginDetails)
+                val pesquisadorDetails = PesquisadorEntity(name, matriculaPesquisador.toString(), pesquisasIniciais, 1, password)
+                providaDatabase!!.databaseDao().registerPesquisador(pesquisadorDetails)
             }
 
         }
 
-        fun getLoginDetails(context: Context, username: String) : LiveData<LoginTableModel>? {
+        fun getPesquisador(context: Context, name: String, password: String) : LiveData<PesquisadorEntity>? {
 
-            loginDatabase = initializeDB(context)
+            providaDatabase = initializeDB(context)
 
-            loginTableModel = loginDatabase!!.loginDao().getLoginDetails(username)
+            pesquisadorEntity = providaDatabase!!.databaseDao().getPesquisador(name, password)
 
-            return loginTableModel
+            return pesquisadorEntity
         }
 
     }
