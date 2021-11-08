@@ -5,19 +5,21 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.jimmystarling.providapesquisasatisfacao.data.model.LoginTableModel
+import com.jimmystarling.providapesquisasatisfacao.data.model.PesquisadorEntity
 import com.jimmystarling.providapesquisasatisfacao.data.repository.LoginRepository
 
 class LoginViewModel : ViewModel() {
 
-    var liveDataLogin: LiveData<LoginTableModel>? = null
+    //var liveDataLogin: LiveData<LoginTableModel>? = null
+    var livePesquisador: LiveData<PesquisadorEntity>? = null
 
-    fun insertData(context: Context, username: String, password: String) {
-        LoginRepository.insertData(context, username, password)
+    fun registerPesquisador(context: Context, username: String, password: String) {
+        LoginRepository.registerPesquisador(context, username, password)
     }
 
-    fun getLoginDetails(context: Context, username: String) : LiveData<LoginTableModel>? {
-        liveDataLogin = LoginRepository.getLoginDetails(context, username)
-        return liveDataLogin
+    fun getPesquisador(context: Context, name: String, password: String) : LiveData<PesquisadorEntity>? {
+        livePesquisador = LoginRepository.getPesquisador(context, name, password)
+        return livePesquisador
     }
 
 }
