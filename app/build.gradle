@@ -2,9 +2,9 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
 }
-
+apply plugin: 'kotlin-kapt'
 android {
-    compileSdkVersion 30
+    compileSdkVersion 31//30
     buildToolsVersion "30.0.3"
 
     dataBinding{
@@ -12,9 +12,12 @@ android {
     }
 
     defaultConfig {
+        configurations.all {
+            resolutionStrategy { force 'androidx.core:core-ktx:1.6.0' }
+        }
         applicationId "com.jimmystarling.providapesquisasatisfacao"
-        minSdkVersion 24
-        targetSdkVersion 30
+        minSdkVersion 26//24
+        targetSdkVersion 31//30
         versionCode 1
         versionName "1.0"
 
@@ -37,6 +40,12 @@ android {
     buildFeatures {
         viewBinding true
     }
+    kapt {
+        useBuildCache = false
+        arguments {
+            arg("key", "value")
+        }
+    }
 }
 dependencies {
     def room_version = "2.3.0"
@@ -53,7 +62,8 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     // Room dependencies
     implementation "androidx.room:room-runtime:$room_version"
-    annotationProcessor "androidx.room:room-compiler:$room_version"
+    implementation "androidx.room:room-ktx:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
     // optional - RxJava2 support for Room
     implementation "androidx.room:room-rxjava2:$room_version"
     // optional - RxJava3 support for Room
