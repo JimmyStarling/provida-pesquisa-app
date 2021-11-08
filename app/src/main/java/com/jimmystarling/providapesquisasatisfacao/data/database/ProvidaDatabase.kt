@@ -2,7 +2,6 @@ package com.jimmystarling.providapesquisasatisfacao.data.database
 
 import android.content.Context
 import androidx.room.*
-import com.jimmystarling.providapesquisasatisfacao.data.model.LoginTableModel
 import com.jimmystarling.providapesquisasatisfacao.data.model.PacienteEntity
 import com.jimmystarling.providapesquisasatisfacao.data.model.PesquisaEntity
 import com.jimmystarling.providapesquisasatisfacao.data.model.PesquisadorEntity

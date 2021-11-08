@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "Pesquisa")
 data class PesquisaEntity (
     @ColumnInfo(name = "questoes")
-    var Questoes: List<QuestaoEntity>,
+    var Questoes: MutableList<QuestaoEntity>,
     @ColumnInfo(name = "paciente")
     var Paciente: PacienteEntity,
 ){
