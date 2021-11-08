@@ -38,14 +38,14 @@ class LoginActivity : AppCompatActivity() {
         val username = binding.username
         val password = binding.password
         val login = binding.login
-        val loading = binding.loading
+        //val loading = binding.loading
 
-        lateinit var strUsername: String
+        lateinit var strName: String
         lateinit var strPassword: String
 
         login.setOnClickListener{
-            loginViewModel.getLoginDetails(context, username.text.toString().trim())!!.observe(this, Observer {
-                strUsername = username.text.toString().trim()
+            loginViewModel.getPesquisador(context, username.text.toString().trim(), password.text.toString().trim())!!.observe(this, {
+                strName = username.text.toString().trim()
                 strPassword = password.text.toString().trim()
                 when {
                     it == null -> {
@@ -66,13 +66,13 @@ class LoginActivity : AppCompatActivity() {
                                     .show()
                             }
                             else -> {
-                                loginViewModel.insertData(context, username.text.toString().trim(), password.text.toString().trim())
+                                loginViewModel.registerPesquisador(context, username.text.toString().trim(), password.text.toString().trim())
                                 Toast.makeText(context, "Bem vindo!", Toast.LENGTH_SHORT).show()
                             }
                         }
                     }
                     else -> {
-                        strUsername = it.Username
+                        strName = it.Name
                         strPassword = it.Password
 
                         Toast.makeText(context, "Bem vindo novamente!", Toast.LENGTH_SHORT).show()
