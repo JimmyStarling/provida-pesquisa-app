@@ -20,6 +20,6 @@ interface DAOAccess {
     fun getPesquisa(paciente: PacienteEntity?) : LiveData<PesquisaEntity>
 
     @Query("UPDATE Pesquisa SET questoes = :questoes WHERE id = :id")
-    fun updatePesquisa(id: Int?, questoes: List<QuestaoEntity>, paciente: PacienteEntity?)
+    fun updatePesquisa(id: Int?, questoes: MutableList<QuestaoEntity>, paciente: PacienteEntity?)
 
 }
