@@ -42,9 +42,6 @@ android {
     }
     kapt {
         useBuildCache = false
-        arguments {
-            arg("key", "value")
-        }
     }
 }
 dependencies {
