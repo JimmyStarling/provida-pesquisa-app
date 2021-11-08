@@ -40,8 +40,8 @@ class LoginActivity : AppCompatActivity() {
         val login = binding.login
         //val loading = binding.loading
 
-        var strName: String? = null
-        var strPassword: String? = null
+        lateinit var strName: String
+        lateinit var strPassword: String
 
         login.setOnClickListener{
             loginViewModel.getPesquisador(context, username.text.toString().trim(), password.text.toString().trim())!!.observe(this, {
