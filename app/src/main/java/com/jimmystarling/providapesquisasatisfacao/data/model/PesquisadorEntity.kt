@@ -12,7 +12,7 @@ data class PesquisadorEntity (
     @ColumnInfo(name = "matricula")
     var Matricula: String,
     @ColumnInfo(name = "pesquisas")
-    var Pesquisas: MutableList<PesquisaEntity>,
+    var Pesquisas: String,
     @ColumnInfo(name = "quantidade_pesquisas")
     var PesquisasContagem: Int,
     @ColumnInfo(name = "password")

@@ -17,9 +17,9 @@ interface DAOAccess {
     suspend fun registerPesquisa(pesquisaEntity: PesquisaEntity)
 
     @Query("SELECT * FROM Pesquisa WHERE paciente =:paciente")
-    fun getPesquisa(paciente: PacienteEntity?) : LiveData<PesquisaEntity>
+    fun getPesquisa(paciente: String) : LiveData<PesquisaEntity>
 
     @Query("UPDATE Pesquisa SET questoes = :questoes WHERE id = :id")
-    fun updatePesquisa(id: Int?, questoes: MutableList<QuestaoEntity>, paciente: PacienteEntity?)
+    fun updatePesquisa(id: Int?, questoes: String)
 
 }

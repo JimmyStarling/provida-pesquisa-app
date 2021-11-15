@@ -2,6 +2,7 @@ package com.jimmystarling.providapesquisasatisfacao.data.repository
 
 import android.content.Context
 import androidx.lifecycle.LiveData
+import com.google.gson.Gson
 import com.jimmystarling.providapesquisasatisfacao.data.database.ProvidaDatabase
 import com.jimmystarling.providapesquisasatisfacao.data.model.PacienteEntity
 import com.jimmystarling.providapesquisasatisfacao.data.model.PesquisaEntity
@@ -13,6 +14,8 @@ import kotlinx.coroutines.launch
 class PesquisaRepository {
 
     companion object{
+
+        var gson = Gson()
 
         var providaDatabase: ProvidaDatabase? = null
 
@@ -27,7 +30,7 @@ class PesquisaRepository {
             LoginRepository.providaDatabase = initializeDB(context)
 
             CoroutineScope(Dispatchers.IO).launch {
-                val pesquisaDetails = PesquisaEntity(questoes, paciente)
+                val pesquisaDetails = PesquisaEntity(gson.toJson(questoes), gson.toJson(paciente))
                 providaDatabase!!.databaseDao().registerPesquisa(pesquisaDetails)
             }
 
@@ -38,7 +41,7 @@ class PesquisaRepository {
             LoginRepository.providaDatabase = initializeDB(context)
 
             CoroutineScope(Dispatchers.IO).launch {
-                providaDatabase!!.databaseDao().updatePesquisa(pesquisaEntity.Id, questoes, paciente)
+                providaDatabase!!.databaseDao().updatePesquisa(pesquisaEntity.Id, gson.toJson(questoes))
             }
 
         }
@@ -47,7 +50,7 @@ class PesquisaRepository {
 
             providaDatabase = initializeDB(context)
 
-            pesquisaEntity = providaDatabase!!.databaseDao().getPesquisa(paciente)
+            pesquisaEntity = providaDatabase!!.databaseDao().getPesquisa(gson.toJson(paciente))
 
             return pesquisaEntity
 
