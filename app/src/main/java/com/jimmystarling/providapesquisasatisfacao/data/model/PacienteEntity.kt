@@ -4,16 +4,16 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "Paciente")
+@Entity(tableName = "paciente")
 data class PacienteEntity (
     @ColumnInfo(name = "name")
-    var Name: String,
+    var name: String,
     @ColumnInfo(name = "contato")
-    var Contato: String,
+    var contato: String,
     @ColumnInfo(name = "date")
-    var Date: String,
+    var date: String,
 ){
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
-    var Id: Int? = null
+    var id: Int? = null
 }

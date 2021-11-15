@@ -2,6 +2,7 @@ package com.jimmystarling.providapesquisasatisfacao.data.repository
 
 import android.content.Context
 import androidx.lifecycle.LiveData
+import com.google.gson.Gson
 import com.jimmystarling.providapesquisasatisfacao.data.database.ProvidaDatabase
 import com.jimmystarling.providapesquisasatisfacao.data.model.*
 import kotlinx.coroutines.CoroutineScope
@@ -12,23 +13,24 @@ class LoginRepository {
 
     companion object {
 
+        var gson = Gson()
+
         var providaDatabase: ProvidaDatabase? = null
 
         var pesquisadorEntity: LiveData<PesquisadorEntity>? = null
 
         // Initial data to insert to new Pesquisador entity
-        var matriculaPesquisador = (0..10).random()
-        var listaPesquisa = mutableListOf(
+        val matriculaPesquisador = (0..10).random()
+        val listaPesquisa = gson.toJson(mutableListOf<QuestaoEntity>(
             QuestaoEntity(1, "Equipe da Enfermagem", "Qual a nota de 0 a 5", "0"),
             QuestaoEntity(2, "Equipe da Vacina", "Qual a nota de 0 a 5", "0"),
             QuestaoEntity(3, "Equipe da Administração", "Qual a nota de 0 a 5", "0")
-        )
-        var pesquisasIniciais = mutableListOf(
-            PesquisaEntity(
-                listaPesquisa,
-                PacienteEntity("Rodrigo Alves", "071983565628", "07/11/2021")
-            )
-        )
+        ))
+        val pacienteInicial = gson.toJson(PacienteEntity("Rodrigo Alves", "071983565628", "07/11/2021"))
+        var pesquisasIniciais = gson.toJson(PesquisaEntity(
+            listaPesquisa,
+            pacienteInicial
+        ))
 
         fun initializeDB(context: Context) : ProvidaDatabase {
             return ProvidaDatabase.getDataseClient(context)

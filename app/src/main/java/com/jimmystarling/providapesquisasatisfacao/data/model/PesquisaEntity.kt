@@ -5,11 +5,11 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "Pesquisa")
-data class PesquisaEntity (
+data class PesquisaEntity(
     @ColumnInfo(name = "questoes")
-    var Questoes: MutableList<QuestaoEntity>,
+    var questoes: String,
     @ColumnInfo(name = "paciente")
-    var Paciente: PacienteEntity,
+    var paciente: String,
 ){
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
