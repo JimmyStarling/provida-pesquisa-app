@@ -45,28 +45,41 @@
 
     <Button
         android:id="@+id/login"
-        android:paddingTop="18dp"
-        android:paddingBottom="18dp"
-        android:paddingLeft="40dp"
-        android:paddingRight="40dp"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="start"
-        android:layout_marginStart="48dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="48dp"
         android:layout_marginBottom="64dp"
         android:background="@drawable/background_rounded_button"
         android:enabled="true"
         android:fontFamily="@font/questrial"
-        android:text="@string/action_sign_in"
+        android:paddingLeft="40dp"
+        android:paddingTop="18dp"
+        android:paddingRight="40dp"
+        android:paddingBottom="18dp"
+        android:text="@string/entrar"
         android:textAllCaps="false"
-        android:textSize="16sp"
+        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/password"
-        app:layout_constraintVertical_bias="0.2"/>
+        app:layout_constraintVertical_bias="0.2" />
+
+    <Button
+        android:id="@+id/button_cadastrar"
+        android:layout_width="match_parent"
+        android:layout_height="60sp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/background_rounded_button_outline"
+        android:text="@string/cadastrar"
+        android:textAllCaps="false"
+        android:textColor="@color/blue_700"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/login"
+        app:layout_constraintVertical_bias="0.0"
+        tools:layout_editor_absoluteX="16dp" />
 
     <ProgressBar
         android:id="@+id/loading"
@@ -88,17 +101,16 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="92dp"
-        android:layout_marginEnd="64dp"
         android:fontFamily="@font/questrial"
         android:text="@string/title_login_string"
-        android:textSize="16sp"
+        android:textColor="@color/blue_700"
+        android:textSize="18"
         app:layout_constraintBottom_toTopOf="@+id/username"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView2"
-        app:layout_constraintVertical_bias="0.526" />
+        app:layout_constraintVertical_bias="0.434" />
 
     <ImageView
         android:id="@+id/imageView2"

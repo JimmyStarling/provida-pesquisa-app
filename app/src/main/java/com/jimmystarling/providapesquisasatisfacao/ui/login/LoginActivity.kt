@@ -1,29 +1,17 @@
 package com.jimmystarling.providapesquisasatisfacao.ui.login
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
-import android.text.Editable
-import android.text.TextWatcher
-import android.view.View
-import android.view.inputmethod.EditorInfo
-import android.widget.EditText
 import android.widget.Toast
-import com.google.gson.Gson
 import kotlinx.serialization.json.Json
 import com.jimmystarling.providapesquisasatisfacao.databinding.ActivityLoginBinding
 
-import com.jimmystarling.providapesquisasatisfacao.R
-import com.jimmystarling.providapesquisasatisfacao.data.model.PesquisaEntity
 import com.jimmystarling.providapesquisasatisfacao.ui.login.viewmodel.LoginViewModel
-import com.jimmystarling.providapesquisasatisfacao.ui.questions.QuestionActivity
+import com.jimmystarling.providapesquisasatisfacao.ui.questions.PesquisaActivity
 import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.json.decodeFromJsonElement
 
 class LoginActivity : AppCompatActivity() {
 
@@ -86,7 +74,7 @@ class LoginActivity : AppCompatActivity() {
 
                         Toast.makeText(context, "Bem vindo novamente! Sr(a) ${strName}, suas pesquisas são ${pesquisas}", Toast.LENGTH_SHORT).show()
 
-                        val intent = Intent(this, QuestionActivity::class.java)
+                        val intent = Intent(this, PesquisaActivity::class.java)
                         startActivity(intent)
 
                     }

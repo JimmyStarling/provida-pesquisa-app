@@ -27,10 +27,10 @@ class LoginRepository {
             QuestaoEntity(3, "Equipe da Administração", "Qual a nota de 0 a 5", "0")
         ))
         val pacienteInicial = gson.toJson(PacienteEntity("Rodrigo Alves", "071983565628", "07/11/2021"))
-        var pesquisasIniciais = gson.toJson(PesquisaEntity(
+        /*var pesquisasIniciais = gson.toJson(PesquisaEntity(
             listaPesquisa,
             pacienteInicial
-        ))
+        ))*/
 
         fun initializeDB(context: Context) : ProvidaDatabase {
             return ProvidaDatabase.getDataseClient(context)
@@ -41,11 +41,12 @@ class LoginRepository {
             providaDatabase = initializeDB(context)
 
             CoroutineScope(IO).launch {
-                val pesquisadorDetails = PesquisadorEntity(name, matriculaPesquisador.toString(), pesquisasIniciais, 1, password)
+                val pesquisadorDetails = PesquisadorEntity(name, matriculaPesquisador.toString(), "", 1, password)//pesquisasIniciais
                 providaDatabase!!.databaseDao().registerPesquisador(pesquisadorDetails)
             }
 
         }
+
 
         fun getPesquisador(context: Context, name: String, password: String) : LiveData<PesquisadorEntity>? {
 
