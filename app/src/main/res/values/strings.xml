@@ -10,4 +10,70 @@
     <string name="invalid_password">A sua senha precisa ter >5 caracteres</string>
     <string name="login_failed">"Login falhou!</string>
     <string name="title_login_string">Faça login para começar as pesquisas</string>
+    <string name="title_question_atendimento">
+        Em uma escala de 10 a 0
+        QUAL A SUA AVALIAÇÃO GERAL
+        QUANTO AO ATENDIMENTO DA
+    </string>
+    <string name="title_question_agilidade">
+        Em uma escala de 10 a 0
+        QUAL A SUA AVALIAÇÃO
+        QUANTO À AGILIDADE NO ATENDIMENTO
+    </string>
+    <string name="title_question_atendimento_callcenter">
+        JÁ FEZ USO DO ATENDIMENTO DO SERVIÇO DE CALL CENTER?
+    </string>
+    <string name="title_question_atendimento_callcenter_2">
+        SE SIM, QUÃO FICOU SAFISTEITO (A)?
+    </string>
+    <string name="title_question_professional">
+        JÁ RECEBEU ATENDIMENTO DE OUTROS PROFISSIONAIS?
+    </string>
+    <string name="title_question_professional2">
+        SE SIM, QUAL (IS) ESPECIALIDADE (S)?
+    </string>
+    <string name="question_assistencia">Assistência Social</string>
+    <string name="question_nutricao">Nutrição</string>
+    <string name="question_odontologia">Odontologia</string>
+    <string name="question_psicologia">Psicologia</string>
+    <string name="title_question_multicentro">
+        SATISFAÇÃO GERAL COM O ATENDIMENTO DO MULTICENTRO
+    </string>
+    <string name="title_question_multicentro_2">
+        Quão Satisfeito (a) com o Atendimento do Multicentro de Amaralina
+    </string>
+    <string name="question_sim">Sim</string>
+    <string name="question_nao">Não</string>
+    <string name="title_question_enf">Equipe da Enfermagem</string>
+    <string name="title_question_farm">Equipe da Farmácia</string>
+    <string name="title_question_marc">Equipe da Marcação</string>
+    <string name="title_question_recep">Equipe da Recepção</string>
+    <string name="title_question_adm">Equipe de Administração</string>
+    <string name="title_question_vac">Equipe de Vacinação</string>
+    <string name="title_question_lab">Equipe do Laboratório</string>
+    <string name="title_question_med">Equipe Médica</string>
+    <string name="title_question_reclamar">
+        DESEJA REGISTRAR ALGUMA RECLAMAÇÃO?
+    </string>
+    <string name="title_question_reclamar2">
+        DESEJA REGISTRAR ALGUMA SUGESTÃO?
+    </string>
+    <string name="title_finish">
+        AGRADECEMOS SUA COLABORAÇÃO.
+        ESTES DADOS SERVIRÃO PARA MELHORARMOS O ATENDIMENTO PARA VOCÊ.
+    </string>
+    <string name="provida_logomarca">Provida logomarca</string>
+    <string name="imagem_da_enfermagem">Imagem da Enfermagem - Ilustração</string>
+    <string name="boa">BOA</string>
+    <string name="ruim">RUIM</string>
+    <string name="regular">REGULAR</string>
+    <string name="otima">OTIMA</string>
+    <string name="_0">0</string>
+    <string name="_4">4</string>
+    <string name="_10">10</string>
+    <string name="_7">7</string>
+    <string name="continuar">Continuar</string>
+    <string name="voltar">Voltar</string>
+    <string name="entrar">Entrar</string>
+    <string name="cadastrar">cadastrar</string>
 </resources>
