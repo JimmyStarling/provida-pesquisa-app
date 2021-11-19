@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ProvidaPesquisaSatisfacao">
         <activity
+            android:name=".ui.ActivityIniciarPesquisa"
+            android:exported="false" />
+        <activity
             android:name=".ui.questions.PesquisaActivity"
             android:exported="false" />
         <activity

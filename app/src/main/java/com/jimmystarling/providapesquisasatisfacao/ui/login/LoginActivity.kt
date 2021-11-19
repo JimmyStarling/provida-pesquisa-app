@@ -6,6 +6,8 @@ import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.Toast
+import com.google.gson.Gson
+import com.jimmystarling.providapesquisasatisfacao.data.model.PesquisadorEntity
 import kotlinx.serialization.json.Json
 import com.jimmystarling.providapesquisasatisfacao.databinding.ActivityLoginBinding
 
@@ -17,6 +19,8 @@ class LoginActivity : AppCompatActivity() {
 
     private lateinit var loginViewModel: LoginViewModel
     private lateinit var binding: ActivityLoginBinding
+
+    lateinit var pesquisador: PesquisadorEntity
 
     lateinit var context: Context
 
@@ -61,8 +65,16 @@ class LoginActivity : AppCompatActivity() {
                                     .show()
                             }
                             else -> {
-                                loginViewModel.registerPesquisador(context, username.text.toString().trim(), password.text.toString().trim())
+                                var nome_paciente: String = username.text.toString().trim()
+                                var senha_paciente: String = password.text.toString().trim()
+                                pesquisador = PesquisadorEntity(nome_paciente, Pesquisas = "", PesquisasContagem = 0, senha_paciente)
+
+                                loginViewModel.registerPesquisador(context, nome_paciente, senha_paciente)
                                 Toast.makeText(context, "Bem vindo!", Toast.LENGTH_SHORT).show()
+                                val intent = Intent(this, PesquisaActivity::class.java).apply {
+                                    putExtra(Companion.PESQUISADOR, gson.toJson(pesquisador))
+                                }
+                                startActivity(intent)
                             }
                         }
                     }
@@ -83,5 +95,11 @@ class LoginActivity : AppCompatActivity() {
         }
 
 
+    }
+
+    companion object {
+
+        var gson = Gson()
+        const val PESQUISADOR = "PESQUISADOR"
     }
 }
