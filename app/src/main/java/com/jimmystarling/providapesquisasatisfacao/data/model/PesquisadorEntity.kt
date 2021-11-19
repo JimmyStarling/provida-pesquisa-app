@@ -9,8 +9,6 @@ data class PesquisadorEntity (
 
     @ColumnInfo(name = "name")
     var Name: String,
-    @ColumnInfo(name = "matricula")
-    var Matricula: String,
     @ColumnInfo(name = "pesquisas")
     var Pesquisas: String,
     @ColumnInfo(name = "quantidade_pesquisas")
