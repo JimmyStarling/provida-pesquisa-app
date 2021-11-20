@@ -7,29 +7,35 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.Toast
-import androidx.databinding.DataBindingUtil.setContentView
 import com.google.android.material.slider.Slider
+import com.google.gson.Gson
+import com.google.gson.JsonElement
+import com.google.gson.JsonParser
 import com.jimmystarling.providapesquisasatisfacao.R
 import com.jimmystarling.providapesquisasatisfacao.data.model.PacienteEntity
 import com.jimmystarling.providapesquisasatisfacao.data.model.PesquisaEntity
 import com.jimmystarling.providapesquisasatisfacao.data.model.PesquisadorEntity
 import com.jimmystarling.providapesquisasatisfacao.data.model.QuestaoEntity
+import org.json.JSONObject
 
 class QuestionFragment : Fragment() {
     lateinit var slider: Slider
     lateinit var slider_value: String
 
-    lateinit var btn_continuar: Button
-    lateinit var btn_volter: Button
+    lateinit var mButtonContinuar: Button
+    lateinit var mButtonVoltar: Button
 
-    lateinit var pesquisa: PesquisaEntity
-    lateinit var pesquisador: PesquisadorEntity
-    lateinit var questoes: QuestaoEntity
-    lateinit var paciente: PacienteEntity
-    lateinit var matricula: String
+    // Entities and variables to modelview
+    lateinit var mPesquisa: PesquisaEntity
+    lateinit var mPesquisador: PesquisadorEntity
+    lateinit var mQuestao: QuestaoEntity
+    lateinit var mPaciente: PacienteEntity
+    
+    lateinit var mTitleQuestion: View
+    lateinit var mTitleContent: View
 
     companion object {
+        var gson = Gson()
         fun newInstance() = QuestionFragment()
     }
 
@@ -39,8 +45,17 @@ class QuestionFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         slider = view?.findViewById<Slider>(R.id.slider_quality)!!
-        btn_continuar = view?.findViewById<Button>(R.id.btn_continuar)!!
-        btn_volter = view?.findViewById<Button>(R.id.btn_voltar)!!
+        mButtonContinuar = view?.findViewById<Button>(R.id.btn_continuar)!!
+        mButtonVoltar = view?.findViewById<Button>(R.id.btn_voltar)!!
+        mTitleQuestion = view?.findViewById(R.id.title_atendimento)!!
+        mTitleContent = view?.findViewById(R.id.title_content)!!
+
+        val intent = activity?.intent
+        val nPesquisadorEntity = intent?.getStringExtra("PESQUISADOR")!!
+        val mPesquisadorParser: JsonElement = JsonParser.parseString(nPesquisadorEntity)
+        // Parsing to dataclass
+        mPesquisador = gson.fromJson(mPesquisadorParser, PesquisadorEntity::class.java) as PesquisadorEntity
+
         return inflater.inflate(R.layout.question_fragment, container, false)
     }
 
@@ -88,12 +103,23 @@ class QuestionFragment : Fragment() {
             }
         }
         // Passing to pesquisa
-        pesquisa = PesquisaEntity(pesquisador, questoes, paciente)
-        pesquisador = PesquisadorEntity()
-        btn_continuar.setOnClickListener {
-            PesquisaViewModel().createPesquisa(pesquisa, pesquisador, paciente)
+        mPesquisa = PesquisaEntity(mPesquisador.toString(), mQuestao.toString(), mPaciente.toString())
+        mQuestao = QuestaoEntity(
+            1,
+            mTitleQuestion.toString(),
+            mTitleContent.toString(),
+            slider_value
+        )
+        mButtonContinuar.setOnClickListener {
+
+            // Creating zero questao entity
+            PesquisaViewModel().createPesquisa(
+                    context = activity?.application!!.applicationContext,
+                    pesquisador = mPesquisador,
+                    questoes = listOf<QuestaoEntity>(mQuestao),
+                    paciente = mPaciente
+            )
         }
-//        Toast.makeText(context, "Atenção, você precisa marcar a caixa não responder para continuar!", Toast.LENGTH_LONG)
     }
 
     override fun onDestroyView() {

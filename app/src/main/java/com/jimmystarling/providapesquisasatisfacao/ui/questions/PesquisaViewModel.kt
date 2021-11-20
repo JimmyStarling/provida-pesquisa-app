@@ -10,10 +10,10 @@ import com.jimmystarling.providapesquisasatisfacao.data.repository.PesquisaRepos
 
 class PesquisaViewModel : ViewModel() {
     fun createPesquisa(context: Context, pesquisador: PesquisadorEntity, questoes: List<QuestaoEntity>, paciente: PacienteEntity){
-        PesquisaRepository.createPesquisa(context, pesquisador, questoes, paciente)
+        return PesquisaRepository.createPesquisa(context, pesquisador, questoes, paciente)
     }
 
     fun updatePesquisa(context: Context, pesquisa: PesquisaEntity, pesquisador: PesquisadorEntity, questoes: List<QuestaoEntity>, paciente: PacienteEntity){
-        PesquisaRepository.updatePesquisa(context, pesquisa, pesquisador, questoes, paciente)
+        return PesquisaRepository.updatePesquisa(context, pesquisa, pesquisador, questoes, paciente)
     }
 }

@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.jimmystarling.providapesquisasatisfacao.data.model.PesquisadorEntity
-import com.jimmystarling.providapesquisasatisfacao.data.repository.LoginRepository
+import com.jimmystarling.providapesquisasatisfacao.data.repository.PesquisadorRepository
 
 class LoginViewModel : ViewModel() {
 
@@ -12,11 +12,11 @@ class LoginViewModel : ViewModel() {
     var livePesquisador: LiveData<PesquisadorEntity>? = null
 
     fun registerPesquisador(context: Context, username: String, password: String) {
-        LoginRepository.registerPesquisador(context, username, password)
+        PesquisadorRepository.registerPesquisador(context, username, password)
     }
 
     fun getPesquisador(context: Context, name: String, password: String) : LiveData<PesquisadorEntity>? {
-        livePesquisador = LoginRepository.getPesquisador(context, name, password)
+        livePesquisador = PesquisadorRepository.getPesquisador(context, name, password)
         return livePesquisador
     }
 

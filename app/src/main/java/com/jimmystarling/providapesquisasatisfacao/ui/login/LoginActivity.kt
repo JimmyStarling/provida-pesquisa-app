@@ -71,6 +71,7 @@ class LoginActivity : AppCompatActivity() {
 
                                 loginViewModel.registerPesquisador(context, nome_paciente, senha_paciente)
                                 Toast.makeText(context, "Bem vindo!", Toast.LENGTH_SHORT).show()
+
                                 val intent = Intent(this, PesquisaActivity::class.java).apply {
                                     putExtra(Companion.PESQUISADOR, gson.toJson(pesquisador))
                                 }
