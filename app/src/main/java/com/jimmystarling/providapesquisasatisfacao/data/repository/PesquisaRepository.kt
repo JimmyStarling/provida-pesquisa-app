@@ -58,6 +58,7 @@ class PesquisaRepository {
 
         }
 
+        // Update Pesquisador
         // Here will pass the variable pesquisa appended to pesquisas converted to json to updatePesquisador
         fun updatePesquisador(context: Context, pesquisador: PesquisadorEntity, pesquisas: List<PesquisaEntity>, quantidade_pesquisa: Int){
             providaDatabase = initializeDB(context)
