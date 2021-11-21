@@ -6,7 +6,9 @@ import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.Toast
+
 import com.google.gson.Gson
+import com.jimmystarling.providapesquisasatisfacao.data.model.PesquisaEntity
 import com.jimmystarling.providapesquisasatisfacao.data.model.PesquisadorEntity
 import kotlinx.serialization.json.Json
 import com.jimmystarling.providapesquisasatisfacao.databinding.ActivityLoginBinding
@@ -37,62 +39,77 @@ class LoginActivity : AppCompatActivity() {
         val username = binding.username
         val password = binding.password
         val login = binding.login
-        //val loading = binding.loading
+        val cadastrar = binding.cadastrar
+        val loading = binding.loading
 
         lateinit var strName: String
         lateinit var strPassword: String
 
-        login.setOnClickListener{
-            loginViewModel.getPesquisador(context, username.text.toString().trim(), password.text.toString().trim())!!.observe(this, {
-                strName = username.text.toString().trim()
-                strPassword = password.text.toString().trim()
-                when {
-                    it == null -> {
-                        when {
-                            username.text.isEmpty() -> {
-                                Toast.makeText(
-                                    context,
-                                    "Porfavor insira seu nome de usuario!",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                            password.text.isEmpty() -> {
-                                Toast.makeText(
-                                    context,
-                                    "Porfavor insira sua senha!",
-                                    Toast.LENGTH_SHORT
-                                )
-                                    .show()
-                            }
-                            else -> {
-                                var nome_paciente: String = username.text.toString().trim()
-                                var senha_paciente: String = password.text.toString().trim()
-                                pesquisador = PesquisadorEntity(nome_paciente, Pesquisas = "", PesquisasContagem = 0, senha_paciente)
+        login.setOnClickListener {
+            loginViewModel.getPesquisador(
+                context,
+                username.text.toString().trim(),
+                password.text.toString().trim()
+            )!!.observe(this, {
+                if (it == null){
+                    Toast.makeText(
+                        context,
+                        "Usuario ou senha incorretos!",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                    pesquisador = it
 
-                                loginViewModel.registerPesquisador(context, nome_paciente, senha_paciente)
-                                Toast.makeText(context, "Bem vindo!", Toast.LENGTH_SHORT).show()
+                    strName = it.name
+                    strPassword = it.password
 
-                                val intent = Intent(this, PesquisaActivity::class.java).apply {
-                                    putExtra(Companion.PESQUISADOR, gson.toJson(pesquisador))
-                                }
-                                startActivity(intent)
-                            }
-                        }
+                    val pesquisas = Json.decodeFromString<PesquisaEntity>(it.pesquisas)
+
+                    Toast.makeText(
+                        context,
+                        "Bem vindo novamente! Sr(a) ${strName}, suas pesquisas são ${pesquisas}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+
+                    val intent = Intent(this, PesquisaActivity::class.java).apply {
+                        putExtra(PESQUISADOR, gson.toJson(pesquisador))
                     }
-                    else -> {
-                        strName = it.Name
-                        strPassword = it.Password
-                        var pesquisas = it.Pesquisas
-                        pesquisas = Json.decodeFromString(pesquisas)
-
-                        Toast.makeText(context, "Bem vindo novamente! Sr(a) ${strName}, suas pesquisas são ${pesquisas}", Toast.LENGTH_SHORT).show()
-
-                        val intent = Intent(this, PesquisaActivity::class.java)
-                        startActivity(intent)
-
-                    }
+                    startActivity(intent)
                 }
             })
+        }
+        cadastrar.setOnClickListener{
+            if(password.text.isEmpty() || username.text.isEmpty()){
+                Toast.makeText(
+                    context,
+                    "Porfavor, preencha todos os campos.",
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else if (it == null){
+                Toast.makeText(
+                    context,
+                    "Você já está cadastrado(a)! Porfavor realize o login com sua senha.",
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else {
+                val nomePaciente: String = username.text.toString().trim()
+                val senhaPaciente: String = password.text.toString().trim()
+                pesquisador = PesquisadorEntity(
+                    nomePaciente,
+                    pesquisas = "",
+                    pesquisas_quantidade = 0,
+                    senhaPaciente
+                )
+
+                loginViewModel.registerPesquisador(context, nomePaciente, senhaPaciente)
+                Toast.makeText(context, "Você foi cadastrado com sucesso!", Toast.LENGTH_SHORT)
+                    .show()
+
+                val intent = Intent(this, PesquisaActivity::class.java).apply {
+                    putExtra(Companion.PESQUISADOR, gson.toJson(pesquisador))
+                }
+                startActivity(intent)
+            }
         }
 
 

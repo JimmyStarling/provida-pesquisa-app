@@ -16,7 +16,9 @@ import com.jimmystarling.providapesquisasatisfacao.data.model.PacienteEntity
 import com.jimmystarling.providapesquisasatisfacao.data.model.PesquisaEntity
 import com.jimmystarling.providapesquisasatisfacao.data.model.PesquisadorEntity
 import com.jimmystarling.providapesquisasatisfacao.data.model.QuestaoEntity
+import kotlinx.serialization.decodeFromString
 import org.json.JSONObject
+import kotlinx.serialization.json.Json
 
 class QuestionFragment : Fragment() {
     lateinit var slider: Slider
@@ -44,6 +46,13 @@ class QuestionFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        return inflater.inflate(R.layout.question_fragment, container, false)
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        viewModel = ViewModelProvider(this).get(PesquisaViewModel::class.java)
+
         slider = view?.findViewById<Slider>(R.id.slider_quality)!!
         mButtonContinuar = view?.findViewById<Button>(R.id.btn_continuar)!!
         mButtonVoltar = view?.findViewById<Button>(R.id.btn_voltar)!!
@@ -51,17 +60,11 @@ class QuestionFragment : Fragment() {
         mTitleContent = view?.findViewById(R.id.title_content)!!
 
         val intent = activity?.intent
-        val nPesquisadorEntity = intent?.getStringExtra("PESQUISADOR")!!
-        val mPesquisadorParser: JsonElement = JsonParser.parseString(nPesquisadorEntity)
+        val mPesquisadorEntity = intent?.getStringExtra("PESQUISADOR")!!
+        //val mPesquisadorParser: JsonElement = JsonParser.parseString(mPesquisadorEntity)
         // Parsing to dataclass
-        mPesquisador = gson.fromJson(mPesquisadorParser, PesquisadorEntity::class.java) as PesquisadorEntity
+        mPesquisador = Json.decodeFromString<PesquisadorEntity>(mPesquisadorEntity)//gson.fromJson(mPesquisadorParser, PesquisadorEntity::class.java) as PesquisadorEntity
 
-        return inflater.inflate(R.layout.question_fragment, container, false)
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(PesquisaViewModel::class.java)
         slider.addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
             override fun onStartTrackingTouch(slider: Slider) {
                 val value: Float = slider.value
@@ -103,13 +106,13 @@ class QuestionFragment : Fragment() {
             }
         }
         // Passing to pesquisa
-        mPesquisa = PesquisaEntity(mPesquisador.toString(), mQuestao.toString(), mPaciente.toString())
         mQuestao = QuestaoEntity(
             1,
             mTitleQuestion.toString(),
             mTitleContent.toString(),
             slider_value
         )
+        mPesquisa = PesquisaEntity(mPesquisador.toString(), mQuestao.toString(), mPaciente.toString())
         mButtonContinuar.setOnClickListener {
 
             // Creating zero questao entity

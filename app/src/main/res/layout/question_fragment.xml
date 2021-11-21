@@ -93,11 +93,15 @@
             android:layout_height="wrap_content"
             android:textAlignment="inherit"
             android:orientation="vertical">
+
             <TextView
+                android:id="@+id/txt_0"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/_0"/>
+                android:text="@string/_0" />
+
             <TextView
+                android:id="@+id/txt_ruim"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/ruim" />
@@ -110,11 +114,15 @@
             android:layout_height="wrap_content"
             android:textAlignment="inherit"
             android:orientation="vertical">
+
             <TextView
+                android:id="@+id/txt_4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/_4"/>
+                android:text="@string/_4" />
+
             <TextView
+                android:id="@+id/txt_boa"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/boa" />
@@ -127,11 +135,15 @@
             android:layout_height="wrap_content"
             android:textAlignment="inherit"
             android:orientation="vertical">
+
             <TextView
+                android:id="@+id/txt_7"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/_7"/>
+                android:text="@string/_7" />
+
             <TextView
+                android:id="@+id/txt_regular"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/regular" />
@@ -144,11 +156,15 @@
             android:layout_height="wrap_content"
             android:textAlignment="inherit"
             android:orientation="vertical">
+
             <TextView
+                android:id="@+id/txt_10"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/_10"/>
+                android:text="@string/_10" />
+
             <TextView
+                android:id="@+id/txt_otima"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/otima" />
@@ -162,9 +178,10 @@
         android:layout_marginStart="50dp"
         android:layout_marginEnd="50dp"
         android:background="@drawable/background_rounded_button"
+        android:padding="16dp"
         android:text="@string/continuar"
         android:textAllCaps="false"
-        android:textSize="24sp"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -177,12 +194,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
+        android:layout_marginTop="15dp"
         android:layout_marginEnd="50dp"
         android:background="@drawable/background_rounded_button_outline"
+        android:padding="16dp"
         android:text="@string/voltar"
         android:textAllCaps="false"
         android:textColor="@color/blue_700"
-        android:textSize="24sp"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

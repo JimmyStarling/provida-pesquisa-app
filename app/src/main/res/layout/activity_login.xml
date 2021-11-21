@@ -32,7 +32,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="15dp"
         android:layout_marginEnd="24dp"
         android:fontFamily="@font/questrial"
         android:hint="@string/prompt_password"
@@ -57,7 +57,7 @@
         android:background="@drawable/background_rounded_button"
         android:enabled="true"
         android:fontFamily="@font/questrial"
-        android:padding="16"
+        android:padding="16dp"
         android:text="@string/entrar"
         android:textAllCaps="false"
         android:textSize="20sp"
@@ -68,7 +68,7 @@
         app:layout_constraintVertical_bias="0.2" />
 
     <Button
-        android:id="@+id/button_cadastrar"
+        android:id="@+id/cadastrar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -104,7 +104,7 @@
         app:layout_constraintVertical_bias="0.3" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/login_subtitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="36dp"
@@ -118,11 +118,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2"
+        app:layout_constraintTop_toBottomOf="@+id/logotype"
         app:layout_constraintVertical_bias="0.434" />
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/logotype"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@+id/loading"
