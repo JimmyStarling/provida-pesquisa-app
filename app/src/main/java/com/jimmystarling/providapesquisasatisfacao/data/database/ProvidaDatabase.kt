@@ -6,7 +6,7 @@ import com.jimmystarling.providapesquisasatisfacao.data.model.PacienteEntity
 import com.jimmystarling.providapesquisasatisfacao.data.model.PesquisaEntity
 import com.jimmystarling.providapesquisasatisfacao.data.model.PesquisadorEntity
 
-@Database(entities = arrayOf(PesquisadorEntity::class, PacienteEntity::class, PesquisaEntity::class), version = 1, exportSchema = false)
+@Database(entities = arrayOf(PesquisadorEntity::class, PacienteEntity::class, PesquisaEntity::class), version = 2, exportSchema = false)
 abstract class ProvidaDatabase : RoomDatabase() {
 
     abstract fun databaseDao() : DAOAccess

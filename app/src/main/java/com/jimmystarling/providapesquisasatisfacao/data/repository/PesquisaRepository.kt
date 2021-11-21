@@ -43,7 +43,7 @@ class PesquisaRepository {
             providaDatabase = initializeDB(context)
 
             CoroutineScope(Dispatchers.IO).launch {
-                providaDatabase!!.databaseDao().updatePesquisa(pesquisa.Id, gson.toJson(pesquisador), gson.toJson(questoes), gson.toJson(paciente))
+                providaDatabase!!.databaseDao().updatePesquisa(pesquisa.id, gson.toJson(pesquisador), gson.toJson(questoes), gson.toJson(paciente))
             }
 
         }
@@ -67,7 +67,7 @@ class PesquisaRepository {
             val quantidade_pesquisas_json = gson.toJson(quantidade_pesquisa)
 
             CoroutineScope(Dispatchers.IO).launch {
-                providaDatabase!!.databaseDao().updatePesquisador(pesquisador.Id, pesquisas_json, quantidade_pesquisas_json)
+                providaDatabase!!.databaseDao().updatePesquisador(pesquisador.id, pesquisas_json, quantidade_pesquisas_json)
             }
         }
     }

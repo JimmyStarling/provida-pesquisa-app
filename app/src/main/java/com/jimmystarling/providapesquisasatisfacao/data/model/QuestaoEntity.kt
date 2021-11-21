@@ -4,13 +4,13 @@ import androidx.room.ColumnInfo
 import androidx.room.PrimaryKey
 
 data class QuestaoEntity(
-    var Id: Int? = null,
+    var id: Int? = null,
     //@ColumnInfo(name = "title")
-    var Title: String,
+    var title: String,
     //@ColumnInfo(name = "content")
-    var Content: String,
+    var content: String,
     //@ColumnInfo(name = "resposta")
-    var Resposta: String,
+    var resposta: String,
 )/*{
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
