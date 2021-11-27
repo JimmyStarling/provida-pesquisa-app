@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.Toast
 
@@ -63,6 +64,7 @@ class LoginActivity : AppCompatActivity() {
                     strName = it.name
                     strPassword = it.password
 
+                    Log.d("/D", it.pesquisas)
                     val pesquisas = Json.decodeFromString<PesquisaEntity>(it.pesquisas)
 
                     Toast.makeText(
@@ -92,16 +94,18 @@ class LoginActivity : AppCompatActivity() {
                     Toast.LENGTH_SHORT
                 ).show()
             } else {
-                val nomePaciente: String = username.text.toString().trim()
-                val senhaPaciente: String = password.text.toString().trim()
+                val name: String = username.text.toString().trim()
+                val password: String = password.text.toString().trim()
                 pesquisador = PesquisadorEntity(
-                    nomePaciente,
-                    pesquisas = "",
+                    name,
+                    pesquisas = gson.toJson(listOf(
+                        PesquisaEntity(name, "", "")
+                    )),
                     pesquisas_quantidade = 0,
-                    senhaPaciente
+                    password
                 )
 
-                loginViewModel.registerPesquisador(context, nomePaciente, senhaPaciente)
+                loginViewModel.registerPesquisador(context, name, password)
                 Toast.makeText(context, "Você foi cadastrado com sucesso!", Toast.LENGTH_SHORT)
                     .show()
 
