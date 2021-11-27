@@ -7,7 +7,6 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.serialization.Serializable
 
 @Entity(tableName = "Pesquisa")
-@Serializable
 data class PesquisaEntity(
     @ColumnInfo(name = "pesquisador")
     @SerializedName("pesquisador")
