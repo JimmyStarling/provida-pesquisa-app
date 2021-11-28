@@ -61,10 +61,9 @@ class QuestionFragment : Fragment() {
 
         val intent = activity?.intent
         val mPesquisadorEntity = intent?.getStringExtra("PESQUISADOR")!!
-        //val mPesquisadorParser: JsonElement = JsonParser.parseString(mPesquisadorEntity)
-        // Parsing to dataclass
-        mPesquisador = Json.decodeFromString<PesquisadorEntity>(mPesquisadorEntity)//gson.fromJson(mPesquisadorParser, PesquisadorEntity::class.java) as PesquisadorEntity
-
+        // Parsing to dataclass to be used by createPesquisa()
+        mPesquisador = Json.decodeFromString<PesquisadorEntity>(mPesquisadorEntity)
+        // Slider listener to CreatePesquisa
         slider.addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
             override fun onStartTrackingTouch(slider: Slider) {
                 val value: Float = slider.value
@@ -78,7 +77,6 @@ class QuestionFragment : Fragment() {
                     slider_value = "Ruim"
                 }
             }
-
             override fun onStopTrackingTouch(slider: Slider) {
                 val value: Float = slider.value
                 if(value.toString() == "3.0"){
@@ -92,29 +90,30 @@ class QuestionFragment : Fragment() {
                 }
             }
         })
-
+        // When the value of slide changes then set the values
         slider.addOnChangeListener { slider, value, fromUser ->
-            val value: Float = slider.value
-            if(value.toString() == "3.0"){
+            val number_slider_value: Float = slider.value
+            if(number_slider_value.toString() == "3.0"){
                 slider_value = "Regular"
-            } else if (value.toString() == "6"){
+            } else if (number_slider_value.toString() == "6"){
                 slider_value = "Bom"
-            } else if (value.toString() == "9"){
+            } else if (number_slider_value.toString() == "9"){
                 slider_value = "Ótimo"
             } else {
                 slider_value = "Ruim"
             }
-        }
-        // Passing to pesquisa
-        mQuestao = QuestaoEntity(
-            1,
-            mTitleQuestion.toString(),
-            mTitleContent.toString(),
-            slider_value
-        )
-        mPesquisa = PesquisaEntity(mPesquisador.toString(), mQuestao.toString(), mPaciente.toString())
-        mButtonContinuar.setOnClickListener {
 
+            // Create question's PesquisaEntity tp be used by createPesquisa()
+            mQuestao = QuestaoEntity(
+                1,
+                mTitleQuestion.toString(),
+                mTitleContent.toString(),
+                slider_value
+            )
+            mPesquisa = PesquisaEntity(mPesquisador.toString(), mQuestao.toString(), mPaciente.toString())
+
+        }
+        mButtonContinuar.setOnClickListener {
             // Creating zero questao entity
             PesquisaViewModel().createPesquisa(
                     context = activity?.application!!.applicationContext,
