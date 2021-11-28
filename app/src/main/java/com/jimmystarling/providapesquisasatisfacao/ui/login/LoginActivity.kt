@@ -41,10 +41,7 @@ class LoginActivity : AppCompatActivity() {
         val password = binding.password
         val login = binding.login
         val cadastrar = binding.cadastrar
-        val loading = binding.loading
-
-        lateinit var strName: String
-        lateinit var strPassword: String
+        //val loading = binding.loading
 
         login.setOnClickListener {
             loginViewModel.getPesquisador(
@@ -61,15 +58,15 @@ class LoginActivity : AppCompatActivity() {
                 } else {
                     pesquisador = it
 
-                    strName = it.name
-                    strPassword = it.password
+                    val strName = it.name
 
-                    Log.d("/D", it.pesquisas)
-                    val pesquisas = Json.decodeFromString<PesquisaEntity>(it.pesquisas)
+                    val mpesquisas = pesquisador.pesquisas.dropLast(1)
+                    val pesquisas = mpesquisas.drop(1)
+                    val pesquisas_data = Json.decodeFromString<PesquisaEntity>(pesquisas)
 
                     Toast.makeText(
                         context,
-                        "Bem vindo novamente! Sr(a) ${strName}, suas pesquisas são ${pesquisas}",
+                        "Bem vindo novamente! Sr(a) ${strName}, suas pesquisas são ${pesquisas_data}",
                         Toast.LENGTH_SHORT
                     ).show()
 
@@ -94,23 +91,23 @@ class LoginActivity : AppCompatActivity() {
                     Toast.LENGTH_SHORT
                 ).show()
             } else {
-                val name: String = username.text.toString().trim()
-                val password: String = password.text.toString().trim()
+                val nome: String = username.text.toString().trim()
+                val credencial: String = password.text.toString().trim()
                 pesquisador = PesquisadorEntity(
-                    name,
+                    nome,
                     pesquisas = gson.toJson(listOf(
-                        PesquisaEntity(name, "", "")
+                        PesquisaEntity(nome, "", "")
                     )),
                     pesquisas_quantidade = 0,
-                    password
+                    credencial
                 )
 
-                loginViewModel.registerPesquisador(context, name, password)
+                loginViewModel.registerPesquisador(context, pesquisador)
                 Toast.makeText(context, "Você foi cadastrado com sucesso!", Toast.LENGTH_SHORT)
                     .show()
 
                 val intent = Intent(this, PesquisaActivity::class.java).apply {
-                    putExtra(Companion.PESQUISADOR, gson.toJson(pesquisador))
+                    putExtra(PESQUISADOR, gson.toJson(pesquisador))
                 }
                 startActivity(intent)
             }
