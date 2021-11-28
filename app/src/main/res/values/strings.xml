@@ -76,4 +76,7 @@
     <string name="voltar">Voltar</string>
     <string name="entrar">Entrar</string>
     <string name="cadastrar">Cadastrar</string>
+    <string name="iniciar_pesquisa_title">Bem-vindo á Pesquisa de Satisfação, digite o nome do paciente e o contato para continuar</string>
+    <string name="nome_do_paciente">Nome do Paciente</string>
+    <string name="iniciar_pesquisa">Iniciar Pesquisa</string>
 </resources>
