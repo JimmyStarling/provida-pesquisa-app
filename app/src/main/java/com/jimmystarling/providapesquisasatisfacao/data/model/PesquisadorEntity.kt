@@ -28,7 +28,7 @@ data class PesquisadorEntity (
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
-    @SerializedName("Id")
+    @SerializedName("id")
     var id: Int? = null
 
 }
