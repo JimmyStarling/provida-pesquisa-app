@@ -79,4 +79,5 @@
     <string name="iniciar_pesquisa_title">Bem-vindo á Pesquisa de Satisfação, digite o nome do paciente e o contato para continuar</string>
     <string name="nome_do_paciente">Nome do Paciente</string>
     <string name="iniciar_pesquisa">Iniciar Pesquisa</string>
+    <string name="contato">Contato</string>
 </resources>
