@@ -61,6 +61,8 @@ class QuestionFragment : Fragment() {
 
         val intent = activity?.intent
         val mPesquisadorEntity = intent?.getStringExtra("PESQUISADOR")!!
+        val mPacienteEntity = intent.getStringExtra("PACIENTE")!!
+        mPaciente = Json.decodeFromString<PacienteEntity>(mPacienteEntity)
         // Parsing to dataclass to be used by createPesquisa()
         mPesquisador = Json.decodeFromString<PesquisadorEntity>(mPesquisadorEntity)
         // Slider listener to CreatePesquisa
