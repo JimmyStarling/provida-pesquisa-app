@@ -13,6 +13,7 @@ import com.jimmystarling.providapesquisasatisfacao.data.model.PesquisaEntity
 import com.jimmystarling.providapesquisasatisfacao.data.model.PesquisadorEntity
 import kotlinx.serialization.json.Json
 import com.jimmystarling.providapesquisasatisfacao.databinding.ActivityLoginBinding
+import com.jimmystarling.providapesquisasatisfacao.ui.ActivityIniciarPesquisa
 
 import com.jimmystarling.providapesquisasatisfacao.ui.login.viewmodel.LoginViewModel
 import com.jimmystarling.providapesquisasatisfacao.ui.questions.PesquisaActivity
@@ -70,7 +71,7 @@ class LoginActivity : AppCompatActivity() {
                         Toast.LENGTH_SHORT
                     ).show()
 
-                    val intent = Intent(this, PesquisaActivity::class.java).apply {
+                    val intent = Intent(this, ActivityIniciarPesquisa::class.java).apply {
                         putExtra(PESQUISADOR, gson.toJson(pesquisador))
                     }
                     startActivity(intent)
@@ -106,7 +107,7 @@ class LoginActivity : AppCompatActivity() {
                 Toast.makeText(context, "Você foi cadastrado com sucesso!", Toast.LENGTH_SHORT)
                     .show()
 
-                val intent = Intent(this, PesquisaActivity::class.java).apply {
+                val intent = Intent(this, ActivityIniciarPesquisa::class.java).apply {
                     putExtra(PESQUISADOR, gson.toJson(pesquisador))
                 }
                 startActivity(intent)
