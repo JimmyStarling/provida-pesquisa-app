@@ -13,7 +13,7 @@ class PesquisaActivity : AppCompatActivity() {
         val fragment = QuestionFragment
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                .replace(R.id.container, fragment.newInstance())
+                .replace(R.id.pesquisa_activity, fragment.newInstance())
                 .commitNow()
         }
     }
