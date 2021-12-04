@@ -26,13 +26,13 @@ class PesquisaRepository {
             return ProvidaDatabase.getDataseClient(context)
         }
 
-        fun createPesquisa(context: Context, pesquisador: PesquisadorEntity, questoes: List<QuestaoEntity>, paciente: PacienteEntity) {
+        fun registerPesquisa(context: Context, pesquisador: PesquisadorEntity, questoes: List<QuestaoEntity>, paciente: PacienteEntity) {
 
             providaDatabase = initializeDB(context)
 
             CoroutineScope(Dispatchers.IO).launch {
                 val pesquisaDetails = PesquisaEntity(gson.toJson(pesquisador), gson.toJson(questoes), gson.toJson(paciente))
-                providaDatabase!!.databaseDao().createPesquisa(pesquisaDetails)
+                providaDatabase!!.databaseDao().registerPesquisa(pesquisaDetails)
             }
 
         }
@@ -48,11 +48,11 @@ class PesquisaRepository {
 
         }
 
-        fun getPesquisa(context: Context,  paciente: PacienteEntity): LiveData<PesquisaEntity>? {
+        fun getPesquisa(context: Context,  pesquisador: PesquisadorEntity): LiveData<PesquisaEntity>? {
 
             providaDatabase = initializeDB(context)
 
-            pesquisaEntity = providaDatabase!!.databaseDao().getPesquisa(gson.toJson(paciente))
+            pesquisaEntity = providaDatabase!!.databaseDao().getPesquisa(gson.toJson(pesquisador))
 
             return pesquisaEntity
 

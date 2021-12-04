@@ -1,0 +1,32 @@
+PESQUISADOR:{
+NOME, 
+MATRICULA,
+SENHA, 
+PESQUISAS
+}
+
+insertPesquisa(Pesquisa{
+paciente{claudio,71981884889}
+questoes{database.getQuestoes() -> retornar array de questoes}
+data{getData()}
+})
+A cada transition na tela(ou inflate) terá um
+updateQuestao(Questao{id, resposta:"Ruim"})
+updatePesquisa(Pesquisa{
+id:1
+questoes{database.getQuestoes() -> retornar array de questoes}
+})
+Quando terminar todos os fragments e passar pra tela "home"
+será acionado 
+updatePesquisador(Pesquisador{
+id,
+pesquisas:{database.getPesquisa() -> retornar array de pesquisas}
+pesquisaContagem:pesquisas.size
+})
+
+PESQUISA:{
+  PESQUISADO: PACIENTE,
+  QUESTÕES:ARRAY(QUESTÃO:{ID:1, TITULO:"BLABLA"}), 
+  CREATED_AT: DATA}
+}
+PACIENTE{ID, NOME, CONTATO, RESPOSTAS}
