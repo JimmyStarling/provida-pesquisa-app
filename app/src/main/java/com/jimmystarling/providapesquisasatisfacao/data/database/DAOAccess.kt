@@ -17,10 +17,10 @@ interface DAOAccess {
     fun updatePesquisador(id: Int?, pesquisas: String, pesquisas_quantidade: String)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun createPesquisa(pesquisaEntity: PesquisaEntity)
+    suspend fun registerPesquisa(pesquisaEntity: PesquisaEntity)
 
-    @Query("SELECT * FROM Pesquisa WHERE paciente =:paciente")
-    fun getPesquisa(paciente: String) : LiveData<PesquisaEntity>
+    @Query("SELECT * FROM Pesquisa WHERE pesquisador =:pesquisador")
+    fun getPesquisa(pesquisador: String) : LiveData<PesquisaEntity>
 
     @Query("UPDATE Pesquisa SET pesquisador =:pesquisador AND questoes =:questoes AND paciente = :paciente WHERE id = :id")
     fun updatePesquisa(id: Int?, pesquisador: String, questoes: String, paciente: String)
