@@ -5,11 +5,14 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import com.google.gson.Gson
 import com.jimmystarling.providapesquisasatisfacao.R
 import com.jimmystarling.providapesquisasatisfacao.data.model.PacienteEntity
 import com.jimmystarling.providapesquisasatisfacao.data.model.PesquisadorEntity
+import com.jimmystarling.providapesquisasatisfacao.data.model.QuestaoEntity
+import com.jimmystarling.providapesquisasatisfacao.data.repository.PesquisaRepository
 import com.jimmystarling.providapesquisasatisfacao.databinding.ActivityIniciarPesquisaBinding
 import com.jimmystarling.providapesquisasatisfacao.databinding.ActivityIniciarPesquisaBinding.*
 import com.jimmystarling.providapesquisasatisfacao.databinding.ActivityLoginBinding
@@ -41,21 +44,21 @@ class ActivityIniciarPesquisa : AppCompatActivity() {
         binding = inflate(layoutInflater)
         setContentView(binding.root)
 
-        val nome_paciente = binding.numeroPaciente.text?.trim()
-        val numero_paciente = binding.nomePaciente.text?.trim()
+        val nome_paciente = binding.numeroPaciente
+        val numero_paciente = binding.nomePaciente
         val button_iniciar = binding.btnComecar
 
         val simple_format = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
         val current_date = simple_format.format(Date())
 
         button_iniciar.setOnClickListener {
-            if (nome_paciente == null){
+            if (nome_paciente.text?.trim() == null){
                 Toast.makeText(
                     context,
                     "Nome do paciente é obrigatório!",
                     Toast.LENGTH_SHORT
                 ).show()
-            } else if (numero_paciente == null){
+            } else if (numero_paciente.text?.trim() == null){
                 Toast.makeText(
                     context,
                     "Numero é obrigatório!",
@@ -63,7 +66,12 @@ class ActivityIniciarPesquisa : AppCompatActivity() {
                 ).show()
             }
 
-            paciente = PacienteEntity(nome_paciente.toString(), numero_paciente.toString(), current_date)
+            paciente = PacienteEntity(
+                name = nome_paciente.text?.trim().toString(),
+                contato = numero_paciente.text?.trim().toString(),
+                date = current_date
+            )
+            Log.d("DEBUG", "PACIENTE IS: ${gson.toJson(paciente)}")
             mPesquisadorEntity = this.intent.getStringExtra("PESQUISADOR").toString()
             pesquisador = Json.decodeFromString<PesquisadorEntity>(mPesquisadorEntity)
             val pesquisa_intent = Intent(this, PesquisaActivity::class.java).apply {
