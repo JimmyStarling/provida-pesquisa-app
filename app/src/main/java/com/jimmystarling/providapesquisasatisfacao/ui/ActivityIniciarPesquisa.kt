@@ -44,8 +44,8 @@ class ActivityIniciarPesquisa : AppCompatActivity() {
         binding = inflate(layoutInflater)
         setContentView(binding.root)
 
-        val nome_paciente = binding.numeroPaciente
-        val numero_paciente = binding.nomePaciente
+        val nome_paciente = binding.nomePaciente
+        val numero_paciente = binding.numeroPaciente
         val button_iniciar = binding.btnComecar
 
         val simple_format = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
@@ -72,6 +72,7 @@ class ActivityIniciarPesquisa : AppCompatActivity() {
                 date = current_date
             )
             Log.d("DEBUG", "PACIENTE IS: ${gson.toJson(paciente)}")
+            // Parsing Pesquisador dataclasss object to another intent
             mPesquisadorEntity = this.intent.getStringExtra("PESQUISADOR").toString()
             pesquisador = Json.decodeFromString<PesquisadorEntity>(mPesquisadorEntity)
             val pesquisa_intent = Intent(this, PesquisaActivity::class.java).apply {

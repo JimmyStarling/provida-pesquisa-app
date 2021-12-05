@@ -20,3 +20,14 @@ PesquisaEntity(
      "name":"71988422043"
   }"
 )
+
+PesquisadorEntity("name=jimmystarlingdev@gmail.com",
+"pesquisas="[
+   {
+      "paciente":"",
+      "pesquisador":"jimmystarlingdev@gmail.com",
+      "questoes":""
+   }
+],
+pesquisas_quantidade=0,
+password=jimy12345)

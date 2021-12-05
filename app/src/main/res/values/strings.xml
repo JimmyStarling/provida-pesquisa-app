@@ -82,4 +82,6 @@
     <string name="contato">Contato</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="already_registered_message">Você já está cadastrado(a)! Por favor realize o login com sua senha.</string>
+    <string name="empty_fills_message">Por favor, preencha todos os campos.</string>
 </resources>

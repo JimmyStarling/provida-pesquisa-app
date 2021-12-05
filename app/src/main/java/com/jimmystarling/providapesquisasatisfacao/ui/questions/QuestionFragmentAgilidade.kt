@@ -137,7 +137,7 @@ class QuestionFragmentAgilidade : Fragment() {
                 paciente = mPaciente
             )
 
-            PesquisaViewModel().getPesquisa(
+            PesquisaViewModel().searchPesquisa(
                 activity?.application!!.applicationContext,
                 pesquisador = mPesquisador
             )!!.observe(activity!!, {

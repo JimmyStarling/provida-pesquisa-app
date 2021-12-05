@@ -72,8 +72,7 @@ class QuestionFragment : Fragment() {
         mPaciente = Json.decodeFromString(mPacienteEntity)
         // Parsing to dataclass to be used by registerPesquisa()
         mPesquisador = Json.decodeFromString(mPesquisadorEntity)
-        // TODO: Update pesquisador with pesquisas and add a count
-        Log.d("DEBUG", "mPaciente:${mPaciente}, mPesquisador:${mPesquisador}")
+
         // Slider listener to registerPesquisa
         slider.addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
             override fun onStartTrackingTouch(slider: Slider) {
@@ -141,6 +140,14 @@ class QuestionFragment : Fragment() {
                 sliderValue
             )
             mPesquisa = PesquisaEntity(gson.toJson(mPesquisador), gson.toJson(mQuestao), gson.toJson(mPaciente))
+
+            mPesquisador.pesquisas =
+                listOf<PesquisaEntity>(
+                    PesquisaEntity(gson.toJson(mPesquisador), gson.toJson(mQuestao), gson.toJson(mPaciente))
+                ).toString()
+            // TODO: Update pesquisador with pesquisas and add a count
+            Log.d("DEBUG", "Paciente:${mPaciente}, Pesquisador(${mPesquisador.id}):${mPesquisador}, Pesquisas: ${mPesquisador.pesquisas}")
+
             // Creating zero questao entity
             PesquisaViewModel().registerPesquisa(
                 context = activity?.application!!.applicationContext,

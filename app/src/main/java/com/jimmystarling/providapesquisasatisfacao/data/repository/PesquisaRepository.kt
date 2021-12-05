@@ -21,6 +21,7 @@ class PesquisaRepository {
         var providaDatabase: ProvidaDatabase? = null
 
         var pesquisaEntity: LiveData<PesquisaEntity>? = null
+        var pesquisas: LiveData<List<PesquisaEntity>>? = null
 
         fun initializeDB(context: Context) : ProvidaDatabase {
             return ProvidaDatabase.getDataseClient(context)
@@ -48,26 +49,23 @@ class PesquisaRepository {
 
         }
 
-        fun getPesquisa(context: Context,  pesquisador: PesquisadorEntity): LiveData<PesquisaEntity>? {
+        fun searchPesquisa(context: Context,  pesquisador: PesquisadorEntity): LiveData<List<PesquisaEntity>>? {
 
             providaDatabase = initializeDB(context)
 
-            pesquisaEntity = providaDatabase!!.databaseDao().getPesquisa(gson.toJson(pesquisador))
+            pesquisas = providaDatabase!!.databaseDao().searchPesquisa(gson.toJson(pesquisador))
 
-            return pesquisaEntity
+            return pesquisas
 
         }
 
         // Update Pesquisador
         // Here will pass the variable pesquisa appended to pesquisas converted to json to updatePesquisador
-        fun updatePesquisador(context: Context, pesquisador: PesquisadorEntity, pesquisas: List<PesquisaEntity>, quantidade_pesquisa: Int){
+        fun updatePesquisador(context: Context, pesquisador: PesquisadorEntity, pesquisas_quanidade: Int){
             providaDatabase = initializeDB(context)
 
-            val pesquisas_json = gson.toJson(pesquisas)
-            val quantidade_pesquisas_json = gson.toJson(quantidade_pesquisa)
-
             CoroutineScope(Dispatchers.IO).launch {
-                providaDatabase!!.databaseDao().updatePesquisador(pesquisador.id, pesquisas_json, quantidade_pesquisas_json)
+                providaDatabase!!.databaseDao().updatePesquisador(pesquisador.id, pesquisas_quanidade)
             }
         }
     }

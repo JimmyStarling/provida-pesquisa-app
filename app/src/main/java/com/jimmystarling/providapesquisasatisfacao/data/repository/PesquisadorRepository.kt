@@ -53,11 +53,11 @@ class PesquisadorRepository {
         }
 
 
-        fun getPesquisador(context: Context, name: String, password: String) : LiveData<PesquisadorEntity>? {
+        fun searchPesquisador(context: Context, name: String, password: String) : LiveData<PesquisadorEntity>? {
 
             providaDatabase = initializeDB(context)
 
-            pesquisadorEntity = providaDatabase!!.databaseDao().getPesquisador(name, password)
+            pesquisadorEntity = providaDatabase!!.databaseDao().searchPesquisador(name, password)
 
             return pesquisadorEntity
         }

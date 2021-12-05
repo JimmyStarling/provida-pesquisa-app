@@ -14,8 +14,8 @@ class PesquisaViewModel : ViewModel() {
         return PesquisaRepository.registerPesquisa(context, pesquisador, questoes, paciente)
     }
 
-    fun getPesquisa(context: Context, pesquisador: PesquisadorEntity): LiveData<PesquisaEntity>? {
-        return PesquisaRepository.getPesquisa(context, pesquisador)
+    fun searchPesquisa(context: Context, pesquisador: PesquisadorEntity): LiveData<PesquisaEntity>? {
+        return PesquisaRepository.searchPesquisa(context, pesquisador)
     }
 
     fun updatePesquisa(context: Context, pesquisa: PesquisaEntity, pesquisador: PesquisadorEntity, questoes: List<QuestaoEntity>, paciente: PacienteEntity){
