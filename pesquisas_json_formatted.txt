@@ -1,0 +1,22 @@
+PesquisaEntity(
+  pesquisador="{
+     "id":2,
+     "name":"jimmystarlingdev@gmail.com",
+     "password":"jimy12345",
+     "pesquisas":"[{\"paciente\":\"\",\"pesquisador\":\"jimmystarlingdev@gmail.com\",\"questoes\":\"\"}]",<----- REMOVE IT
+     "pesquisas_quantidade":0
+  }",
+  questoes="[
+     {
+        "content":"Equipe da Enfermagem",
+        "id":1,
+        "resposta":"Ruim",
+        "title":"Em uma escala de 10 a 0 QUAL A SUA AVALIAÇÃO QUANTO À AGILIDADE NO ATENDIMENTO"
+     }
+  ]",
+  paciente="{
+     "contato":"Edna Sacramento Vinagre Lima",
+     "date":"04/12/2021 05:11:40",
+     "name":"71988422043"
+  }"
+)
