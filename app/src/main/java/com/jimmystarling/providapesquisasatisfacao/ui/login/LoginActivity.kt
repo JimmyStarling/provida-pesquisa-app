@@ -27,8 +27,6 @@ class LoginActivity : AppCompatActivity() {
     lateinit var context: Context
     lateinit var activityIniciarPesquisa: Intent
 
-    var isRegistered: Boolean = false
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -54,52 +52,45 @@ class LoginActivity : AppCompatActivity() {
                     R.string.empty_fills_message,
                     Toast.LENGTH_SHORT
                 ).show()
-            }
-            else {
+            } else {
                 loginViewModel.searchPesquisador(
                     context,
                     pesquisadorName,
                     pesquisadorPassword
                 )!!.observe(this, { pesquisador ->
-                    if (pesquisador == null){
+                    if (pesquisador == null) {
                         Toast.makeText(
                             context,
                             "Usuario ou senha incorretos!",
                             Toast.LENGTH_SHORT
                         ).show()
                     } else {
-                        loginViewModel.searchPesquisadorPesquisas(context, pesquisador)!!.observe(this, { pesquisas ->
-                            Toast.makeText(
-                                context,
-                                "Bem vindo novamente! Sr(a) ${pesquisador.name}, suas pesquisas são ${gson.toJson(pesquisas)}",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        })
-
-                        activityIniciarPesquisa = Intent(this, ActivityIniciarPesquisa::class.java).apply {
-                            putExtra(PESQUISADOR, gson.toJson(pesquisador))
-                        }
+                        searchPesquisas(pesquisador)
+                        activityIniciarPesquisa =
+                            Intent(this, ActivityIniciarPesquisa::class.java).apply {
+                                putExtra(PESQUISADOR, gson.toJson(pesquisador))
+                            }
                         startActivity(intent)
                     }
+                    this.pesquisador = pesquisador
                 })
+            }
         }
 
-        cadastrar.setOnClickListener{
-            isRegistered(pesquisadorName, pesquisadorPassword)
+        cadastrar.setOnClickListener {
             if (name.text.isEmpty() || password.text.isEmpty()) {
                 Toast.makeText(
                     context,
                     R.string.empty_fills_message,
                     Toast.LENGTH_SHORT
                 ).show()
-            } else if (isRegistered) {
+            } else if (it != null) {
                 Toast.makeText(
                     context,
                     R.string.already_registered_message,
                     Toast.LENGTH_SHORT
                 ).show()
-            } else if (!isRegistered) {
-
+            } else {
                 pesquisador = PesquisadorEntity(
                     pesquisadorName,
                     pesquisadorPassword,
@@ -107,28 +98,34 @@ class LoginActivity : AppCompatActivity() {
                 )
                 signupPesquisador(pesquisador)
 
-                activityIniciarPesquisa = Intent(this, ActivityIniciarPesquisa::class.java).apply {
-                    putExtra(PESQUISADOR, gson.toJson(pesquisador))
-                }
+                activityIniciarPesquisa =
+                    Intent(this, ActivityIniciarPesquisa::class.java).apply {
+                        putExtra(PESQUISADOR, gson.toJson(pesquisador))
+                    }
                 startActivity(activityIniciarPesquisa)
             }
         }
+    }
 
     private fun signupPesquisador(pesquisador: PesquisadorEntity) {
-        loginViewModel.registerPesquisador(context, this.pesquisador)
+        loginViewModel.registerPesquisador(context, pesquisador)
         Toast.makeText(context, "Você foi cadastrado com sucesso!", Toast.LENGTH_SHORT)
             .show()
     }
 
-    private fun isAlreadyRegistered(name: String, password: String): Boolean {
-        loginViewModel.searchPesquisador(
-            context,
-            name,
-            password
-        )!!.observe(this, { pesquisador ->
-            isRegistered = (pesquisador != null)
-        })
-        return isRegistered
+    private fun searchPesquisas(pesquisador: PesquisadorEntity) {
+        loginViewModel.searchPesquisadorPesquisas(context, pesquisador)!!
+            .observe(this, { pesquisas ->
+                Toast.makeText(
+                    context,
+                    "Bem vindo novamente! Sr(a) ${this.pesquisador.name}, suas pesquisas são ${
+                        gson.toJson(
+                            pesquisas
+                        )
+                    }",
+                    Toast.LENGTH_SHORT
+                ).show()
+            })
     }
 
     companion object {
