@@ -21,7 +21,6 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var loginViewModel: LoginViewModel
     private lateinit var binding: ActivityLoginBinding
 
-    lateinit var pesquisador: PesquisadorEntity
     lateinit var pesquisa: PesquisaEntity
 
     lateinit var context: Context
@@ -61,7 +60,7 @@ class LoginActivity : AppCompatActivity() {
                     if (pesquisador == null) {
                         Toast.makeText(
                             context,
-                            "Usuario ou senha incorretos!",
+                            getString(R.string.wrong_user_inputs),
                             Toast.LENGTH_SHORT
                         ).show()
                     } else {
@@ -72,7 +71,6 @@ class LoginActivity : AppCompatActivity() {
                             }
                         startActivity(intent)
                     }
-                    this.pesquisador = pesquisador
                 })
             }
         }
@@ -84,33 +82,40 @@ class LoginActivity : AppCompatActivity() {
                     R.string.empty_fills_message,
                     Toast.LENGTH_SHORT
                 ).show()
-            } else if (it != null) {
-                Toast.makeText(
-                    context,
-                    R.string.already_registered_message,
-                    Toast.LENGTH_SHORT
-                ).show()
             } else {
-                pesquisador = PesquisadorEntity(
+                loginViewModel.searchPesquisador(
+                    context,
                     pesquisadorName,
-                    pesquisadorPassword,
-                    0,
-                )
-                signupPesquisador(pesquisador)
-
-                activityIniciarPesquisa =
-                    Intent(this, ActivityIniciarPesquisa::class.java).apply {
-                        putExtra(PESQUISADOR, gson.toJson(pesquisador))
+                    pesquisadorPassword
+                )!!.observe(this, { pesquisador ->
+                    if (pesquisador != null) {
+                        Toast.makeText(
+                            context,
+                            R.string.already_registered_message,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    } else {
+                        signupPesquisador(pesquisadorName, pesquisadorPassword)
                     }
-                startActivity(activityIniciarPesquisa)
+                })
             }
         }
     }
-
-    private fun signupPesquisador(pesquisador: PesquisadorEntity) {
-        loginViewModel.registerPesquisador(context, pesquisador)
-        Toast.makeText(context, "Você foi cadastrado com sucesso!", Toast.LENGTH_SHORT)
+    private fun signupPesquisador(name: String, password: String) {
+        val mPesquisadorEntity = PesquisadorEntity(
+            name,
+            password,
+            0,
+        )
+        loginViewModel.registerPesquisador(context, mPesquisadorEntity)
+        Toast.makeText(context, getString(R.string.sucessful_signup), Toast.LENGTH_SHORT)
             .show()
+
+        activityIniciarPesquisa =
+            Intent(this, ActivityIniciarPesquisa::class.java).apply {
+                putExtra(PESQUISADOR, gson.toJson(mPesquisadorEntity))
+            }
+        startActivity(activityIniciarPesquisa)
     }
 
     private fun searchPesquisas(pesquisador: PesquisadorEntity) {
@@ -118,11 +123,7 @@ class LoginActivity : AppCompatActivity() {
             .observe(this, { pesquisas ->
                 Toast.makeText(
                     context,
-                    "Bem vindo novamente! Sr(a) ${this.pesquisador.name}, suas pesquisas são ${
-                        gson.toJson(
-                            pesquisas
-                        )
-                    }",
+                    "Bem vindo novamente! Sr(a) ${pesquisador.name}, suas pesquisas são ${gson.toJson(pesquisas)}",
                     Toast.LENGTH_SHORT
                 ).show()
             })
