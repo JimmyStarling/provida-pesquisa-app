@@ -15,9 +15,6 @@ data class PacienteEntity (
     @ColumnInfo(name = "contato")
     @SerializedName("contato")
     var contato: String,
-    @ColumnInfo(name = "date")
-    @SerializedName("date")
-    var date: String,
 ){
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
