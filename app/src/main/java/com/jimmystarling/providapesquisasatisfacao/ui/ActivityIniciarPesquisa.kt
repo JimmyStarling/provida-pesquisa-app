@@ -28,6 +28,7 @@ class ActivityIniciarPesquisa : AppCompatActivity() {
 
     private lateinit var binding: ActivityIniciarPesquisaBinding
     lateinit var context: Context
+    lateinit var activityPesquisa: Intent
 
     lateinit var mPesquisadorEntity: String
 
@@ -48,39 +49,37 @@ class ActivityIniciarPesquisa : AppCompatActivity() {
         val numero_paciente = binding.numeroPaciente
         val button_iniciar = binding.btnComecar
 
-        val simple_format = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
-        val current_date = simple_format.format(Date())
+
+        val pacienteName: String? = nome_paciente.text.toString().trim()
+        val pacienteContact: String? = numero_paciente.text.toString().trim()
 
         button_iniciar.setOnClickListener {
-            if (nome_paciente.text?.trim() == null){
+            if (pacienteName == null || pacienteContact == null){
                 Toast.makeText(
                     context,
-                    "Nome do paciente é obrigatório!",
+                    "Por favor, preencha todos os campos.",
                     Toast.LENGTH_SHORT
                 ).show()
-            } else if (numero_paciente.text?.trim() == null){
-                Toast.makeText(
-                    context,
-                    "Numero é obrigatório!",
-                    Toast.LENGTH_SHORT
-                ).show()
+            } else {
+                paciente = PacienteEntity(
+                    name = pacienteName,
+                    contato = pacienteContact
+                )
+                Log.d("DEBUG", "PACIENTE IS: ${gson.toJson(paciente)}")
+                pesquisador = getPesquisador(this.intent)
+                activityPesquisa = Intent(this, PesquisaActivity::class.java).apply {
+                    putExtra(PACIENTE, gson.toJson(paciente))
+                    putExtra(PESQUISADOR, gson.toJson(pesquisador))
+                }
+                startActivity(activityPesquisa)
             }
-
-            paciente = PacienteEntity(
-                name = nome_paciente.text?.trim().toString(),
-                contato = numero_paciente.text?.trim().toString(),
-                date = current_date
-            )
-            Log.d("DEBUG", "PACIENTE IS: ${gson.toJson(paciente)}")
-            // Parsing Pesquisador dataclasss object to another intent
-            mPesquisadorEntity = this.intent.getStringExtra("PESQUISADOR").toString()
-            pesquisador = Json.decodeFromString<PesquisadorEntity>(mPesquisadorEntity)
-            val pesquisa_intent = Intent(this, PesquisaActivity::class.java).apply {
-                putExtra(PACIENTE, gson.toJson(paciente))
-                putExtra(PESQUISADOR, gson.toJson(pesquisador))
-            }
-            startActivity(pesquisa_intent)
         }
+    }
+
+    private fun getPesquisador(intent: Intent): PesquisadorEntity {
+        mPesquisadorEntity = intent.getStringExtra("PESQUISADOR").toString()
+        pesquisador = Json.decodeFromString<PesquisadorEntity>(mPesquisadorEntity)
+        return pesquisador
     }
 
     companion object{
