@@ -64,12 +64,7 @@ class LoginActivity : AppCompatActivity() {
                             Toast.LENGTH_SHORT
                         ).show()
                     } else {
-                        searchPesquisas(pesquisador)
-                        activityIniciarPesquisa =
-                            Intent(this, ActivityIniciarPesquisa::class.java).apply {
-                                putExtra(PESQUISADOR, gson.toJson(pesquisador))
-                            }
-                        startActivity(intent)
+                        loginPesquisador(pesquisador)
                     }
                 })
             }
@@ -118,7 +113,7 @@ class LoginActivity : AppCompatActivity() {
         startActivity(activityIniciarPesquisa)
     }
 
-    private fun searchPesquisas(pesquisador: PesquisadorEntity) {
+    private fun loginPesquisador(pesquisador: PesquisadorEntity) {
         loginViewModel.searchPesquisadorPesquisas(context, pesquisador)!!
             .observe(this, { pesquisas ->
                 Toast.makeText(
@@ -127,6 +122,11 @@ class LoginActivity : AppCompatActivity() {
                     Toast.LENGTH_SHORT
                 ).show()
             })
+        activityIniciarPesquisa =
+            Intent(this, ActivityIniciarPesquisa::class.java).apply {
+                putExtra(PESQUISADOR, gson.toJson(pesquisador))
+            }
+        startActivity(intent)
     }
 
     companion object {
