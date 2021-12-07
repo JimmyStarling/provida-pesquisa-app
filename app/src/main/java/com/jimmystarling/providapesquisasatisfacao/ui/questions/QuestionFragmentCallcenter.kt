@@ -16,6 +16,7 @@ import com.jimmystarling.providapesquisasatisfacao.data.model.PacienteEntity
 import com.jimmystarling.providapesquisasatisfacao.data.model.PesquisaEntity
 import com.jimmystarling.providapesquisasatisfacao.data.model.PesquisadorEntity
 import com.jimmystarling.providapesquisasatisfacao.data.model.QuestaoEntity
+import com.jimmystarling.providapesquisasatisfacao.ui.questions.PesquisaActivity.Companion.currentDate
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 
@@ -25,7 +26,7 @@ class QuestionFragmentCallcenter: Fragment() {
     lateinit var nextFragment: Fragment
 
     lateinit var slider: Slider
-    lateinit var slider_value: String
+    lateinit var sliderValue: String
 
     lateinit var mButtonContinuar: Button
     lateinit var mButtonVoltar: Button
@@ -33,7 +34,7 @@ class QuestionFragmentCallcenter: Fragment() {
     // Entities and variables to modelview
     lateinit var mPesquisa: PesquisaEntity
     lateinit var mPesquisador: PesquisadorEntity
-    lateinit var mQuestao: QuestaoEntity
+    lateinit var mQuestoes: MutableList<QuestaoEntity>
     lateinit var mPaciente: PacienteEntity
 
     lateinit var mTitleQuestion: View
@@ -70,54 +71,17 @@ class QuestionFragmentCallcenter: Fragment() {
         mPaciente = Json.decodeFromString<PacienteEntity>(mPacienteEntity)
         // Parsing to dataclass to be used by registerPesquisa()
         mPesquisador = Json.decodeFromString<PesquisadorEntity>(mPesquisadorEntity)
-        // Slider listener to registerPesquisa
-        slider.addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
-            override fun onStartTrackingTouch(slider: Slider) {
-                val value: Float = slider.value
-                slider_value = when {
-                    value.toString() == "3.0" -> {
-                        "Regular"
-                    }
-                    value.toString() == "6" -> {
-                        "Bom"
-                    }
-                    value.toString() == "9" -> {
-                        "Ótimo"
-                    }
-                    else -> {
-                        "Ruim"
-                    }
-                }
-            }
-            override fun onStopTrackingTouch(slider: Slider) {
-                val value: Float = slider.value
-                slider_value = when {
-                    value.toString() == "3.0" -> {
-                        "Regular"
-                    }
-                    value.toString() == "6" -> {
-                        "Bom"
-                    }
-                    value.toString() == "9" -> {
-                        "Ótimo"
-                    }
-                    else -> {
-                        "Ruim"
-                    }
-                }
-            }
-        })
         // When the value of slide changes then set the values
-        slider.addOnChangeListener { slider, value, fromUser ->
-            val number_slider_value: Float = slider.value
-            slider_value = when {
-                number_slider_value.toString() == "3.0" -> {
+        slider.addOnChangeListener { slider, _, _ ->
+            val slideNumberValue: Float = slider.value
+            sliderValue = when {
+                slideNumberValue.toString() == "3.0" -> {
                     "Regular"
                 }
-                number_slider_value.toString() == "6" -> {
+                slideNumberValue.toString() == "6" -> {
                     "Bom"
                 }
-                number_slider_value.toString() == "9" -> {
+                slideNumberValue.toString() == "9" -> {
                     "Ótimo"
                 }
                 else -> {
@@ -128,19 +92,23 @@ class QuestionFragmentCallcenter: Fragment() {
         }
         mButtonContinuar.setOnClickListener {
             // Create question's PesquisaEntity tp be used by registerPesquisa()
-            mQuestao = QuestaoEntity(
-                1,
-                mTitleQuestion.toString(),
-                mTitleContent.toString(),
-                slider_value
+            mQuestoes +=
+                    QuestaoEntity(
+                        3,
+                        mTitleQuestion.toString(),
+                        mTitleContent.toString(),
+                        sliderValue
+                    )
+            mPesquisa = PesquisaEntity(
+                gson.toJson(mPesquisador),
+                gson.toJson(mQuestoes),
+                gson.toJson(mPaciente),
+                gson.toJson(currentDate)
             )
-            mPesquisa = PesquisaEntity(mPesquisador.toString(), mQuestao.toString(), mPaciente.toString())
             // Creating zero questao entity
-            PesquisaViewModel().registerPesquisa(
-                context = activity?.application!!.applicationContext,
-                pesquisador = mPesquisador,
-                questoes = listOf<QuestaoEntity>(mQuestao),
-                paciente = mPaciente
+            PesquisaViewModel().updatePesquisa(
+                activity?.application!!.applicationContext,
+                mPesquisa
             )
 
             nextFragment = QuestionFragmentAgilidade()

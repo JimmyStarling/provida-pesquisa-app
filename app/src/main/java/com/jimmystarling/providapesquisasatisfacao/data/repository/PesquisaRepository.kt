@@ -23,28 +23,38 @@ class PesquisaRepository {
         var pesquisaEntity: LiveData<PesquisaEntity>? = null
         var pesquisas: LiveData<List<PesquisaEntity>>? = null
 
-        fun initializeDB(context: Context) : ProvidaDatabase {
+        private fun initializeDB(context: Context) : ProvidaDatabase {
             return ProvidaDatabase.getDataseClient(context)
         }
 
-        fun registerPesquisa(context: Context, pesquisador: PesquisadorEntity, questoes: List<QuestaoEntity>, paciente: PacienteEntity) {
+        fun registerPesquisa(context: Context, pesquisa: PesquisaEntity) {
 
             providaDatabase = initializeDB(context)
 
             CoroutineScope(Dispatchers.IO).launch {
-                val pesquisaDetails = PesquisaEntity(gson.toJson(pesquisador), gson.toJson(questoes), gson.toJson(paciente))
-                providaDatabase!!.databaseDao().registerPesquisa(pesquisaDetails)
+                val mPesquisa = PesquisaEntity(
+                    pesquisa.pesquisador,
+                    pesquisa.questoes,
+                    pesquisa.paciente,
+                    pesquisa.date
+                )
+                providaDatabase!!.databaseDao().registerPesquisa(
+                    mPesquisa
+                )
             }
 
         }
 
         // Here will pass the appended variable to questoes list and convert it to json
-        fun updatePesquisa(context: Context, pesquisa: PesquisaEntity, pesquisador: PesquisadorEntity, questoes: List<QuestaoEntity>, paciente: PacienteEntity) {
+        fun updatePesquisa(
+            context: Context,
+            pesquisa: PesquisaEntity,
+        ) {
 
             providaDatabase = initializeDB(context)
 
             CoroutineScope(Dispatchers.IO).launch {
-                providaDatabase!!.databaseDao().updatePesquisa(pesquisa.id, gson.toJson(pesquisador), gson.toJson(questoes), gson.toJson(paciente))
+                providaDatabase!!.databaseDao().updatePesquisa(pesquisa.id, pesquisa.pesquisador, pesquisa.questoes, pesquisa.paciente)
             }
 
         }
