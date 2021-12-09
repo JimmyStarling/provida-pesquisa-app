@@ -91,12 +91,14 @@ class QuestionFragmentCallcenter: Fragment() {
 
         }
         mButtonContinuar.setOnClickListener {
+            val titleQuestion: String = getString(R.string.title_question_agilidade)
+            val titleContent: String = getString(R.string.title_question_enf)
             // Create question's PesquisaEntity tp be used by registerPesquisa()
             mQuestoes +=
                     QuestaoEntity(
                         3,
-                        mTitleQuestion.toString(),
-                        mTitleContent.toString(),
+                        titleQuestion,
+                        titleContent,
                         sliderValue
                     )
             mPesquisa = PesquisaEntity(
@@ -111,7 +113,7 @@ class QuestionFragmentCallcenter: Fragment() {
                 mPesquisa
             )
 
-            nextFragment = QuestionFragmentAgilidade()
+            nextFragment = QuestionFragmentEstrutura()
             lastFragment = this
             fragmentTransaction.hide(lastFragment)
             fragmentTransaction.show(nextFragment)

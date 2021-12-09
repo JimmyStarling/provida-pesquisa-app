@@ -26,7 +26,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class QuestionFragmentAgilidade : Fragment() {
+class QuestionFragmentLimpeza : Fragment() {
 
     lateinit var nextFragment: Fragment
 
@@ -54,7 +54,7 @@ class QuestionFragmentAgilidade : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(layout.question_fragment_agilidade, container, false)
+        return inflater.inflate(layout.question_fragment_limpeza, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
