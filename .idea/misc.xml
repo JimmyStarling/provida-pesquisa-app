@@ -14,11 +14,17 @@
         <entry key="..\:/Users/Jimmy St/Documents/Github/provida-pesquisa-app/app/src/main/res/layout/question_fragment.xml" value="0.1" />
         <entry key="..\:/Users/i/Documents/Github/provida-pesquisa-app/app/src/main/res/drawable/background_rounded_button.xml" value="0.2390194075587334" />
         <entry key="..\:/Users/i/Documents/Github/provida-pesquisa-app/app/src/main/res/drawable/background_rounded_button_outline.xml" value="0.2390194075587334" />
-        <entry key="..\:/Users/i/Documents/Github/provida-pesquisa-app/app/src/main/res/layout/activity_iniciar_pesquisa.xml" value="0.264" />
+        <entry key="..\:/Users/i/Documents/Github/provida-pesquisa-app/app/src/main/res/layout/activity_iniciar_pesquisa.xml" value="0.2" />
         <entry key="..\:/Users/i/Documents/Github/provida-pesquisa-app/app/src/main/res/layout/activity_login.xml" value="0.264" />
         <entry key="..\:/Users/i/Documents/Github/provida-pesquisa-app/app/src/main/res/layout/pesquisa_activity.xml" value="0.15760869565217392" />
         <entry key="..\:/Users/i/Documents/Github/provida-pesquisa-app/app/src/main/res/layout/question_activity.xml" value="0.11865942028985507" />
         <entry key="..\:/Users/i/Documents/Github/provida-pesquisa-app/app/src/main/res/layout/question_fragment.xml" value="0.25" />
+        <entry key="..\:/Users/i/Documents/Github/provida-pesquisa-app/app/src/main/res/layout/question_fragment_agilidade.xml" value="0.4" />
+        <entry key="..\:/Users/i/Documents/Github/provida-pesquisa-app/app/src/main/res/layout/question_fragment_callcenter.xml" value="0.536" />
+        <entry key="..\:/Users/i/Documents/Github/provida-pesquisa-app/app/src/main/res/layout/question_fragment_estrutura.xml" value="0.2" />
+        <entry key="..\:/Users/i/Documents/Github/provida-pesquisa-app/app/src/main/res/layout/question_fragment_geral.xml" value="0.536" />
+        <entry key="..\:/Users/i/Documents/Github/provida-pesquisa-app/app/src/main/res/layout/question_fragment_limpeza.xml" value="0.6" />
+        <entry key="..\:/Users/i/Documents/Github/provida-pesquisa-app/app/src/main/res/layout/question_fragment_reclamar.xml" value="0.536" />
       </map>
     </option>
   </component>
