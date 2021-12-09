@@ -39,7 +39,7 @@ class LoginActivity : AppCompatActivity() {
         val name = binding.username
         val password = binding.password
         val login = binding.login
-        val cadastrar = binding.cadastrar
+        val signup = binding.cadastrar
 
         val pesquisadorName = name.text.toString().trim()
         val pesquisadorPassword = password.text.toString().trim()
@@ -64,13 +64,25 @@ class LoginActivity : AppCompatActivity() {
                             Toast.LENGTH_SHORT
                         ).show()
                     } else {
-                        loginPesquisador(pesquisador)
+                        loginViewModel.searchPesquisadorPesquisas(context, pesquisador)!!
+                            .observe(this, { pesquisas ->
+                                Toast.makeText(
+                                    context,
+                                    "Bem vindo novamente! Sr(a) ${pesquisador.name}, suas pesquisas são ${gson.toJson(pesquisas)}",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            })
+                        activityIniciarPesquisa =
+                            Intent(this, ActivityIniciarPesquisa::class.java).apply {
+                                putExtra(PESQUISADOR, gson.toJson(pesquisador))
+                            }
+                        startActivity(intent)
                     }
                 })
             }
         }
 
-        cadastrar.setOnClickListener {
+        signup.setOnClickListener {
             if (name.text.isEmpty() || password.text.isEmpty()) {
                 Toast.makeText(
                     context,
@@ -91,6 +103,11 @@ class LoginActivity : AppCompatActivity() {
                         ).show()
                     } else {
                         signupPesquisador(pesquisadorName, pesquisadorPassword)
+                        activityIniciarPesquisa =
+                            Intent(this, ActivityIniciarPesquisa::class.java).apply {
+                                putExtra(PESQUISADOR, gson.toJson(pesquisador))
+                            }
+                        startActivity(intent)
                     }
                 })
             }
@@ -112,23 +129,6 @@ class LoginActivity : AppCompatActivity() {
             }
         startActivity(activityIniciarPesquisa)
     }
-
-    private fun loginPesquisador(pesquisador: PesquisadorEntity) {
-        loginViewModel.searchPesquisadorPesquisas(context, pesquisador)!!
-            .observe(this, { pesquisas ->
-                Toast.makeText(
-                    context,
-                    "Bem vindo novamente! Sr(a) ${pesquisador.name}, suas pesquisas são ${gson.toJson(pesquisas)}",
-                    Toast.LENGTH_SHORT
-                ).show()
-            })
-        activityIniciarPesquisa =
-            Intent(this, ActivityIniciarPesquisa::class.java).apply {
-                putExtra(PESQUISADOR, gson.toJson(pesquisador))
-            }
-        startActivity(intent)
-    }
-
     companion object {
         var gson = Gson()
         const val PESQUISADOR = "PESQUISADOR"
