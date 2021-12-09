@@ -20,6 +20,12 @@
         QUAL A SUA AVALIAÇÃO
         QUANTO À AGILIDADE NO ATENDIMENTO
     </string>
+    <string name="title_question_estrutura">
+        Qual sua satisfação com relação à estrutura do Multicentro Dr. Adriano Pondé?
+    </string>
+    <string name="title_question_limpeza">
+        Qual sua satisfação com relação à limpeza do Multicentro Dr. Adriano Pondé?
+    </string>
     <string name="title_question_atendimento_callcenter">
         JÁ FEZ USO DO ATENDIMENTO DO SERVIÇO DE CALL CENTER?
     </string>
@@ -86,4 +92,7 @@
     <string name="empty_fills_message">Por favor, preencha todos os campos.</string>
     <string name="wrong_user_inputs">Usuario ou senha incorretos!</string>
     <string name="sucessful_signup">Você foi cadastrado com sucesso!</string>
+    <string name="logotype">Logotype</string>
+    <string name="campo_para_registro_de_sugest_o_se_houver">Campo para registro de sugestão (se houver)</string>
+    <string name="campo_para_registro_de_reclama_o_se_houver">Campo para registro de reclamação (se houver)</string>
 </resources>
