@@ -65,8 +65,8 @@
         DESEJA REGISTRAR ALGUMA SUGESTÃO?
     </string>
     <string name="title_finish">
-        AGRADECEMOS SUA COLABORAÇÃO.
-        ESTES DADOS SERVIRÃO PARA MELHORARMOS O ATENDIMENTO PARA VOCÊ.
+        Agradecemos sua colaboração!
+        Estes dados servirão para melhorarmos o atendimento para você.
     </string>
     <string name="provida_logomarca">Provida logomarca</string>
     <string name="imagem_da_enfermagem">Imagem da Enfermagem - Ilustração</string>
@@ -95,4 +95,5 @@
     <string name="logotype">Logotype</string>
     <string name="campo_para_registro_de_sugest_o_se_houver">Campo para registro de sugestão (se houver)</string>
     <string name="campo_para_registro_de_reclama_o_se_houver">Campo para registro de reclamação (se houver)</string>
+    <string name="finalizar">Finalizar</string>
 </resources>
