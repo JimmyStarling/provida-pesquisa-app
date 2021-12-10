@@ -1,5 +1,6 @@
 package com.jimmystarling.providapesquisasatisfacao.ui.questions
 
+import android.content.Intent
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.util.Log
@@ -17,7 +18,11 @@ import com.jimmystarling.providapesquisasatisfacao.data.model.PacienteEntity
 import com.jimmystarling.providapesquisasatisfacao.data.model.PesquisaEntity
 import com.jimmystarling.providapesquisasatisfacao.data.model.PesquisadorEntity
 import com.jimmystarling.providapesquisasatisfacao.data.model.QuestaoEntity
+import com.jimmystarling.providapesquisasatisfacao.ui.ActivityIniciarPesquisa
+import com.jimmystarling.providapesquisasatisfacao.ui.questions.PesquisaActivity.Companion.activityPesquisa
 import com.jimmystarling.providapesquisasatisfacao.ui.questions.PesquisaActivity.Companion.currentDate
+import com.jimmystarling.providapesquisasatisfacao.ui.questions.PesquisaActivity.Companion.mTitleContent
+import com.jimmystarling.providapesquisasatisfacao.ui.questions.PesquisaActivity.Companion.mTitleQuestion
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import java.text.SimpleDateFormat
@@ -39,9 +44,6 @@ class QuestionFragment : Fragment() {
     private lateinit var mPesquisador: PesquisadorEntity
     private lateinit var mQuestoes: MutableList<QuestaoEntity>
     private lateinit var mPaciente: PacienteEntity
-    
-    private lateinit var mTitleQuestion: View
-    private lateinit var mTitleContent: View
 
     companion object {
         var gson = Gson()
@@ -94,8 +96,8 @@ class QuestionFragment : Fragment() {
             }
         }
         mButtonContinuar.setOnClickListener {
-            val titleQuestion: String = getString(R.string.title_question_agilidade)
-            val titleContent: String = getString(R.string.title_question_enf)
+            val titleQuestion: String = mTitleQuestion.text.toString()
+            val titleContent: String = mTitleContent.text.toString()
             // Create question's PesquisaEntity tp be used by registerPesquisa()
             mQuestoes = mutableListOf<QuestaoEntity>(
                 QuestaoEntity(
@@ -116,6 +118,11 @@ class QuestionFragment : Fragment() {
                 context = activity?.application!!.applicationContext,
                 pesquisa = mPesquisa
             )
+            run {
+                Intent(activity, ActivityIniciarPesquisa::class.java).apply {
+                    putExtra(ActivityIniciarPesquisa.QUESTOES, gson.toJson(mQuestoes))
+                }
+            }
             nextFragment = QuestionFragmentAgilidade()
             lastFragment = this
             fragmentTransaction.replace(R.id.pesquisa_activity, nextFragment, "FRAGMENT_AGILIDADE")

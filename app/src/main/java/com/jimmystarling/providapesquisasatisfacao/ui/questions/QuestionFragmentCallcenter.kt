@@ -1,5 +1,6 @@
 package com.jimmystarling.providapesquisasatisfacao.ui.questions
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,7 +17,10 @@ import com.jimmystarling.providapesquisasatisfacao.data.model.PacienteEntity
 import com.jimmystarling.providapesquisasatisfacao.data.model.PesquisaEntity
 import com.jimmystarling.providapesquisasatisfacao.data.model.PesquisadorEntity
 import com.jimmystarling.providapesquisasatisfacao.data.model.QuestaoEntity
+import com.jimmystarling.providapesquisasatisfacao.ui.ActivityIniciarPesquisa
 import com.jimmystarling.providapesquisasatisfacao.ui.questions.PesquisaActivity.Companion.currentDate
+import com.jimmystarling.providapesquisasatisfacao.ui.questions.PesquisaActivity.Companion.mTitleContent
+import com.jimmystarling.providapesquisasatisfacao.ui.questions.PesquisaActivity.Companion.mTitleQuestion
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 
@@ -37,8 +41,8 @@ class QuestionFragmentCallcenter: Fragment() {
     lateinit var mQuestoes: MutableList<QuestaoEntity>
     lateinit var mPaciente: PacienteEntity
 
-    lateinit var mTitleQuestion: View
-    lateinit var mTitleContent: View
+
+
 
     companion object {
         var gson = Gson()
@@ -91,8 +95,8 @@ class QuestionFragmentCallcenter: Fragment() {
 
         }
         mButtonContinuar.setOnClickListener {
-            val titleQuestion: String = getString(R.string.title_question_agilidade)
-            val titleContent: String = getString(R.string.title_question_enf)
+            val titleQuestion: String = mTitleQuestion.text.toString()
+            val titleContent: String = mTitleContent.text.toString()
             // Create question's PesquisaEntity tp be used by registerPesquisa()
             mQuestoes +=
                     QuestaoEntity(
@@ -112,9 +116,21 @@ class QuestionFragmentCallcenter: Fragment() {
                 activity?.application!!.applicationContext,
                 mPesquisa
             )
-
+            run {
+                Intent(activity, ActivityIniciarPesquisa::class.java).apply {
+                    putExtra(ActivityIniciarPesquisa.QUESTOES, gson.toJson(mQuestoes))
+                }
+            }
             nextFragment = QuestionFragmentEstrutura()
             lastFragment = this
+            fragmentTransaction.hide(lastFragment)
+            fragmentTransaction.show(nextFragment)
+            fragmentTransaction.addToBackStack(null)
+            fragmentTransaction.commit()
+        }
+
+        mButtonVoltar.setOnClickListener {
+            nextFragment = QuestionFragmentAgilidade()
             fragmentTransaction.hide(lastFragment)
             fragmentTransaction.show(nextFragment)
             fragmentTransaction.addToBackStack(null)

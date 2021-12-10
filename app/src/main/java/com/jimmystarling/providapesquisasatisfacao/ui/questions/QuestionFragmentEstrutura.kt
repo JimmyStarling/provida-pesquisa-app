@@ -1,5 +1,6 @@
 package com.jimmystarling.providapesquisasatisfacao.ui.questions
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -21,7 +22,10 @@ import kotlinx.serialization.json.Json
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.jimmystarling.providapesquisasatisfacao.R.*
+import com.jimmystarling.providapesquisasatisfacao.ui.ActivityIniciarPesquisa
 import com.jimmystarling.providapesquisasatisfacao.ui.questions.PesquisaActivity.Companion.currentDate
+import com.jimmystarling.providapesquisasatisfacao.ui.questions.PesquisaActivity.Companion.mTitleContent
+import com.jimmystarling.providapesquisasatisfacao.ui.questions.PesquisaActivity.Companion.mTitleQuestion
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -42,8 +46,8 @@ class QuestionFragmentEstrutura : Fragment() {
     lateinit var mQuestoes: MutableList<QuestaoEntity>
     lateinit var mPaciente: PacienteEntity
 
-    lateinit var mTitleQuestion: View
-    lateinit var mTitleContent: View
+
+
 
     companion object {
         var gson = Gson()
@@ -96,11 +100,11 @@ class QuestionFragmentEstrutura : Fragment() {
         }
 
         mButtonContinuar.setOnClickListener {
-            val titleQuestion: String = getString(R.string.title_question_agilidade)
-            val titleContent: String = getString(R.string.title_question_enf)
+            val titleQuestion: String = mTitleQuestion.text.toString()
+            val titleContent: String = mTitleContent.text.toString()
             mQuestoes +=
                 QuestaoEntity(
-                    2,
+                    4,
                     titleQuestion,
                     titleContent,
                     slider_value!!
@@ -130,14 +134,20 @@ class QuestionFragmentEstrutura : Fragment() {
                 Log.d("DEBUG", "Pesquisa variable value is: ${it.toString()}")
             })
 
-            nextFragment = QuestionFragmentCallcenter()
+            run {
+                Intent(activity, ActivityIniciarPesquisa::class.java).apply {
+                    putExtra(ActivityIniciarPesquisa.QUESTOES, gson.toJson(mQuestoes))
+                }
+            }
+
+            nextFragment = QuestionFragmentLimpeza()
             fragmentTransaction.hide(lastFragment)
             fragmentTransaction.add(R.id.pesquisa_activity, nextFragment)
             fragmentTransaction.addToBackStack(null)
             fragmentTransaction.commit()
         }
         mButtonVoltar.setOnClickListener {
-            nextFragment = QuestionFragment()
+            nextFragment = QuestionFragmentCallcenter()
             fragmentTransaction.hide(lastFragment)
             fragmentTransaction.show(nextFragment)
             fragmentTransaction.addToBackStack(null)
