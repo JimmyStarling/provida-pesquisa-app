@@ -76,7 +76,7 @@ class LoginActivity : AppCompatActivity() {
                             Intent(this, ActivityIniciarPesquisa::class.java).apply {
                                 putExtra(PESQUISADOR, gson.toJson(pesquisador))
                             }
-                        startActivity(intent)
+                        startActivity(activityIniciarPesquisa)
                     }
                 })
             }
