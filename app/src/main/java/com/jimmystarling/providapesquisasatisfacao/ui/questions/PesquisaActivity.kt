@@ -3,6 +3,7 @@ package com.jimmystarling.providapesquisasatisfacao.ui.questions
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.TextView
 import com.jimmystarling.providapesquisasatisfacao.R
 import java.text.SimpleDateFormat
 import java.util.*
@@ -23,5 +24,11 @@ class PesquisaActivity : AppCompatActivity() {
     companion object{
         val simpleFormat = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
         val currentDate = simpleFormat.format(Date())
+
+        lateinit var mTitleQuestion : TextView
+        lateinit var mTitleContent: TextView
+
+        lateinit var activityPesquisa: Any
+
     }
 }
