@@ -43,11 +43,8 @@ class QuestionFragmentEstrutura : Fragment() {
     // Entities and variables to modelview
     lateinit var mPesquisa: PesquisaEntity
     lateinit var mPesquisador: PesquisadorEntity
-    lateinit var mQuestoes: MutableList<QuestaoEntity>
+    lateinit var mQuestoes: QuestaoEntity
     lateinit var mPaciente: PacienteEntity
-
-
-
 
     companion object {
         var gson = Gson()
@@ -65,7 +62,7 @@ class QuestionFragmentEstrutura : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(PesquisaViewModel::class.java)
 
-        val fragmentManager: FragmentManager = activity!!.supportFragmentManager
+        val fragmentManager: FragmentManager = requireActivity().supportFragmentManager
         val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
 
         slider = view?.findViewById<Slider>(R.id.slider_quality)!!
@@ -102,17 +99,22 @@ class QuestionFragmentEstrutura : Fragment() {
         mButtonContinuar.setOnClickListener {
             val titleQuestion: String = mTitleQuestion.text.toString()
             val titleContent: String = mTitleContent.text.toString()
-            mQuestoes +=
-                QuestaoEntity(
-                    4,
-                    titleQuestion,
-                    titleContent,
-                    slider_value!!
-                )
+            var listQuestoes: Array<String>?
+            run {
+                Intent(activity, PesquisaActivity::class.java).apply {
+                    listQuestoes = getStringArrayExtra(ActivityIniciarPesquisa.QUESTOES)!!
+                }
+            }
+            mQuestoes = QuestaoEntity(
+                            4,
+                            titleQuestion,
+                            titleContent,
+                            slider_value!!
+                        )
 
             mPesquisa = PesquisaEntity(
                 gson.toJson(mPesquisador),
-                gson.toJson(mQuestoes),
+                gson.toJson(listQuestoes),
                 gson.toJson(mPaciente),
                 gson.toJson(currentDate)
             )
@@ -125,7 +127,7 @@ class QuestionFragmentEstrutura : Fragment() {
             PesquisaViewModel().searchPesquisa(
                 context = activity?.application!!.applicationContext,
                 pesquisador = mPesquisador
-            )!!.observe(activity!!, {
+            )!!.observe(requireActivity(), {
                 Toast.makeText(
                     context,
                     "Atualizando a pesquisa ${it.toString()}",
@@ -136,7 +138,7 @@ class QuestionFragmentEstrutura : Fragment() {
 
             run {
                 Intent(activity, ActivityIniciarPesquisa::class.java).apply {
-                    putExtra(ActivityIniciarPesquisa.QUESTOES, gson.toJson(mQuestoes))
+                    putExtra(ActivityIniciarPesquisa.QUESTOES, gson.toJson(listQuestoes))
                 }
             }
 

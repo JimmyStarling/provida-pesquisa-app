@@ -1,16 +1,16 @@
 package com.jimmystarling.providapesquisasatisfacao.ui.questions
 
 import android.content.Intent
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.slider.Slider
 import com.google.gson.Gson
 import com.jimmystarling.providapesquisasatisfacao.R
@@ -19,14 +19,11 @@ import com.jimmystarling.providapesquisasatisfacao.data.model.PesquisaEntity
 import com.jimmystarling.providapesquisasatisfacao.data.model.PesquisadorEntity
 import com.jimmystarling.providapesquisasatisfacao.data.model.QuestaoEntity
 import com.jimmystarling.providapesquisasatisfacao.ui.ActivityIniciarPesquisa
-import com.jimmystarling.providapesquisasatisfacao.ui.questions.PesquisaActivity.Companion.activityPesquisa
 import com.jimmystarling.providapesquisasatisfacao.ui.questions.PesquisaActivity.Companion.currentDate
 import com.jimmystarling.providapesquisasatisfacao.ui.questions.PesquisaActivity.Companion.mTitleContent
 import com.jimmystarling.providapesquisasatisfacao.ui.questions.PesquisaActivity.Companion.mTitleQuestion
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
-import java.text.SimpleDateFormat
-import java.util.*
 
 class QuestionFragment : Fragment() {
 
@@ -34,7 +31,7 @@ class QuestionFragment : Fragment() {
     private lateinit var nextFragment: Fragment
 
     private lateinit var slider: Slider
-    lateinit var sliderValue: String
+    private lateinit var sliderValue: String
 
     private lateinit var mButtonContinuar: Button
     private lateinit var mButtonVoltar: Button
@@ -60,9 +57,9 @@ class QuestionFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(PesquisaViewModel::class.java)
+        viewModel = ViewModelProvider(this)[PesquisaViewModel::class.java]
 
-        val fragmentManager: FragmentManager = activity!!.supportFragmentManager
+        val fragmentManager: FragmentManager = requireActivity().supportFragmentManager
         val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
 
         slider = view?.findViewById(R.id.slider_quality)!!
@@ -98,6 +95,7 @@ class QuestionFragment : Fragment() {
         mButtonContinuar.setOnClickListener {
             val titleQuestion: String = mTitleQuestion.text.toString()
             val titleContent: String = mTitleContent.text.toString()
+            val questoesList: Array<String>?
             // Create question's PesquisaEntity tp be used by registerPesquisa()
             mQuestoes = mutableListOf<QuestaoEntity>(
                 QuestaoEntity(
@@ -118,9 +116,11 @@ class QuestionFragment : Fragment() {
                 context = activity?.application!!.applicationContext,
                 pesquisa = mPesquisa
             )
+            // Converting the mutable list to array list
+            questoesList = mQuestoes.map { it.toString() }.toTypedArray()
             run {
-                Intent(activity, ActivityIniciarPesquisa::class.java).apply {
-                    putExtra(ActivityIniciarPesquisa.QUESTOES, gson.toJson(mQuestoes))
+                Intent(activity, PesquisaActivity::class.java).apply {
+                    putExtra(ActivityIniciarPesquisa.QUESTOES, questoesList)
                 }
             }
             nextFragment = QuestionFragmentAgilidade()

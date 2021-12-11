@@ -63,9 +63,9 @@ class QuestionFragmentLimpeza : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(PesquisaViewModel::class.java)
+        viewModel = ViewModelProvider(this)[PesquisaViewModel::class.java]
 
-        val fragmentManager: FragmentManager = activity!!.supportFragmentManager
+        val fragmentManager: FragmentManager = requireActivity().supportFragmentManager
         val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
 
         slider = view?.findViewById<Slider>(R.id.slider_quality)!!
@@ -102,6 +102,12 @@ class QuestionFragmentLimpeza : Fragment() {
         mButtonContinuar.setOnClickListener {
             val titleQuestion: String = PesquisaActivity.mTitleQuestion.text.toString()
             val titleContent: String = PesquisaActivity.mTitleContent.text.toString()
+            var listQuestoes: Array<String>?
+            run {
+                Intent(activity, PesquisaActivity::class.java).apply {
+                    listQuestoes = getStringArrayExtra(ActivityIniciarPesquisa.QUESTOES)!!
+                }
+            }
             mQuestoes +=
                 QuestaoEntity(
                     5,
@@ -112,7 +118,7 @@ class QuestionFragmentLimpeza : Fragment() {
 
             mPesquisa = PesquisaEntity(
                 gson.toJson(mPesquisador),
-                gson.toJson(mQuestoes),
+                gson.toJson(listQuestoes),
                 gson.toJson(mPaciente),
                 gson.toJson(currentDate)
             )
@@ -125,7 +131,7 @@ class QuestionFragmentLimpeza : Fragment() {
             PesquisaViewModel().searchPesquisa(
                 context = activity?.application!!.applicationContext,
                 pesquisador = mPesquisador
-            )!!.observe(activity!!, {
+            )!!.observe(requireActivity(), {
                 Toast.makeText(
                     context,
                     "Atualizando a pesquisa ${it.toString()}",
@@ -135,7 +141,7 @@ class QuestionFragmentLimpeza : Fragment() {
             })
             run {
                 Intent(activity, ActivityIniciarPesquisa::class.java).apply {
-                    putExtra(ActivityIniciarPesquisa.QUESTOES, gson.toJson(mQuestoes))
+                    putExtra(ActivityIniciarPesquisa.QUESTOES, gson.toJson(listQuestoes))
                 }
             }
 
