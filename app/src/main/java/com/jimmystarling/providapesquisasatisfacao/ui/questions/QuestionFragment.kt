@@ -92,42 +92,56 @@ class QuestionFragment : Fragment() {
                 }
             }
         }
-        mButtonContinuar.setOnClickListener {
-            val titleQuestion: String = mTitleQuestion.text.toString()
-            val titleContent: String = mTitleContent.text.toString()
-            val questoesList: Array<String>?
-            // Create question's PesquisaEntity tp be used by registerPesquisa()
-            mQuestoes = mutableListOf<QuestaoEntity>(
-                QuestaoEntity(
-                    1,
-                    titleQuestion,
-                    titleContent,
-                    sliderValue
+        val phraseData = arrayListOf<Int>(
+            R.string.title_question_enf,
+            R.string.title_question_farm,
+            R.string.title_question_marc,
+            R.string.title_question_recep,
+            R.string.title_question_adm,
+            R.string.title_question_vac,
+            R.string.title_question_lab,
+            R.string.title_question_med
+        )
+
+        phraseData.map { phrase ->
+            mButtonContinuar.setOnClickListener {
+                val titleQuestion: String = mTitleQuestion.text.toString()
+                val titleContent: String = mTitleContent.text.toString()
+                val questoesList: Array<String>?
+                // Create question's PesquisaEntity tp be used by registerPesquisa()
+                mQuestoes = mutableListOf<QuestaoEntity>(
+                    QuestaoEntity(
+                        1,
+                        titleQuestion,
+                        titleContent,
+                        sliderValue
+                    )
                 )
-            )
-            mPesquisa = PesquisaEntity(
-                gson.toJson(mPesquisador),
-                gson.toJson(mQuestoes),
-                gson.toJson(mPaciente),
-                gson.toJson(currentDate)
-            )
-            Log.d("DEBUG", "Pesquisa registrada: ${gson.toJson(mPesquisa)}")
-            PesquisaViewModel().registerPesquisa(
-                context = activity?.application!!.applicationContext,
-                pesquisa = mPesquisa
-            )
-            // Converting the mutable list to array list
-            questoesList = mQuestoes.map { it.toString() }.toTypedArray()
-            run {
-                Intent(activity, PesquisaActivity::class.java).apply {
-                    putExtra(ActivityIniciarPesquisa.QUESTOES, questoesList)
+                mPesquisa = PesquisaEntity(
+                    gson.toJson(mPesquisador),
+                    gson.toJson(mQuestoes),
+                    gson.toJson(mPaciente),
+                    gson.toJson(currentDate)
+                )
+                Log.d("DEBUG", "Pesquisa registrada: ${gson.toJson(mPesquisa)}")
+                PesquisaViewModel().registerPesquisa(
+                    context = activity?.application!!.applicationContext,
+                    pesquisa = mPesquisa
+                )
+                // Converting the mutable list to array list
+                questoesList = mQuestoes.map { it.toString() }.toTypedArray()
+                run {
+                    Intent(activity, PesquisaActivity::class.java).apply {
+                        putExtra(ActivityIniciarPesquisa.QUESTOES, questoesList)
+                    }
                 }
+                // TODO: ADD IF INDEX ==
+                nextFragment = QuestionFragmentAgilidade()
+                lastFragment = this
+                fragmentTransaction.replace(R.id.pesquisa_activity, nextFragment, "FRAGMENT_AGILIDADE")
+                fragmentTransaction.addToBackStack(null)
+                fragmentTransaction.commit()
             }
-            nextFragment = QuestionFragmentAgilidade()
-            lastFragment = this
-            fragmentTransaction.replace(R.id.pesquisa_activity, nextFragment, "FRAGMENT_AGILIDADE")
-            fragmentTransaction.addToBackStack(null)
-            fragmentTransaction.commit()
         }
     }
 }
