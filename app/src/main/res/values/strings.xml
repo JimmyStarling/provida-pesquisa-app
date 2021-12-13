@@ -96,4 +96,5 @@
     <string name="campo_para_registro_de_sugest_o_se_houver">Campo para registro de sugestão (se houver)</string>
     <string name="campo_para_registro_de_reclama_o_se_houver">Campo para registro de reclamação (se houver)</string>
     <string name="finalizar">Finalizar</string>
+    <string name="carregar_pesquisas">Carregar Pesquisas</string>
 </resources>

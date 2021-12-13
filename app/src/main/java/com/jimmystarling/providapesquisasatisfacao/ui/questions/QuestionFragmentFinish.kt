@@ -106,7 +106,7 @@ class QuestionFragmentFinish : Fragment() {
             var listQuestoes: Array<String>?
             run {
                 Intent(activity, PesquisaActivity::class.java).apply {
-                    listQuestoes = getStringArrayExtra(ActivityIniciarPesquisa.QUESTOES)!!
+                    listQuestoes = getStringArrayExtra(PesquisaActivity.QUESTOES)!!
                 }
             }
             mQuestoes +=

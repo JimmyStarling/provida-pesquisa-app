@@ -96,7 +96,7 @@ class QuestionFragmentCallcenter: Fragment() {
             var listQuestoes: Array<String>?
             run {
                 Intent(activity, PesquisaActivity::class.java).apply {
-                    listQuestoes = getStringArrayExtra(ActivityIniciarPesquisa.QUESTOES)!!
+                    listQuestoes = getStringArrayExtra(PesquisaActivity.QUESTOES)!!
                 }
             }
             // Create question's PesquisaEntity tp be used by registerPesquisa()
@@ -120,8 +120,8 @@ class QuestionFragmentCallcenter: Fragment() {
                 mPesquisa
             )
             run {
-                Intent(activity, ActivityIniciarPesquisa::class.java).apply {
-                    putExtra(ActivityIniciarPesquisa.QUESTOES, gson.toJson(listQuestoes))
+                Intent(activity, PesquisaActivity::class.java).apply {
+                    putExtra(PesquisaActivity.QUESTOES, gson.toJson(listQuestoes))
                 }
             }
             nextFragment = QuestionFragmentEstrutura()

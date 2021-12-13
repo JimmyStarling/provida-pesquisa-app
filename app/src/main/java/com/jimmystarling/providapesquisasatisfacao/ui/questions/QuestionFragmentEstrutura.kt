@@ -102,7 +102,7 @@ class QuestionFragmentEstrutura : Fragment() {
             var listQuestoes: Array<String>?
             run {
                 Intent(activity, PesquisaActivity::class.java).apply {
-                    listQuestoes = getStringArrayExtra(ActivityIniciarPesquisa.QUESTOES)!!
+                    listQuestoes = getStringArrayExtra(PesquisaActivity.QUESTOES)!!
                 }
             }
             mQuestoes = QuestaoEntity(
@@ -138,7 +138,7 @@ class QuestionFragmentEstrutura : Fragment() {
 
             run {
                 Intent(activity, ActivityIniciarPesquisa::class.java).apply {
-                    putExtra(ActivityIniciarPesquisa.QUESTOES, gson.toJson(listQuestoes))
+                    putExtra(PesquisaActivity.QUESTOES, gson.toJson(listQuestoes))
                 }
             }
 
