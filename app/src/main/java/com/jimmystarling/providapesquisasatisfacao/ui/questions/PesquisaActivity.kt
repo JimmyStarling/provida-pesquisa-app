@@ -22,6 +22,7 @@ class PesquisaActivity : AppCompatActivity() {
     }
 
     companion object{
+        var QUESTOES: String? = null
         val simpleFormat = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
         val currentDate = simpleFormat.format(Date())
 
