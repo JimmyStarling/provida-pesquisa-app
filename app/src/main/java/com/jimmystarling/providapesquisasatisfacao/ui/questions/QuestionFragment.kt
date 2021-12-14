@@ -19,6 +19,7 @@ import com.jimmystarling.providapesquisasatisfacao.data.model.PesquisaEntity
 import com.jimmystarling.providapesquisasatisfacao.data.model.PesquisadorEntity
 import com.jimmystarling.providapesquisasatisfacao.data.model.QuestaoEntity
 import com.jimmystarling.providapesquisasatisfacao.ui.ActivityIniciarPesquisa
+import com.jimmystarling.providapesquisasatisfacao.ui.FragmentsViewModel
 import com.jimmystarling.providapesquisasatisfacao.ui.questions.PesquisaActivity.Companion.currentDate
 import com.jimmystarling.providapesquisasatisfacao.ui.questions.PesquisaActivity.Companion.mTitleContent
 import com.jimmystarling.providapesquisasatisfacao.ui.questions.PesquisaActivity.Companion.mTitleQuestion
@@ -38,7 +39,7 @@ class QuestionFragment : Fragment() {
     // Entities and variables to modelview
     private lateinit var mPesquisa: PesquisaEntity
     private lateinit var mPesquisador: PesquisadorEntity
-    private lateinit var mQuestoes: MutableList<QuestaoEntity>
+    private var mQuestoes: MutableList<QuestaoEntity> = emptyList<QuestaoEntity>().toMutableList()
     private lateinit var mPaciente: PacienteEntity
 
     companion object {
@@ -72,19 +73,18 @@ class QuestionFragment : Fragment() {
         mPaciente = Json.decodeFromString(mPacienteEntity)
         // Parsing to dataclass to be used by registerPesquisa()
         mPesquisador = Json.decodeFromString(mPesquisadorEntity)
-        lateinit var sliderValue: String
+        var sliderValue = "1"
+        val slideDictionary: Map<Int, String> = mapOf<Int, String>(
+            1 to "Ruim",
+            4 to "Regular",
+            7 to "Bom",
+            10 to "Ótimo"
+        )
         // When the value of slide changes then set the values
         slider.addOnChangeListener { _, data, _ ->
-            if (data.toString() == "4") {
-                sliderValue = "Regular"
-            } else if (data.toString() == "7") {
-                sliderValue = "Bom"
-            }
-            else if (data.toString() == "10") {
-                sliderValue = "Ótimo"
-            } else {
-                sliderValue = "Ruim"
-            }
+            val dataNumber: Int = data.toInt()
+            sliderValue = slideDictionary[dataNumber].toString()
+            Log.d("DEBUG", "The slide value is $sliderValue")
         }
         val phraseData = arrayListOf<String>(
             getString(R.string.title_question_enf),
@@ -100,9 +100,7 @@ class QuestionFragment : Fragment() {
         mButtonContinuar.setOnClickListener {
             val titleQuestion: String = mTitleQuestion.text.toString()
             val titleContent: String = mTitleContent.text.toString()
-
             // Set titles and when is the last title then replace fragment
-            val lastPhrase: String = phraseData[phraseData.size - 1]
             phraseData.forEachIndexed { index, phrase ->
                 Log.d("DEBUG", "Actual titleContent is: $phrase at $index")
                 if(titleContent == phraseData[index]){
@@ -132,13 +130,23 @@ class QuestionFragment : Fragment() {
                         mTitleContent.text = phraseData[index+1]
                     } else if(phraseData[0] != mTitleContent.text && phraseData.getOrNull(index+1) != null){
                         // Create question's PesquisaEntity tp be used by registerPesquisa()
-                        mQuestoes +=
+                        mQuestoes.add(
                             QuestaoEntity(
-                                index,// get from the index
+                                index,
                                 titleQuestion,
                                 titleContent,
                                 sliderValue
                             )
+                        )
+                        // Set title question as the next phrase at phraseData
+                        mTitleContent.text = phraseData[index+1]
+                    } else {
+                        // Setting questions to fragments
+                        FragmentsViewModel().setQuestions(mQuestoes)
+                        FragmentsViewModel().questionsMessage.observe(activity!!) { questions ->
+                            Log.d("DEBUG", "The questions from modelview is: $questions")
+                        }
+                        // Setting pesquisas to database
                         mPesquisa = PesquisaEntity(
                             gson.toJson(mPesquisador),
                             gson.toJson(mQuestoes),
@@ -149,11 +157,6 @@ class QuestionFragment : Fragment() {
                             context = activity?.application!!.applicationContext,
                             pesquisa = mPesquisa
                         )
-                        // Set title question as the next phrase at phraseData
-                        mTitleContent.text = phraseData[index+1]
-                    } else {
-
-
                         val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
                         nextFragment = QuestionFragmentAgilidade()
                         lastFragment = this
