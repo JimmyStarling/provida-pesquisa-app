@@ -35,7 +35,7 @@
             app:layout_constraintVertical_bias="0.251" />
 
         <TextView
-            android:id="@+id/title_atendimento"
+            android:id="@+id/title_atendimento_agilidade"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="36dp"
@@ -59,10 +59,10 @@
             android:src="@drawable/enfermagem"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/title_content" />
+            app:layout_constraintTop_toBottomOf="@+id/title_content_agilidade" />
 
         <TextView
-            android:id="@+id/title_content"
+            android:id="@+id/title_content_agilidade"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -73,11 +73,11 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/title_atendimento"
+            app:layout_constraintTop_toBottomOf="@+id/title_atendimento_agilidade"
             app:layout_constraintVertical_bias="0.0" />
 
         <com.google.android.material.slider.Slider
-            android:id="@+id/slider_quality"
+            android:id="@+id/slider_quality_agilidade"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -97,7 +97,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.495"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/slider_quality">
+            app:layout_constraintTop_toBottomOf="@+id/slider_quality_agilidade">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -189,7 +189,7 @@
         </LinearLayout>
 
         <Button
-            android:id="@+id/btn_continuar"
+            android:id="@+id/btn_continuar_agilidade"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="50dp"
@@ -207,7 +207,7 @@
             app:layout_constraintVertical_bias="0.218" />
 
         <Button
-            android:id="@+id/btn_voltar"
+            android:id="@+id/btn_voltar_agilidade"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="50dp"
@@ -223,7 +223,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_continuar"
+            app:layout_constraintTop_toBottomOf="@+id/btn_continuar_agilidade"
             app:layout_constraintVertical_bias="0.146" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

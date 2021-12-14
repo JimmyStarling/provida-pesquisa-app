@@ -191,7 +191,7 @@
             app:layout_constraintVertical_bias="0.218" />
 
         <Button
-            android:id="@+id/btn_voltar"
+            android:id="@+id/btn_voltar_estrutura"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="50dp"
