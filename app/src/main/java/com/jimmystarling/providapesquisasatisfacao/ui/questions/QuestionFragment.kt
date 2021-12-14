@@ -75,13 +75,12 @@ class QuestionFragment : Fragment() {
         lateinit var sliderValue: String
         // When the value of slide changes then set the values
         slider.addOnChangeListener { _, data, _ ->
-            val sliderValueNumber: Float = data
-            if (sliderValueNumber.toString() == "4") {
+            if (data.toString() == "4") {
                 sliderValue = "Regular"
-            } else if (sliderValueNumber.toString() == "7") {
+            } else if (data.toString() == "7") {
                 sliderValue = "Bom"
             }
-            else if (sliderValueNumber.toString() == "10") {
+            else if (data.toString() == "10") {
                 sliderValue = "Ótimo"
             } else {
                 sliderValue = "Ruim"
@@ -101,7 +100,6 @@ class QuestionFragment : Fragment() {
         mButtonContinuar.setOnClickListener {
             val titleQuestion: String = mTitleQuestion.text.toString()
             val titleContent: String = mTitleContent.text.toString()
-            var questoesList: Array<String>?
 
             // Set titles and when is the last title then replace fragment
             val lastPhrase: String = phraseData[phraseData.size - 1]
@@ -154,13 +152,8 @@ class QuestionFragment : Fragment() {
                         // Set title question as the next phrase at phraseData
                         mTitleContent.text = phraseData[index+1]
                     } else {
-                        // Converting the mutable list to array list
-                        questoesList = mQuestoes.map { it.toString() }.toTypedArray()
-                        run {
-                            Intent(activity, PesquisaActivity::class.java).apply {
-                                putExtra(PesquisaActivity.QUESTOES, questoesList)
-                            }
-                        }
+
+
                         val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
                         nextFragment = QuestionFragmentAgilidade()
                         lastFragment = this
