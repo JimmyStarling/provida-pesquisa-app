@@ -2,6 +2,7 @@ package com.jimmystarling.providapesquisasatisfacao.ui.questions
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,6 +19,7 @@ import com.jimmystarling.providapesquisasatisfacao.data.model.PesquisaEntity
 import com.jimmystarling.providapesquisasatisfacao.data.model.PesquisadorEntity
 import com.jimmystarling.providapesquisasatisfacao.data.model.QuestaoEntity
 import com.jimmystarling.providapesquisasatisfacao.ui.ActivityIniciarPesquisa
+import com.jimmystarling.providapesquisasatisfacao.ui.FragmentsViewModel
 import com.jimmystarling.providapesquisasatisfacao.ui.questions.PesquisaActivity.Companion.currentDate
 import com.jimmystarling.providapesquisasatisfacao.ui.questions.PesquisaActivity.Companion.mTitleContent
 import com.jimmystarling.providapesquisasatisfacao.ui.questions.PesquisaActivity.Companion.mTitleQuestion
@@ -38,7 +40,6 @@ class QuestionFragmentCallcenter: Fragment() {
     // Entities and variables to modelview
     private lateinit var mPesquisa: PesquisaEntity
     private lateinit var mPesquisador: PesquisadorEntity
-    private lateinit var mQuestoes: QuestaoEntity
     private lateinit var mPaciente: PacienteEntity
 
     companion object {
@@ -56,14 +57,20 @@ class QuestionFragmentCallcenter: Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this)[PesquisaViewModel::class.java]
 
+        lateinit var mQuestoes: MutableList<QuestaoEntity>
+
         val fragmentManager: FragmentManager = requireActivity().supportFragmentManager
         val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
 
         slider = view?.findViewById(R.id.slider_quality)!!
         mButtonContinuar = view?.findViewById(R.id.btn_continuar)!!
-        mButtonVoltar = view?.findViewById(R.id.btn_voltar)!!
+        mButtonVoltar = view?.findViewById(R.id.btn_voltar_callcenter)!!
         mTitleQuestion = view?.findViewById(R.id.title_atendimento)!!
         mTitleContent = view?.findViewById(R.id.title_content)!!
+
+        FragmentsViewModel().questionsMessage.observe(activity!!) { questions ->
+            mQuestoes = questions as MutableList<QuestaoEntity>
+        }
 
         val intent = activity?.intent
         val mPesquisadorEntity = intent?.getStringExtra("PESQUISADOR")!!
@@ -71,46 +78,40 @@ class QuestionFragmentCallcenter: Fragment() {
         mPaciente = Json.decodeFromString(mPacienteEntity)
         // Parsing to dataclass to be used by registerPesquisa()
         mPesquisador = Json.decodeFromString(mPesquisadorEntity)
+        lateinit var sliderValue: String
+        val slideDictionary: Map<Int, String> = mapOf<Int, String>(
+            1 to "Ruim",
+            4 to "Regular",
+            7 to "Bom",
+            10 to "Ótimo"
+        )
         // When the value of slide changes then set the values
-        slider.addOnChangeListener { slider, _, _ ->
-            val slideNumberValue: Float = slider.value
-            sliderValue = when {
-                slideNumberValue.toString() == "3.0" -> {
-                    "Regular"
-                }
-                slideNumberValue.toString() == "6" -> {
-                    "Bom"
-                }
-                slideNumberValue.toString() == "9" -> {
-                    "Ótimo"
-                }
-                else -> {
-                    "Ruim"
+        slider.addOnChangeListener { _, data, _ ->
+            val sliderValueNumber: Float = data
+            slideDictionary.forEach {
+                when {
+                    sliderValueNumber.toString() == it.key.toString() -> {
+                        sliderValue = it.value
+                    }
                 }
             }
-
         }
         mButtonContinuar.setOnClickListener {
             val titleQuestion: String = mTitleQuestion.text.toString()
             val titleContent: String = mTitleContent.text.toString()
-            var listQuestoes: Array<String>?
-            run {
-                Intent(activity, PesquisaActivity::class.java).apply {
-                    listQuestoes = getStringArrayExtra(PesquisaActivity.QUESTOES)!!
-                }
-            }
+
             // Create question's PesquisaEntity tp be used by registerPesquisa()
-            mQuestoes = QuestaoEntity(
-                        3,
+            mQuestoes.add(
+                QuestaoEntity(
+                        16,
                         titleQuestion,
                         titleContent,
                         sliderValue
                     )
-            listQuestoes?.plus(mQuestoes.toString())
-
+            )
             mPesquisa = PesquisaEntity(
                 gson.toJson(mPesquisador),
-                gson.toJson(listQuestoes),
+                gson.toJson(mQuestoes),
                 gson.toJson(mPaciente),
                 gson.toJson(currentDate)
             )
@@ -119,10 +120,9 @@ class QuestionFragmentCallcenter: Fragment() {
                 activity?.application!!.applicationContext,
                 mPesquisa
             )
-            run {
-                Intent(activity, PesquisaActivity::class.java).apply {
-                    putExtra(PesquisaActivity.QUESTOES, gson.toJson(listQuestoes))
-                }
+            FragmentsViewModel().setQuestions(mQuestoes)
+            FragmentsViewModel().questionsMessage.observe(activity!!) { questions ->
+                Log.d("DEBUG", "The questions from modelview is: $questions")
             }
             nextFragment = QuestionFragmentEstrutura()
             lastFragment = this

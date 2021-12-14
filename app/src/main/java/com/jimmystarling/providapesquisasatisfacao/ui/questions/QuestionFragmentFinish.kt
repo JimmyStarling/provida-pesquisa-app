@@ -25,6 +25,7 @@ import androidx.fragment.app.FragmentTransaction
 import com.jimmystarling.providapesquisasatisfacao.R.*
 import com.jimmystarling.providapesquisasatisfacao.ui.ActivityIniciarPesquisa
 import com.jimmystarling.providapesquisasatisfacao.ui.ActivityIniciarPesquisa.Companion.activityIniciarPesquisa
+import com.jimmystarling.providapesquisasatisfacao.ui.FragmentsViewModel
 import com.jimmystarling.providapesquisasatisfacao.ui.questions.PesquisaActivity.Companion.activityPesquisa
 import com.jimmystarling.providapesquisasatisfacao.ui.questions.PesquisaActivity.Companion.currentDate
 import com.jimmystarling.providapesquisasatisfacao.ui.questions.PesquisaActivity.Companion.mTitleContent
@@ -37,7 +38,6 @@ class QuestionFragmentFinish : Fragment() {
     lateinit var nextFragment: Fragment
 
     lateinit var slider: Slider
-    var slider_value: String? = null
 
     lateinit var mButtonContinuar: Button
     lateinit var mButtonVoltar: Button
@@ -45,10 +45,7 @@ class QuestionFragmentFinish : Fragment() {
     // Entities and variables to modelview
     lateinit var mPesquisa: PesquisaEntity
     lateinit var mPesquisador: PesquisadorEntity
-    lateinit var mQuestoes: MutableList<QuestaoEntity>
     lateinit var mPaciente: PacienteEntity
-
-
 
     companion object {
         var gson = Gson()
@@ -69,11 +66,17 @@ class QuestionFragmentFinish : Fragment() {
         val fragmentManager: FragmentManager = requireActivity().supportFragmentManager
         val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
 
+        lateinit var mQuestoes: MutableList<QuestaoEntity>
+
         slider = view?.findViewById<Slider>(R.id.slider_quality)!!
         mButtonContinuar = view?.findViewById<Button>(R.id.btn_continuar)!!
-        mButtonVoltar = view?.findViewById<Button>(R.id.btn_voltar)!!
+        mButtonVoltar = view?.findViewById<Button>(R.id.btn_voltar_finish)!!
         mTitleQuestion = view?.findViewById(R.id.title_atendimento)!!
         mTitleContent = view?.findViewById(R.id.title_content)!!
+
+        FragmentsViewModel().questionsMessage.observe(activity!!) { questions ->
+            mQuestoes = questions as MutableList<QuestaoEntity>
+        }
 
         val intent = activity?.intent
         val mPesquisadorEntity = intent?.getStringExtra("PESQUISADOR")!!
@@ -81,21 +84,21 @@ class QuestionFragmentFinish : Fragment() {
         mPaciente = Json.decodeFromString<PacienteEntity>(mPacienteEntity)
         // Parsing to dataclass to be used by registerPesquisa()
         mPesquisador = Json.decodeFromString<PesquisadorEntity>(mPesquisadorEntity)
+        lateinit var sliderValue: String
+        val slideDictionary: Map<Int, String> = mapOf<Int, String>(
+            1 to "Ruim",
+            4 to "Regular",
+            7 to "Bom",
+            10 to "Ótimo"
+        )
         // When the value of slide changes then set the values
-        slider.addOnChangeListener { slider, _, _ ->
-            val slideNumberValue: Float = slider.value
-            slider_value = when {
-                slideNumberValue.toString() == "3.0" -> {
-                    "Regular"
-                }
-                slideNumberValue.toString() == "6" -> {
-                    "Bom"
-                }
-                slideNumberValue.toString() == "9" -> {
-                    "Ótimo"
-                }
-                else -> {
-                    "Ruim"
+        slider.addOnChangeListener { _, data, _ ->
+            val sliderValueNumber: Float = data
+            slideDictionary.forEach {
+                when {
+                    sliderValueNumber.toString() == it.key.toString() -> {
+                        sliderValue = it.value
+                    }
                 }
             }
         }
@@ -103,23 +106,18 @@ class QuestionFragmentFinish : Fragment() {
         mButtonContinuar.setOnClickListener {
             val titleQuestion: String = PesquisaActivity.mTitleQuestion.text.toString()
             val titleContent: String = PesquisaActivity.mTitleContent.text.toString()
-            var listQuestoes: Array<String>?
-            run {
-                Intent(activity, PesquisaActivity::class.java).apply {
-                    listQuestoes = getStringArrayExtra(PesquisaActivity.QUESTOES)!!
-                }
-            }
-            mQuestoes +=
+
+            mQuestoes.add(
                 QuestaoEntity(
                     7,
                     titleQuestion,
                     titleContent,
-                    slider_value!!
+                    sliderValue!!
                 )
-
+            )
             mPesquisa = PesquisaEntity(
                 gson.toJson(mPesquisador),
-                gson.toJson(listQuestoes),
+                gson.toJson(mQuestoes),
                 gson.toJson(mPaciente),
                 gson.toJson(currentDate)
             )
@@ -142,7 +140,7 @@ class QuestionFragmentFinish : Fragment() {
             })
             run {
                 activityIniciarPesquisa = Intent(activity, ActivityIniciarPesquisa::class.java).apply {
-                    putExtra(ActivityIniciarPesquisa.QUESTOES, gson.toJson(listQuestoes))
+                    putExtra(ActivityIniciarPesquisa.QUESTOES, gson.toJson(mQuestoes))
                 }
                 startActivity(activityIniciarPesquisa as Intent)
             }
