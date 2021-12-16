@@ -6,8 +6,11 @@ import com.google.gson.Gson
 import com.jimmystarling.providapesquisasatisfacao.data.database.ProvidaDatabase
 import com.jimmystarling.providapesquisasatisfacao.data.model.*
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.encodeToJsonElement
 
 class PesquisadorRepository {
 
@@ -33,6 +36,20 @@ class PesquisadorRepository {
 
         }
 
+        // Here will pass the appended variable to questoes list and convert it to json
+        fun updatePesquisador(
+            context: Context,
+            name: String,
+            pesquisas_quantidade: Int
+        ) {
+
+            providaDatabase = initializeDB(context)
+
+            CoroutineScope(Dispatchers.IO).launch {
+                providaDatabase!!.databaseDao().updatePesquisador(name, pesquisas_quantidade)
+            }
+
+        }
 
         fun searchPesquisador(context: Context, name: String, password: String) : LiveData<PesquisadorEntity>? {
 
