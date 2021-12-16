@@ -97,4 +97,6 @@
     <string name="campo_para_registro_de_reclama_o_se_houver">Campo para registro de reclamação (se houver)</string>
     <string name="finalizar">Finalizar</string>
     <string name="carregar_pesquisas">Carregar Pesquisas</string>
+    <string name="sua_quantidade_de_pesquisas_s_o">Sua quantidade de pesquisas são:</string>
+    <string name="yes_callcenter">Sim já utilizei os serviços de callcenter.</string>
 </resources>

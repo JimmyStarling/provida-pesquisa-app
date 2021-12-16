@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.CheckBox
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
@@ -36,6 +37,7 @@ class QuestionFragmentCallcenter: Fragment() {
 
     private lateinit var mButtonContinuar: Button
     private lateinit var mButtonVoltar: Button
+    private lateinit var mCheckbox: CheckBox
 
     // Entities and variables to modelview
     private lateinit var mPesquisa: PesquisaEntity
@@ -67,10 +69,7 @@ class QuestionFragmentCallcenter: Fragment() {
         mButtonVoltar = view?.findViewById(R.id.btn_voltar_callcenter)!!
         mTitleQuestion = view?.findViewById(R.id.title_atendimento)!!
         mTitleContent = view?.findViewById(R.id.title_content)!!
-
-        FragmentsViewModel().questionsMessage.observe(activity!!) { questions ->
-            mQuestoes = questions as MutableList<QuestaoEntity>
-        }
+        mCheckbox = view?.findViewById(R.id.callcenter_uso)!!
 
         val intent = activity?.intent
         val mPesquisadorEntity = intent?.getStringExtra("PESQUISADOR")!!
@@ -92,6 +91,7 @@ class QuestionFragmentCallcenter: Fragment() {
                 when {
                     sliderValueNumber.toString() == it.key.toString() -> {
                         sliderValue = it.value
+                        mCheckbox.isActivated = true
                     }
                 }
             }
@@ -100,15 +100,42 @@ class QuestionFragmentCallcenter: Fragment() {
             val titleQuestion: String = mTitleQuestion.text.toString()
             val titleContent: String = mTitleContent.text.toString()
 
-            // Create question's PesquisaEntity tp be used by registerPesquisa()
-            mQuestoes.add(
-                QuestaoEntity(
-                        16,
+            // Passing questoes to mQuestoes
+            var questoes: MutableList<QuestaoEntity> = emptyList<QuestaoEntity>().toMutableList()
+            PesquisaViewModel().searchPesquisa(
+                context = activity?.application!!.applicationContext,
+                pesquisador = mPesquisador
+            )!!.observe(requireActivity(), {
+                val lastPesquisa = it.last()
+                mPesquisa = lastPesquisa
+                it.forEach { pesquisa ->
+                    questoes = Json.decodeFromString<MutableList<QuestaoEntity>>(pesquisa.questoes)
+                        .toMutableList()
+                }
+            })
+            mQuestoes = questoes
+
+            if (mCheckbox.isActivated){
+                // Create question's PesquisaEntity tp be used by registerPesquisa()
+                mQuestoes.add(
+                    QuestaoEntity(
+                        17,
                         titleQuestion,
                         titleContent,
                         sliderValue
                     )
-            )
+                )
+            } else {
+                mQuestoes.add(
+                    QuestaoEntity(
+                        17,
+                        titleQuestion,
+                        titleContent,
+                        "0"
+                    )
+                )
+            }
+
             mPesquisa = PesquisaEntity(
                 gson.toJson(mPesquisador),
                 gson.toJson(mQuestoes),
@@ -121,10 +148,6 @@ class QuestionFragmentCallcenter: Fragment() {
                 id = mPesquisa?.id,
                 questoes = mQuestoes
             )
-            FragmentsViewModel().setQuestions(mQuestoes)
-            FragmentsViewModel().questionsMessage.observe(activity!!) { questions ->
-                Log.d("DEBUG", "The questions from modelview is: $questions")
-            }
             nextFragment = QuestionFragmentEstrutura()
             lastFragment = this
             fragmentTransaction.hide(lastFragment)

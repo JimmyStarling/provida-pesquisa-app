@@ -79,7 +79,7 @@ class PesquisaRepository {
             providaDatabase = initializeDB(context)
 
             CoroutineScope(Dispatchers.IO).launch {
-                providaDatabase!!.databaseDao().updatePesquisador(pesquisador.id, pesquisas_quanidade)
+                providaDatabase!!.databaseDao().updatePesquisador(pesquisador.name, pesquisas_quanidade)
             }
         }
     }

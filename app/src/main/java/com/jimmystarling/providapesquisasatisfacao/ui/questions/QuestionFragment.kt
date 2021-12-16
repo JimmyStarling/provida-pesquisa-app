@@ -74,6 +74,7 @@ class QuestionFragment : Fragment() {
         mPaciente = Json.decodeFromString(mPacienteEntity)
         // Parsing to dataclass to be used by registerPesquisa()
         mPesquisador = Json.decodeFromString(mPesquisadorEntity)
+        Log.d("DEBUG", "mPesquisador is $mPesquisador")
         var sliderValue = "1"
         val slideDictionary: Map<Int, String> = mapOf<Int, String>(
             1 to "Ruim",
@@ -142,12 +143,16 @@ class QuestionFragment : Fragment() {
                         // Set title question as the next phrase at phraseData
                         mTitleContent.text = phraseData[index+1]
                     } else {
+                        // Create question's PesquisaEntity to be used by registerPesquisa()
+                        mQuestoes.add(
+                            QuestaoEntity(
+                                index,// get from the index
+                                titleQuestion,
+                                titleContent,
+                                sliderValue
+                            )
+                        )
                         Log.d("DEBUG", "The final question variable is: $mQuestoes")
-                        // Setting questions to fragments
-                        FragmentsViewModel().setQuestions(mQuestoes)
-                        FragmentsViewModel().questionsMessage.observe(activity!!) { questions ->
-                            Log.d("DEBUG", "The questions from modelview is: $questions")
-                        }
                         // Updating pesquisa by pesquisador
                         PesquisaViewModel().searchPesquisa(
                             activity?.application!!.applicationContext,

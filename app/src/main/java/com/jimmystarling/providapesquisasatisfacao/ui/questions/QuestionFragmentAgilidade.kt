@@ -67,17 +67,13 @@ class QuestionFragmentAgilidade : Fragment() {
         mTitleQuestion = view?.findViewById(R.id.title_atendimento_agilidade)!!
         mTitleContent = view?.findViewById(R.id.title_content_agilidade)!!
 
-        FragmentsViewModel().questionsMessage.observe(activity!!, { questions ->
-            mQuestoes = questions as MutableList<QuestaoEntity>
-            Log.d("DEBUG", "Retriving the questions: $questions")
-        })
-
         val intent = activity?.intent
         val mPesquisadorEntity = intent?.getStringExtra("PESQUISADOR")!!
         val mPacienteEntity = intent.getStringExtra("PACIENTE")!!
         mPaciente = Json.decodeFromString<PacienteEntity>(mPacienteEntity)
         // Parsing to dataclass to be used by registerPesquisa()
         mPesquisador = Json.decodeFromString<PesquisadorEntity>(mPesquisadorEntity)
+        Log.d("DEBUG", "Pesquisador from FragmentAgilidade() is: $mPesquisador")
         var sliderValue = "1"
         val slideDictionary: Map<Int, String> = mapOf<Int, String>(
             1 to "Ruim",
@@ -102,88 +98,92 @@ class QuestionFragmentAgilidade : Fragment() {
             getString(R.string.title_question_med)
         )
 
+        // Updating pesquisa by pesquisador
+        PesquisaViewModel().searchPesquisa(
+            activity?.application!!.applicationContext,
+            mPesquisador
+        )?.observe(activity!!, {
+            val lastPesquisa = it.last()
+            mPesquisa = lastPesquisa
+        })
+
+        var questoesID = 9
         mButtonContinuar.setOnClickListener {
+
             val titleQuestion: String = mTitleQuestion.text.toString()
             val titleContent: String = mTitleContent.text.toString()
-
             // Set titles and when is the last title then replace fragment
             phraseData.forEachIndexed { index, phrase ->
-                Log.d("DEBUG", "Actual titleContent is: $phrase at $index")
-                if(titleContent == phraseData[index]) {
-                    if (phraseData.getOrNull(index + 1) != null) {
+                if(titleContent == phraseData[index]){
+                    // If is the first question then register else update PesquisaEntity
+                    if (phraseData[0] == mTitleContent.text){
                         // Passing questoes to mQuestoes
-                        lateinit var questoes: MutableList<QuestaoEntity>
+                        var questoes: MutableList<QuestaoEntity> = emptyList<QuestaoEntity>().toMutableList()
                         PesquisaViewModel().searchPesquisa(
                             context = activity?.application!!.applicationContext,
                             pesquisador = mPesquisador
                         )!!.observe(requireActivity(), {
+                            val lastPesquisa = it.last()
+                            mPesquisa = lastPesquisa
                             it.forEach { pesquisa ->
                                 questoes = Json.decodeFromString<MutableList<QuestaoEntity>>(pesquisa.questoes)
                                     .toMutableList()
-                                Log.d("DEBUG", "Pesquisa variable value is: ${pesquisa.toString()}")
                             }
-                            mQuestoes = questoes
-                            Log.d("DEBUG", "mQuestoes variable value is: $mQuestoes")
                         })
+                        mQuestoes = questoes
                         // Create question's PesquisaEntity to be used by registerPesquisa()
                         mQuestoes.add(
                             QuestaoEntity(
-                                index,
+                                index+questoesID,
                                 titleQuestion,
                                 titleContent,
                                 sliderValue
                             )
                         )
-                        mPesquisa = PesquisaEntity(
-                            QuestionFragment.gson.toJson(mPesquisador),
-                            QuestionFragment.gson.toJson(mQuestoes),
-                            QuestionFragment.gson.toJson(mPaciente),
-                            QuestionFragment.gson.toJson(currentDate)
+                        Log.d("DEBUG", "Question from agilidade added: ${mQuestoes.last()}")
+                        // Set title question as the next phrase at phraseData
+                        mTitleContent.text = phraseData[index+1]
+                    } else if(phraseData[0] != mTitleContent.text && phraseData.getOrNull(index+1) != null){
+                        questoesID++
+                        // Create question's PesquisaEntity tp be used by registerPesquisa()
+                        mQuestoes.add(
+                            QuestaoEntity(
+                                questoesID,
+                                titleQuestion,
+                                titleContent,
+                                sliderValue
+                            )
                         )
+                        // Set title question as the next phrase at phraseData
+                        mTitleContent.text = phraseData[index+1]
+                        Log.d("DEBUG", "Question from agilidade added: ${mQuestoes.last()}")
+                    } else {
+                        // Create question's PesquisaEntity to be used by registerPesquisa()
+                        mQuestoes.add(
+                            QuestaoEntity(
+                                questoesID++,// get from the index
+                                titleQuestion,
+                                titleContent,
+                                sliderValue
+                            )
+                        )
+                        Log.d("DEBUG", "The pesquisador variable: $mPesquisador")
                         PesquisaViewModel().updatePesquisa(
                             context = activity?.application!!.applicationContext,
                             id = mPesquisa.id,
                             questoes = mQuestoes
                         )
-                        // Set title question as the next phrase at phraseData
-                        mTitleContent.text = phraseData[index + 1]
-                    } else {
-                        // Create question's PesquisaEntity to be used by registerPesquisa()
-                        mQuestoes.add(
-                            QuestaoEntity(
-                                index,// get from the index
-                                titleQuestion,
-                                titleContent,
-                                sliderValue
-                            )
-                        )
-                        mPesquisa = PesquisaEntity(
-                            QuestionFragment.gson.toJson(mPesquisador),
-                            QuestionFragment.gson.toJson(mQuestoes),
-                            QuestionFragment.gson.toJson(mPaciente),
-                            QuestionFragment.gson.toJson(currentDate)
-                        )
+
+                        Log.d("DEBUG", "The final question variable: $mQuestoes")
+
+                        val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
+                        nextFragment = QuestionFragmentCallcenter()
+                        lastFragment = this
+                        fragmentTransaction.replace(R.id.pesquisa_activity, nextFragment, "FRAGMENT_AGILIDADE")
+                        fragmentTransaction.addToBackStack(null)
+                        fragmentTransaction.commit()
                     }
                 }
-                // Update pesquisa to database
-                PesquisaViewModel().updatePesquisa(
-                    context = activity?.application!!.applicationContext,
-                    id = mPesquisa.id,
-                            questoes = mQuestoes
-                )
-                // Setting fragment questions
-                FragmentsViewModel().setQuestions(mQuestoes)
-                FragmentsViewModel().questionsMessage.observe(activity!!) { questions ->
-                    Log.d("DEBUG", "The questions from modelview is: $questions")
-                }
-
-                val fragmentTransaction: FragmentTransaction =
-                    fragmentManager.beginTransaction()
-                nextFragment = QuestionFragmentCallcenter()
-                fragmentTransaction.hide(lastFragment)
-                fragmentTransaction.add(R.id.pesquisa_activity, nextFragment)
-                fragmentTransaction.addToBackStack(null)
-                fragmentTransaction.commit()
             }
         }
         mButtonVoltar.setOnClickListener {

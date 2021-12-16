@@ -195,7 +195,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/question_classification"
-        app:layout_constraintVertical_bias="0.218" />
+        app:layout_constraintVertical_bias="0.309" />
 
     <Button
         android:id="@+id/btn_voltar_callcenter"
@@ -216,4 +216,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_continuar"
         app:layout_constraintVertical_bias="0.146" />
+
+    <CheckBox
+        android:id="@+id/callcenter_uso"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/yes_callcenter"
+        app:layout_constraintBottom_toTopOf="@+id/btn_continuar"
+        app:layout_constraintTop_toBottomOf="@+id/question_classification"
+        tools:layout_editor_absoluteX="149dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

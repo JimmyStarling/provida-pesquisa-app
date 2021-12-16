@@ -23,9 +23,11 @@ import kotlinx.serialization.json.Json
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.jimmystarling.providapesquisasatisfacao.R.*
+import com.jimmystarling.providapesquisasatisfacao.data.repository.PesquisadorRepository
 import com.jimmystarling.providapesquisasatisfacao.ui.ActivityIniciarPesquisa
 import com.jimmystarling.providapesquisasatisfacao.ui.ActivityIniciarPesquisa.Companion.activityIniciarPesquisa
 import com.jimmystarling.providapesquisasatisfacao.ui.FragmentsViewModel
+import com.jimmystarling.providapesquisasatisfacao.ui.login.viewmodel.LoginViewModel
 import com.jimmystarling.providapesquisasatisfacao.ui.questions.PesquisaActivity.Companion.activityPesquisa
 import com.jimmystarling.providapesquisasatisfacao.ui.questions.PesquisaActivity.Companion.currentDate
 import com.jimmystarling.providapesquisasatisfacao.ui.questions.PesquisaActivity.Companion.mTitleContent
@@ -109,7 +111,7 @@ class QuestionFragmentFinish : Fragment() {
 
             mQuestoes.add(
                 QuestaoEntity(
-                    7,
+                    21,
                     titleQuestion,
                     titleContent,
                     sliderValue!!
@@ -125,20 +127,25 @@ class QuestionFragmentFinish : Fragment() {
             PesquisaViewModel().updatePesquisa(
                 context = activity?.application!!.applicationContext,
                 id = mPesquisa.id,
-                            questoes = mQuestoes
+                questoes = mQuestoes
             )
 
             PesquisaViewModel().searchPesquisa(
                 context = activity?.application!!.applicationContext,
                 pesquisador = mPesquisador
             )!!.observe(requireActivity(), {
-                Toast.makeText(
-                    context,
-                    "Atualizando a pesquisa ${it.toString()}",
-                    Toast.LENGTH_SHORT
-                ).show()
-                Log.d("DEBUG", "Pesquisa variable value is: ${it.toString()}")
+                val pesquisasQuantidade = it.size
+                PesquisadorRepository.updatePesquisador(activity!!, mPesquisador.name, pesquisasQuantidade)
             })
+
+            PesquisadorRepository.searchPesquisador(
+                activity?.application!!.applicationContext,
+                mPesquisador.name,
+                mPesquisador.password
+            )!!.observe(requireActivity(), {
+                Log.d("DEBUG", "A quantidade de pesquisa final é ${it.pesquisas_quantidade}")
+            })
+
             run {
                 activityIniciarPesquisa = Intent(activity, ActivityIniciarPesquisa::class.java).apply {
                     putExtra(ActivityIniciarPesquisa.QUESTOES, gson.toJson(mQuestoes))
