@@ -11,6 +11,8 @@ import com.jimmystarling.providapesquisasatisfacao.data.model.QuestaoEntity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.encodeToJsonElement
 
 class PesquisaRepository {
 
@@ -48,13 +50,15 @@ class PesquisaRepository {
         // Here will pass the appended variable to questoes list and convert it to json
         fun updatePesquisa(
             context: Context,
-            pesquisa: PesquisaEntity,
+            id: Int?,
+            questoes: MutableList<QuestaoEntity>
         ) {
+            val questoesJson: String = Json.encodeToJsonElement(questoes).toString()
 
             providaDatabase = initializeDB(context)
 
             CoroutineScope(Dispatchers.IO).launch {
-                providaDatabase!!.databaseDao().updatePesquisa(pesquisa.id, pesquisa.pesquisador, pesquisa.questoes, pesquisa.paciente)
+                providaDatabase!!.databaseDao().updatePesquisa(id, questoesJson)
             }
 
         }

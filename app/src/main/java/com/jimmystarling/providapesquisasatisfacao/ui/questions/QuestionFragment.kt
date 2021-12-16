@@ -20,6 +20,7 @@ import com.jimmystarling.providapesquisasatisfacao.data.model.PesquisadorEntity
 import com.jimmystarling.providapesquisasatisfacao.data.model.QuestaoEntity
 import com.jimmystarling.providapesquisasatisfacao.ui.ActivityIniciarPesquisa
 import com.jimmystarling.providapesquisasatisfacao.ui.FragmentsViewModel
+import com.jimmystarling.providapesquisasatisfacao.ui.questions.PesquisaActivity.Companion.activityPesquisa
 import com.jimmystarling.providapesquisasatisfacao.ui.questions.PesquisaActivity.Companion.currentDate
 import com.jimmystarling.providapesquisasatisfacao.ui.questions.PesquisaActivity.Companion.mTitleContent
 import com.jimmystarling.providapesquisasatisfacao.ui.questions.PesquisaActivity.Companion.mTitleQuestion
@@ -141,22 +142,26 @@ class QuestionFragment : Fragment() {
                         // Set title question as the next phrase at phraseData
                         mTitleContent.text = phraseData[index+1]
                     } else {
+                        Log.d("DEBUG", "The final question variable is: $mQuestoes")
                         // Setting questions to fragments
                         FragmentsViewModel().setQuestions(mQuestoes)
                         FragmentsViewModel().questionsMessage.observe(activity!!) { questions ->
                             Log.d("DEBUG", "The questions from modelview is: $questions")
                         }
-                        // Setting pesquisas to database
-                        mPesquisa = PesquisaEntity(
-                            gson.toJson(mPesquisador),
-                            gson.toJson(mQuestoes),
-                            gson.toJson(mPaciente),
-                            gson.toJson(currentDate)
-                        )
-                        PesquisaViewModel().updatePesquisa(
-                            context = activity?.application!!.applicationContext,
-                            pesquisa = mPesquisa
-                        )
+                        // Updating pesquisa by pesquisador
+                        PesquisaViewModel().searchPesquisa(
+                            activity?.application!!.applicationContext,
+                            mPesquisador
+                        )?.observe(activity!!, {
+                            val lastPesquisa = it.last()
+                            Log.d("DEBUG", "The id of pesquisa is ${lastPesquisa?.id}")
+                            PesquisaViewModel().updatePesquisa(
+                                context = activity?.application!!.applicationContext,
+                                id = lastPesquisa?.id,
+                                questoes = mQuestoes
+                            )
+                        })
+
                         val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
                         nextFragment = QuestionFragmentAgilidade()
                         lastFragment = this

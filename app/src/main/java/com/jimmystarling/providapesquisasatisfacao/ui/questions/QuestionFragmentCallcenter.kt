@@ -118,7 +118,8 @@ class QuestionFragmentCallcenter: Fragment() {
             // Creating zero questao entity
             PesquisaViewModel().updatePesquisa(
                 activity?.application!!.applicationContext,
-                mPesquisa
+                id = mPesquisa?.id,
+                questoes = mQuestoes
             )
             FragmentsViewModel().setQuestions(mQuestoes)
             FragmentsViewModel().questionsMessage.observe(activity!!) { questions ->

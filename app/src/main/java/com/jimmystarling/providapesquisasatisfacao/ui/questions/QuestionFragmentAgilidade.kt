@@ -142,7 +142,8 @@ class QuestionFragmentAgilidade : Fragment() {
                         )
                         PesquisaViewModel().updatePesquisa(
                             context = activity?.application!!.applicationContext,
-                            pesquisa = mPesquisa
+                            id = mPesquisa.id,
+                            questoes = mQuestoes
                         )
                         // Set title question as the next phrase at phraseData
                         mTitleContent.text = phraseData[index + 1]
@@ -167,7 +168,8 @@ class QuestionFragmentAgilidade : Fragment() {
                 // Update pesquisa to database
                 PesquisaViewModel().updatePesquisa(
                     context = activity?.application!!.applicationContext,
-                    pesquisa = mPesquisa
+                    id = mPesquisa.id,
+                            questoes = mQuestoes
                 )
                 // Setting fragment questions
                 FragmentsViewModel().setQuestions(mQuestoes)

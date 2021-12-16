@@ -18,7 +18,7 @@ class PesquisaViewModel : ViewModel() {
         return PesquisaRepository.searchPesquisa(context, pesquisador)
     }
 
-    fun updatePesquisa(context: Context, pesquisa: PesquisaEntity){
-        return PesquisaRepository.updatePesquisa(context, pesquisa)
+    fun updatePesquisa(context: Context, id: Int?, questoes: MutableList<QuestaoEntity>){
+        return PesquisaRepository.updatePesquisa(context, id, questoes)
     }
 }

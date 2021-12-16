@@ -25,7 +25,7 @@ interface DAOAccess {
     @Query("SELECT * FROM Pesquisa WHERE pesquisador =:pesquisador")
     fun searchPesquisa(pesquisador: String) : LiveData<List<PesquisaEntity>>
 
-    @Query("UPDATE Pesquisa SET pesquisador =:pesquisador AND questoes =:questoes AND paciente = :paciente WHERE id = :id")
-    fun updatePesquisa(id: Int?, pesquisador: String, questoes: String, paciente: String)
+    @Query("UPDATE Pesquisa SET questoes =:questoes WHERE id = :id")
+    fun updatePesquisa(id: Int?, questoes: String)
 
 }

@@ -124,7 +124,8 @@ class QuestionFragmentFinish : Fragment() {
             // Creating zero questao entity
             PesquisaViewModel().updatePesquisa(
                 context = activity?.application!!.applicationContext,
-                pesquisa = mPesquisa
+                id = mPesquisa.id,
+                            questoes = mQuestoes
             )
 
             PesquisaViewModel().searchPesquisa(
