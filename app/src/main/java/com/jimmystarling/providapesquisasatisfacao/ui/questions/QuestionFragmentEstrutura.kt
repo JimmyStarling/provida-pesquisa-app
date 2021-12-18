@@ -21,6 +21,7 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
+import com.google.common.reflect.TypeToken
 import com.jimmystarling.providapesquisasatisfacao.R.*
 import com.jimmystarling.providapesquisasatisfacao.ui.ActivityIniciarPesquisa
 import com.jimmystarling.providapesquisasatisfacao.ui.FragmentsViewModel
@@ -67,15 +68,10 @@ class QuestionFragmentEstrutura : Fragment() {
 
         lateinit var mQuestoes: MutableList<QuestaoEntity>
 
-        slider = view?.findViewById<Slider>(R.id.slider_quality)!!
-        mButtonContinuar = view?.findViewById<Button>(R.id.btn_continuar)!!
+        slider = view?.findViewById<Slider>(R.id.slider_quality_estrutura)!!
+        mButtonContinuar = view?.findViewById<Button>(R.id.btn_continuar_estrutura)!!
         mButtonVoltar = view?.findViewById<Button>(R.id.btn_voltar_estrutura)!!
-        mTitleQuestion = view?.findViewById(R.id.title_atendimento)!!
-        mTitleContent = view?.findViewById(R.id.title_content)!!
-
-        FragmentsViewModel().questionsMessage.observe(activity!!) { questions ->
-            mQuestoes = questions as MutableList<QuestaoEntity>
-        }
+        mTitleQuestion = view?.findViewById(R.id.title_estrutura)!!
 
         val intent = activity?.intent
         val mPesquisadorEntity = intent?.getStringExtra("PESQUISADOR")!!
@@ -104,50 +100,44 @@ class QuestionFragmentEstrutura : Fragment() {
 
         mButtonContinuar.setOnClickListener {
             val titleQuestion: String = mTitleQuestion.text.toString()
-            val titleContent: String = mTitleContent.text.toString()
-
+            // Local variables to lastPesquisa's entity and questions.
+            lateinit var lastPesquisa: PesquisaEntity
+            lateinit var lastPesquisaQuestions: MutableList<QuestaoEntity>
+            // Passing questoes to mQuestoes
+            PesquisaViewModel().searchPesquisa(
+                context = activity?.application!!.applicationContext,
+                pesquisador = mPesquisador
+            )!!.observe(requireActivity(), { pesquisas ->
+                lastPesquisa = pesquisas.last()
+                lastPesquisaQuestions =
+                    Gson().fromJson<MutableList<QuestaoEntity>>(lastPesquisa.questoes)
+                lastPesquisaQuestions.forEach { question ->
+                    mQuestoes.add(question)
+                }
+            })
             mQuestoes.add(
                 QuestaoEntity(
                         18,
                         titleQuestion,
-                        titleContent,
-                        slider_value!!
+                        getString(string.estrutura_title),
+                        sliderValue
                     )
             )
-
             mPesquisa = PesquisaEntity(
                 gson.toJson(mPesquisador),
                 gson.toJson(mQuestoes),
                 gson.toJson(mPaciente),
                 gson.toJson(currentDate)
             )
-            // Creating zero questao entity
             PesquisaViewModel().updatePesquisa(
                 context = activity?.application!!.applicationContext,
                 id = mPesquisa.id,
-                            questoes = mQuestoes
+                questoes = mQuestoes
             )
-
-            PesquisaViewModel().searchPesquisa(
-                context = activity?.application!!.applicationContext,
-                pesquisador = mPesquisador
-            )!!.observe(requireActivity(), {
-                Toast.makeText(
-                    context,
-                    "Atualizando a pesquisa ${it.toString()}",
-                    Toast.LENGTH_SHORT
-                ).show()
-                Log.d("DEBUG", "Pesquisa variable value is: ${it.toString()}")
-            })
-
-            FragmentsViewModel().setQuestions(mQuestoes)
-            FragmentsViewModel().questionsMessage.observe(activity!!) { questions ->
-                Log.d("DEBUG", "The questions from modelview is: $questions")
-            }
-
+            Log.d("DEBUG", "The mPesquisa were updated: $mPesquisa")
             nextFragment = QuestionFragmentLimpeza()
             fragmentTransaction.hide(lastFragment)
-            fragmentTransaction.add(R.id.pesquisa_activity, nextFragment)
+            fragmentTransaction.replace(R.id.pesquisa_activity, nextFragment)
             fragmentTransaction.addToBackStack(null)
             fragmentTransaction.commit()
         }
@@ -159,4 +149,5 @@ class QuestionFragmentEstrutura : Fragment() {
             fragmentTransaction.commit()
         }
     }
+    inline fun <reified T> Gson.fromJson(json: String) = fromJson<T>(json, object: TypeToken<T>() {}.type)
 }

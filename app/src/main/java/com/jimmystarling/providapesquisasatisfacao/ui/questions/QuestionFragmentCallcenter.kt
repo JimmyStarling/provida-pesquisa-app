@@ -13,6 +13,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.slider.Slider
+import com.google.common.reflect.TypeToken
 import com.google.gson.Gson
 import com.jimmystarling.providapesquisasatisfacao.R
 import com.jimmystarling.providapesquisasatisfacao.data.model.PacienteEntity
@@ -62,13 +63,12 @@ class QuestionFragmentCallcenter: Fragment() {
         lateinit var mQuestoes: MutableList<QuestaoEntity>
 
         val fragmentManager: FragmentManager = requireActivity().supportFragmentManager
-        val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
 
-        slider = view?.findViewById(R.id.slider_quality)!!
-        mButtonContinuar = view?.findViewById(R.id.btn_continuar)!!
+        slider = view?.findViewById(R.id.slider_quality_callcenter)!!
+        mButtonContinuar = view?.findViewById(R.id.btn_continuar_callcenter)!!
         mButtonVoltar = view?.findViewById(R.id.btn_voltar_callcenter)!!
-        mTitleQuestion = view?.findViewById(R.id.title_atendimento)!!
-        mTitleContent = view?.findViewById(R.id.title_content)!!
+        mTitleQuestion = view?.findViewById(R.id.title_callcenter)!!
+        mTitleContent = view?.findViewById(R.id.title_content_callcenter)!!
         mCheckbox = view?.findViewById(R.id.callcenter_uso)!!
 
         val intent = activity?.intent
@@ -96,67 +96,61 @@ class QuestionFragmentCallcenter: Fragment() {
                 }
             }
         }
+        val questoesID = 17
         mButtonContinuar.setOnClickListener {
             val titleQuestion: String = mTitleQuestion.text.toString()
             val titleContent: String = mTitleContent.text.toString()
-
+            // Local variables to lastPesquisa's entity and questions.
+            lateinit var lastPesquisa: PesquisaEntity
+            lateinit var lastPesquisaQuestions: MutableList<QuestaoEntity>
             // Passing questoes to mQuestoes
-            var questoes: MutableList<QuestaoEntity> = emptyList<QuestaoEntity>().toMutableList()
             PesquisaViewModel().searchPesquisa(
                 context = activity?.application!!.applicationContext,
                 pesquisador = mPesquisador
-            )!!.observe(requireActivity(), {
-                val lastPesquisa = it.last()
-                mPesquisa = lastPesquisa
-                it.forEach { pesquisa ->
-                    questoes = Json.decodeFromString<MutableList<QuestaoEntity>>(pesquisa.questoes)
-                        .toMutableList()
+            )!!.observe(requireActivity(), { pesquisas ->
+                lastPesquisa = pesquisas.last()
+                lastPesquisaQuestions =
+                    Gson().fromJson<MutableList<QuestaoEntity>>(lastPesquisa.questoes)
+                lastPesquisaQuestions.forEach { question ->
+                    mQuestoes.add(question)
                 }
             })
-            mQuestoes = questoes
-
-            if (mCheckbox.isActivated){
+            if (!mCheckbox.isActivated) {
                 // Create question's PesquisaEntity tp be used by registerPesquisa()
                 mQuestoes.add(
                     QuestaoEntity(
-                        17,
-                        titleQuestion,
-                        titleContent,
-                        sliderValue
-                    )
-                )
-            } else {
-                mQuestoes.add(
-                    QuestaoEntity(
-                        17,
+                        questoesID,
                         titleQuestion,
                         titleContent,
                         "0"
                     )
                 )
+            } else {
+                mQuestoes.add(
+                    QuestaoEntity(
+                        questoesID,
+                        titleQuestion,
+                        getString(R.string.estrutura_title),
+                        sliderValue
+                    )
+                )
+                PesquisaViewModel().updatePesquisa(
+                    context = activity?.application!!.applicationContext,
+                    id = mPesquisa.id,
+                    questoes = mQuestoes
+                )
+                Log.d("DEBUG", "The mPesquisa were updated: $mPesquisa")
+                val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
+                nextFragment = QuestionFragmentEstrutura()
+                lastFragment = this
+                fragmentTransaction.replace(R.id.pesquisa_activity, nextFragment, "FRAGMENT_AGILIDADE")
+                fragmentTransaction.addToBackStack(null)
+                fragmentTransaction.commit()
             }
-
-            mPesquisa = PesquisaEntity(
-                gson.toJson(mPesquisador),
-                gson.toJson(mQuestoes),
-                gson.toJson(mPaciente),
-                gson.toJson(currentDate)
-            )
-            // Creating zero questao entity
-            PesquisaViewModel().updatePesquisa(
-                activity?.application!!.applicationContext,
-                id = mPesquisa?.id,
-                questoes = mQuestoes
-            )
-            nextFragment = QuestionFragmentEstrutura()
-            lastFragment = this
-            fragmentTransaction.hide(lastFragment)
-            fragmentTransaction.show(nextFragment)
-            fragmentTransaction.addToBackStack(null)
-            fragmentTransaction.commit()
         }
 
         mButtonVoltar.setOnClickListener {
+            val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
             nextFragment = QuestionFragmentAgilidade()
             fragmentTransaction.hide(lastFragment)
             fragmentTransaction.show(nextFragment)
@@ -164,5 +158,5 @@ class QuestionFragmentCallcenter: Fragment() {
             fragmentTransaction.commit()
         }
     }
-
+    inline fun <reified T> Gson.fromJson(json: String) = fromJson<T>(json, object: TypeToken<T>() {}.type)
 }

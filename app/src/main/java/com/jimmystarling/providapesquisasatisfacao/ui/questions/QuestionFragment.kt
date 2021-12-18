@@ -159,7 +159,6 @@ class QuestionFragment : Fragment() {
                             mPesquisador
                         )?.observe(activity!!, {
                             val lastPesquisa = it.last()
-                            Log.d("DEBUG", "The id of pesquisa is ${lastPesquisa?.id}")
                             PesquisaViewModel().updatePesquisa(
                                 context = activity?.application!!.applicationContext,
                                 id = lastPesquisa?.id,

@@ -70,13 +70,11 @@ class QuestionFragmentFinish : Fragment() {
 
         lateinit var mQuestoes: MutableList<QuestaoEntity>
 
-        slider = view?.findViewById<Slider>(R.id.slider_quality)!!
-        mButtonContinuar = view?.findViewById<Button>(R.id.btn_continuar)!!
+        mButtonContinuar = view?.findViewById<Button>(R.id.btn_continuar_finish)!!
         mButtonVoltar = view?.findViewById<Button>(R.id.btn_voltar_finish)!!
-        mTitleQuestion = view?.findViewById(R.id.title_atendimento)!!
-        mTitleContent = view?.findViewById(R.id.title_content)!!
+        mTitleQuestion = view?.findViewById(R.id.title_finish)!!
 
-        FragmentsViewModel().questionsMessage.observe(activity!!) { questions ->
+        FragmentsViewModel().questionsMessage.observe(requireActivity()) { questions ->
             mQuestoes = questions as MutableList<QuestaoEntity>
         }
 
@@ -86,37 +84,9 @@ class QuestionFragmentFinish : Fragment() {
         mPaciente = Json.decodeFromString<PacienteEntity>(mPacienteEntity)
         // Parsing to dataclass to be used by registerPesquisa()
         mPesquisador = Json.decodeFromString<PesquisadorEntity>(mPesquisadorEntity)
-        lateinit var sliderValue: String
-        val slideDictionary: Map<Int, String> = mapOf<Int, String>(
-            1 to "Ruim",
-            4 to "Regular",
-            7 to "Bom",
-            10 to "Ótimo"
-        )
-        // When the value of slide changes then set the values
-        slider.addOnChangeListener { _, data, _ ->
-            val sliderValueNumber: Float = data
-            slideDictionary.forEach {
-                when {
-                    sliderValueNumber.toString() == it.key.toString() -> {
-                        sliderValue = it.value
-                    }
-                }
-            }
-        }
 
         mButtonContinuar.setOnClickListener {
-            val titleQuestion: String = PesquisaActivity.mTitleQuestion.text.toString()
-            val titleContent: String = PesquisaActivity.mTitleContent.text.toString()
 
-            mQuestoes.add(
-                QuestaoEntity(
-                    21,
-                    titleQuestion,
-                    titleContent,
-                    sliderValue!!
-                )
-            )
             mPesquisa = PesquisaEntity(
                 gson.toJson(mPesquisador),
                 gson.toJson(mQuestoes),
@@ -135,7 +105,7 @@ class QuestionFragmentFinish : Fragment() {
                 pesquisador = mPesquisador
             )!!.observe(requireActivity(), {
                 val pesquisasQuantidade = it.size
-                PesquisadorRepository.updatePesquisador(activity!!, mPesquisador.name, pesquisasQuantidade)
+                PesquisadorRepository.updatePesquisador(requireActivity(), mPesquisador.name, pesquisasQuantidade)
             })
 
             PesquisadorRepository.searchPesquisador(
