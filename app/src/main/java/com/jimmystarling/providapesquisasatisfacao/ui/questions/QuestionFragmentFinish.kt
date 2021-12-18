@@ -68,7 +68,7 @@ class QuestionFragmentFinish : Fragment() {
         val fragmentManager: FragmentManager = requireActivity().supportFragmentManager
         val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
 
-        lateinit var mQuestoes: MutableList<QuestaoEntity>
+        var mQuestoes: MutableList<QuestaoEntity> = emptyList<QuestaoEntity>().toMutableList()
 
         mButtonContinuar = view?.findViewById<Button>(R.id.btn_continuar_finish)!!
         mButtonVoltar = view?.findViewById<Button>(R.id.btn_voltar_finish)!!

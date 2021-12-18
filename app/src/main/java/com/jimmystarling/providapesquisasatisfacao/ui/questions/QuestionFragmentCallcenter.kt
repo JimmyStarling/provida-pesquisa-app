@@ -60,7 +60,7 @@ class QuestionFragmentCallcenter: Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this)[PesquisaViewModel::class.java]
 
-        lateinit var mQuestoes: MutableList<QuestaoEntity>
+        var mQuestoes: MutableList<QuestaoEntity> = emptyList<QuestaoEntity>().toMutableList()
 
         val fragmentManager: FragmentManager = requireActivity().supportFragmentManager
 

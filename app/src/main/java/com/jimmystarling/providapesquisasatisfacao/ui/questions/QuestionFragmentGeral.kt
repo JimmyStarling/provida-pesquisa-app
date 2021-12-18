@@ -64,7 +64,7 @@ class QuestionFragmentGeral : Fragment() {
 
         val fragmentManager: FragmentManager = requireActivity().supportFragmentManager
 
-        lateinit var mQuestoes: MutableList<QuestaoEntity>
+        var mQuestoes: MutableList<QuestaoEntity> = emptyList<QuestaoEntity>().toMutableList()
 
         slider = view?.findViewById<Slider>(R.id.slider_quality_geral)!!
         mButtonContinuar = view?.findViewById<Button>(R.id.btn_continuar_geral)!!
