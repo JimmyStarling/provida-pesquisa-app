@@ -99,6 +99,11 @@
     <string name="carregar_pesquisas">Carregar Pesquisas</string>
     <string name="sua_quantidade_de_pesquisas_s_o">Sua quantidade de pesquisas são:</string>
     <string name="yes_callcenter">Sim já utilizei os serviços de callcenter.</string>
-    <string name="estrutura_title">Estrutura</string>
+    <string name="estrutura_title">ESTRUTURA</string>
     <string name="title_content_limpeza">LIMPEZA</string>
+    <string name="answer_nulo">Nulo</string>
+    <string name="not_answering">Não respondeu</string>
+    <string name="callcenter_title">CALLCENTER</string>
+    <string name="limpeza_title">LIMPEZA</string>
+    <string name="geral_title">GERAL</string>
 </resources>
