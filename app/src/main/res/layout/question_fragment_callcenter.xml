@@ -193,7 +193,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/callcenter_uso"
+        app:layout_constraintTop_toBottomOf="@+id/checkbox_callcenter"
         app:layout_constraintVertical_bias="0.309" />
 
     <Button
@@ -217,7 +217,7 @@
         app:layout_constraintVertical_bias="0.146" />
 
     <CheckBox
-        android:id="@+id/callcenter_uso"
+        android:id="@+id/checkbox_callcenter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="149dp"
