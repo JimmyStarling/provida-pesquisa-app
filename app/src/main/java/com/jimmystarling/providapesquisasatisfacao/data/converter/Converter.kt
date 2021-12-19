@@ -6,4 +6,4 @@ import com.google.gson.Gson
 
 class Converter {
 }
-inline fun <reified T> Gson.fromJson(json: String) = fromJson<T>(json, object: TypeToken<T>() {}.type)
+inline fun <reified T> Gson.fromJson(json: String) = fromJson<T>(json, object: TypeToken<T>() {}.type)!!
