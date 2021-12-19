@@ -88,7 +88,7 @@ class LoginActivity : AppCompatActivity() {
                         Log.d("DEBUG", "Pesquisador: ${gson.toJson(pesquisador)}")
                         activityIniciarPesquisa =
                             Intent(this, ActivityIniciarPesquisa::class.java).apply {
-                                putExtra(PESQUISADOR, gson.toJson(mPesquisador))
+                                putExtra(RESEARCHER, gson.toJson(mPesquisador))
                             }
                         startActivity(activityIniciarPesquisa)
                     }
@@ -119,7 +119,7 @@ class LoginActivity : AppCompatActivity() {
                         signupPesquisador(pesquisadorName.trim().toString(), pesquisadorPassword.trim().toString())
                         activityIniciarPesquisa =
                             Intent(this, ActivityIniciarPesquisa::class.java).apply {
-                                putExtra(PESQUISADOR, gson.toJson(pesquisador))
+                                putExtra(RESEARCHER, gson.toJson(pesquisador))
                             }
                         startActivity(intent)
                     }
@@ -139,12 +139,12 @@ class LoginActivity : AppCompatActivity() {
 
         activityIniciarPesquisa =
             Intent(this, ActivityIniciarPesquisa::class.java).apply {
-                putExtra(PESQUISADOR, gson.toJson(mPesquisadorEntity))
+                putExtra(RESEARCHER, gson.toJson(mPesquisadorEntity))
             }
         startActivity(activityIniciarPesquisa)
     }
     companion object {
         var gson = Gson()
-        const val PESQUISADOR = "PESQUISADOR"
+        const val RESEARCHER = "RESEARCHER"
     }
 }
