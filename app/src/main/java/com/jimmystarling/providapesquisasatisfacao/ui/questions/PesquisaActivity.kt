@@ -18,21 +18,6 @@ import java.util.*
 
 class PesquisaActivity : AppCompatActivity() {
 
-    // From activity
-    val appContext = this.application!!.applicationContext
-    // Fragments
-    lateinit var lastFragment: Fragment
-    lateinit var nextFragment: Fragment
-    // Entities and variables to modelview
-    lateinit var mResearcher: PesquisadorEntity
-    lateinit var mPatient: PacienteEntity
-    lateinit var mQuestions: MutableList<QuestaoEntity>
-    lateinit var mPesquisa: PesquisaEntity
-    // Variables
-    lateinit var slider: Slider
-    lateinit var sliderValue: String
-    lateinit var teamTitles: ArrayList<String>
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.pesquisa_activity)

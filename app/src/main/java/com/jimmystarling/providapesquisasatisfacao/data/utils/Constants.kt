@@ -18,7 +18,7 @@ class Constants {
             10 to "Ótimo"
         )
 
-        val RESEARCHER = "PESQUISADOR"
+        val RESEARCHER = "RESEARCHER"
         val CLIENT = "CLIENTE"
         val SURVEY = "PESQUISA"
     }
