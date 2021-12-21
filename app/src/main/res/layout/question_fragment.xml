@@ -129,7 +129,7 @@
                 android:id="@+id/txt_boa"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/boa" />
+                android:text="@string/regular" />
         </LinearLayout>
 
         <Space
@@ -152,7 +152,7 @@
                 android:id="@+id/txt_regular"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/regular" />
+                android:text="@string/boa" />
         </LinearLayout>
 
         <Space

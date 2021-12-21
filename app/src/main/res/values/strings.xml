@@ -106,4 +106,5 @@
     <string name="callcenter_title">CALLCENTER</string>
     <string name="limpeza_title">LIMPEZA</string>
     <string name="geral_title">GERAL</string>
+    <string name="username">Seu Nome e Sobrenome</string>
 </resources>
