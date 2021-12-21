@@ -29,8 +29,7 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 
 class QuestionFragment : Fragment() {
-    // From activity
-    private val appContext = activity?.application!!.applicationContext
+    private lateinit var appContext: Context
     // Fragments
     private lateinit var lastFragment: Fragment
     private lateinit var nextFragment: Fragment
@@ -58,101 +57,103 @@ class QuestionFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
         return inflater.inflate(R.layout.question_fragment, container, false)
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        activity?.lifecycleScope?.launchWhenCreated {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-            val mResearcherEntity = activity?.intent!!.getStringExtra(RESEARCHER)!!
-            val mPatientEntity = activity?.intent!!.getStringExtra(CLIENT)!!
 
-            slider = view?.findViewById(R.id.slider_quality)!!
-            mButtonContinue = view?.findViewById(R.id.btn_continuar)!!
-            mButtonReturn = view?.findViewById(R.id.btn_voltar)!!
-            mTitleQuestion =  view?.findViewById(R.id.title_atendimento)!!
-            mTitleContent =  view?.findViewById(R.id.title_content)!!
+        // From activity
+        appContext = activity?.application!!.applicationContext
 
-            mPatient = Json.decodeFromString(mPatientEntity)
-            mResearcher = Json.decodeFromString(mResearcherEntity)
-            mQuestions = emptyList<QuestaoEntity>().toMutableList()
+        val mResearcherEntity = activity?.intent!!.getStringExtra(RESEARCHER)!!
+        val mPatientEntity = activity?.intent!!.getStringExtra(CLIENT)!!
 
-            Log.d("DEBUG from QuestionFragment()", "mPatient is $mPatient, mResearcher is $mResearcher, mQuestions is $mQuestions")
+        slider = requireView().findViewById(R.id.slider_quality)!!
+        mButtonContinue = requireView().findViewById(R.id.btn_continuar)!!
+        mButtonReturn = requireView().findViewById(R.id.btn_voltar)!!
+        mTitleQuestion =  requireView().findViewById(R.id.title_atendimento)!!
+        mTitleContent =  requireView().findViewById(R.id.title_content)!!
 
-            setupSlider()
+        mPatient = Json.decodeFromString(mPatientEntity)
+        mResearcher = Json.decodeFromString(mResearcherEntity)
+        mQuestions = emptyList<QuestaoEntity>().toMutableList()
 
-            mButtonContinue.setOnClickListener {
-                val currentQuestion: String = mTitleQuestion.text.toString()
-                val currentTeamName: String = mTitleContent.text.toString()
-                getTeamsQuestion().forEachIndexed { index, phrase ->
-                    if(currentTeamName == teamTitles[index]){
-                        // If is the first question then register else update PesquisaEntity
-                        if (teamTitles[0] == mTitleContent.text){
-                            // Create question's PesquisaEntity tp be used by registerPesquisa()
-                            mQuestions = mutableListOf(
-                                QuestaoEntity(
-                                    0,
-                                    currentQuestion,
-                                    currentTeamName,
-                                    sliderValue
-                                )
+        Log.d("DEBUG from QuestionFragment()", "mPatient is $mPatient, mResearcher is $mResearcher, mQuestions is $mQuestions")
+
+        setupSlider()
+
+        mButtonContinue.setOnClickListener {
+            val currentQuestion: String = mTitleQuestion.text.toString()
+            val currentTeamName: String = mTitleContent.text.toString()
+            getTeamsQuestion().forEachIndexed { index, phrase ->
+                if(currentTeamName == teamTitles[index]){
+                    // If is the first question then register else update PesquisaEntity
+                    if (teamTitles[0] == mTitleContent.text){
+                        // Create question's PesquisaEntity tp be used by registerPesquisa()
+                        mQuestions = mutableListOf(
+                            QuestaoEntity(
+                                0,
+                                currentQuestion,
+                                currentTeamName,
+                                sliderValue
                             )
-                            mPesquisa = PesquisaEntity(
-                                gson.toJson(mResearcher),
-                                gson.toJson(mQuestions),
-                                gson.toJson(mPatient),
-                                gson.toJson(getCurrentDate())
+                        )
+                        mPesquisa = PesquisaEntity(
+                            gson.toJson(mResearcher),
+                            gson.toJson(mQuestions),
+                            gson.toJson(mPatient),
+                            gson.toJson(getCurrentDate())
+                        )
+                        Log.d("DEBUG from QuestionFragment()", "mPesquisa were registered: ${gson.toJson(mPesquisa)}")
+                        PesquisaViewModel().registerPesquisa(
+                            context = appContext,
+                            pesquisa = mPesquisa
+                        )
+                        // Set title question as the next phrase at teamTitles
+                        mTitleContent.text = teamTitles[index+1]
+                    } else if(teamTitles[0] != mTitleContent.text && teamTitles.getOrNull(index+1) != null){
+                        // Create question's PesquisaEntity tp be used by registerPesquisa()
+                        mQuestions.add(
+                            QuestaoEntity(
+                                index,
+                                currentQuestion,
+                                currentTeamName,
+                                sliderValue
                             )
-                            Log.d("DEBUG from QuestionFragment()", "mPesquisa were registered: ${gson.toJson(mPesquisa)}")
-                            PesquisaViewModel().registerPesquisa(
-                                context = appContext,
-                                pesquisa = mPesquisa
+                        )
+                        // Set title question as the next phrase at teamTitles
+                        mTitleContent.text = teamTitles[index+1]
+                    } else {
+                        // Create question's PesquisaEntity to be used by registerPesquisa()
+                        mQuestions.add(
+                            QuestaoEntity(
+                                index,// get from the index
+                                currentQuestion,
+                                currentTeamName,
+                                sliderValue
                             )
-                            // Set title question as the next phrase at teamTitles
-                            mTitleContent.text = teamTitles[index+1]
-                        } else if(teamTitles[0] != mTitleContent.text && teamTitles.getOrNull(index+1) != null){
-                            // Create question's PesquisaEntity tp be used by registerPesquisa()
-                            mQuestions.add(
-                                QuestaoEntity(
-                                    index,
-                                    currentQuestion,
-                                    currentTeamName,
-                                    sliderValue
-                                )
-                            )
-                            // Set title question as the next phrase at teamTitles
-                            mTitleContent.text = teamTitles[index+1]
-                        } else {
-                            // Create question's PesquisaEntity to be used by registerPesquisa()
-                            mQuestions.add(
-                                QuestaoEntity(
-                                    index,// get from the index
-                                    currentQuestion,
-                                    currentTeamName,
-                                    sliderValue
-                                )
-                            )
-                            Log.d("DEBUG", "The final question variable is: $mQuestions")
-                            // Updating pesquisa by pesquisador
-                            PesquisaViewModel().searchPesquisa(
-                                appContext,
-                                mResearcher
-                            )?.observeOnce(requireActivity(), {
-                                if(it != null) {
-                                    val lastSurvey = it.last()
-                                    finishQuestions(lastSurvey)
-                                }
-                            })
-                        }// Else
-                    }// Current has team titles
-                }// Foreach teams
-            }// On click continuar listener
-            mButtonReturn.setOnClickListener {
-                val fragmentManager: FragmentManager = requireActivity().supportFragmentManager
-                fragmentManager.popBackStack()
-            }
-
+                        )
+                        Log.d("DEBUG", "The final question variable is: $mQuestions")
+                        // Updating pesquisa by pesquisador
+                        PesquisaViewModel().searchPesquisa(
+                            appContext,
+                            mResearcher
+                        )?.observeOnce(requireActivity(), {
+                            if(it != null) {
+                                val lastSurvey = it.last()
+                                finishQuestions(lastSurvey)
+                            }
+                        })
+                    }// Else
+                }// Current has team titles
+            }// Foreach teams
+        }// On click continuar listener
+        mButtonReturn.setOnClickListener {
+            val fragmentManager: FragmentManager = requireActivity().supportFragmentManager
+            fragmentManager.popBackStack()
         }
     }
     private fun setupSlider(){

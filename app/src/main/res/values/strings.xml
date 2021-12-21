@@ -6,7 +6,7 @@
     <string name="action_sign_in">Entre ou cadastre-se</string>
     <string name="action_sign_in_short">Entrar</string>
     <string name="welcome">"Bem vindo(a) !"</string>
-    <string name="invalid_username">Seu usuário é invalido.</string>
+    <string name="invalid_name">Seu usuário é invalido.</string>
     <string name="invalid_password">A sua senha precisa ter >5 caracteres</string>
     <string name="login_failed">"Login falhou!</string>
     <string name="title_login_string">Faça login para começar as pesquisas</string>
@@ -106,5 +106,5 @@
     <string name="callcenter_title">CALLCENTER</string>
     <string name="limpeza_title">LIMPEZA</string>
     <string name="geral_title">GERAL</string>
-    <string name="username">Seu Nome e Sobrenome</string>
+    <string name="name">Seu Nome e Sobrenome</string>
 </resources>

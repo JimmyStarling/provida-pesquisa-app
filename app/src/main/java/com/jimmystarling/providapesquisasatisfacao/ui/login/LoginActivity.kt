@@ -37,8 +37,8 @@ class LoginActivity : AppCompatActivity() {
 
         loginViewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
 
-        val name = binding.username
-        val password = binding.password
+        val name = binding.nameResearcher
+        val password = binding.passwordResearcher
         val login = binding.login
         val signup = binding.cadastrar
 
