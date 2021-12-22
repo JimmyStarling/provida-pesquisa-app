@@ -7,11 +7,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.CheckBox
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
-import androidx.lifecycle.lifecycleScope
 import com.google.android.material.slider.Slider
 import com.google.gson.Gson
 import com.jimmystarling.providapesquisasatisfacao.R
@@ -30,8 +30,6 @@ import kotlinx.serialization.json.Json
 
 class QuestionFragment : Fragment() {
     private lateinit var appContext: Context
-    // Fragments
-    private lateinit var lastFragment: Fragment
     private lateinit var nextFragment: Fragment
     // Entities and variables to modelview
     private lateinit var mResearcher: PesquisadorEntity
@@ -40,13 +38,14 @@ class QuestionFragment : Fragment() {
     private lateinit var mPesquisa: PesquisaEntity
     // Variables
     private lateinit var slider: Slider
-    private lateinit var sliderValue: String
+    private var sliderValue: String = "0"
     private lateinit var teamTitles: ArrayList<String>
     // UI components
     private lateinit var mButtonContinue: Button
     private lateinit var mButtonReturn: Button
     private lateinit var mTitleQuestion: TextView
     private lateinit var mTitleContent: TextView
+    private lateinit var mCheckbox: CheckBox
 
     companion object {
         private var gson = Gson()
@@ -76,6 +75,7 @@ class QuestionFragment : Fragment() {
         mButtonReturn = requireView().findViewById(R.id.btn_voltar)!!
         mTitleQuestion =  requireView().findViewById(R.id.title_atendimento)!!
         mTitleContent =  requireView().findViewById(R.id.title_content)!!
+        mCheckbox = requireView().findViewById(R.id.checkbox_atendimento)!!
 
         mPatient = Json.decodeFromString(mPatientEntity)
         mResearcher = Json.decodeFromString(mResearcherEntity)
@@ -83,24 +83,40 @@ class QuestionFragment : Fragment() {
 
         Log.d("DEBUG from QuestionFragment()", "mPatient is $mPatient, mResearcher is $mResearcher, mQuestions is $mQuestions")
 
-        setupSlider()
-
+        sliderValue = setupSlider()
         mButtonContinue.setOnClickListener {
             val currentQuestion: String = mTitleQuestion.text.toString()
             val currentTeamName: String = mTitleContent.text.toString()
-            getTeamsQuestion().forEachIndexed { index, phrase ->
+            // Checkbox
+            val checkbox = mCheckbox.isActivated
+            getTeamsQuestion().forEachIndexed { index, _ ->
                 if(currentTeamName == teamTitles[index]){
                     // If is the first question then register else update PesquisaEntity
                     if (teamTitles[0] == mTitleContent.text){
-                        // Create question's PesquisaEntity tp be used by registerPesquisa()
-                        mQuestions = mutableListOf(
-                            QuestaoEntity(
-                                0,
-                                currentQuestion,
-                                currentTeamName,
-                                sliderValue
-                            )
-                        )
+                        when {
+                            checkbox -> {
+                                // Create question's PesquisaEntity tp be used by registerPesquisa()
+                                mQuestions = mutableListOf(
+                                    QuestaoEntity(
+                                        0,
+                                        currentQuestion,
+                                        currentTeamName,
+                                        sliderValue
+                                    )
+                                )
+                            }
+                            else -> {
+                                // Create question's PesquisaEntity tp be used by registerPesquisa()
+                                mQuestions = mutableListOf(
+                                    QuestaoEntity(
+                                        0,
+                                        currentQuestion,
+                                        currentTeamName,
+                                        getString(R.string.answer_nulo)
+                                    )
+                                )
+                            }
+                        }
                         mPesquisa = PesquisaEntity(
                             gson.toJson(mResearcher),
                             gson.toJson(mQuestions),
@@ -156,11 +172,13 @@ class QuestionFragment : Fragment() {
             fragmentManager.popBackStack()
         }
     }
-    private fun setupSlider(){
+    private fun setupSlider(): String{
         // When the value of slide changes then set the values
         slider.addOnChangeListener { _, data, _ ->
             sliderValue = SLIDE_DICTIONARY[data.toInt()].toString()
             Log.d("DEBUG from QuestionFragment()", "The slider value is $sliderValue")
+        }.run {
+            return@setupSlider sliderValue
         }
     }
     private fun getTeamsQuestion(): ArrayList<String>{
@@ -182,10 +200,10 @@ class QuestionFragment : Fragment() {
             id = lastSurvey.id,
             questoes = mQuestions
         ).run {
-            startNewFragment(newInstance(), QuestionFragmentAgilidade())
+            startNewFragment(QuestionFragmentAgilidade())
         }
     }
-    private fun startNewFragment(oldFragment: Fragment, newFragment: Fragment){
+    private fun startNewFragment(newFragment: Fragment){
         val fragmentManager: FragmentManager = requireActivity().supportFragmentManager
         val fragmentTransaction: FragmentTransaction =
             fragmentManager.beginTransaction()
