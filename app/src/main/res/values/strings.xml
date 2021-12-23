@@ -107,4 +107,5 @@
     <string name="limpeza_title">LIMPEZA</string>
     <string name="geral_title">GERAL</string>
     <string name="name">Seu Nome e Sobrenome</string>
+    <string name="question_content_reclamacao">RECLAMAÇÃO</string>
 </resources>
