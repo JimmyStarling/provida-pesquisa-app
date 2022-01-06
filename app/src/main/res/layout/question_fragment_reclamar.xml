@@ -92,6 +92,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
+            android:layout_marginTop="30dp"
             android:layout_marginEnd="32dp"
             android:layout_marginBottom="128dp"
             android:ems="10"
@@ -101,7 +102,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txt_sugestao" />
+            app:layout_constraintTop_toBottomOf="@+id/txt_sugestao"
+            app:layout_constraintVertical_bias="0.0" />
 
         <EditText
             android:id="@+id/txt_sugestao"
@@ -118,13 +120,14 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/title_atendimento_reclamar"
-            app:layout_constraintVertical_bias="0.743" />
+            app:layout_constraintVertical_bias="0.223" />
 
         <CheckBox
             android:id="@+id/checkbox_reclamacao"
             android:layout_width="533dp"
             android:layout_height="0dp"
             android:layout_marginStart="36dp"
+            android:layout_marginTop="44dp"
             android:layout_marginEnd="36dp"
             android:text="@string/not_answering"
             app:layout_constraintEnd_toEndOf="parent"

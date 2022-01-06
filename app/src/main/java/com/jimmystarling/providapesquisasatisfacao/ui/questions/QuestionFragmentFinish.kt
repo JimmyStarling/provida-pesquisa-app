@@ -35,13 +35,16 @@ import java.util.*
 class QuestionFragmentFinish : Fragment() {
 
     private lateinit var appContext: Context
+
     // Entities and variables to modelview
     private lateinit var mResearcher: PesquisadorEntity
     private lateinit var mPatient: PacienteEntity
     private lateinit var mQuestions: MutableList<QuestaoEntity>
+
     // UI components
     private lateinit var mButtonContinue: Button
     private lateinit var mButtonReturn: Button
+
     /*
     lateinit var nextFragment: Fragment
 
@@ -58,12 +61,14 @@ class QuestionFragmentFinish : Fragment() {
     companion object {
         var gson = Gson()
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         return inflater.inflate(layout.question_fragment_finish, container, false)
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         // From activity
@@ -78,7 +83,10 @@ class QuestionFragmentFinish : Fragment() {
         mResearcher = Json.decodeFromString(mResearcherEntity)
         mQuestions = emptyList<QuestaoEntity>().toMutableList()
 
-        Log.d("DEBUG from QuestionFragment()", "mPatient is $mPatient, mResearcher is $mResearcher, mQuestions is $mQuestions")
+        Log.d(
+            "DEBUG from QuestionFragment()",
+            "mPatient is $mPatient, mResearcher is $mResearcher, mQuestions is $mQuestions"
+        )
 
         mButtonContinue.setOnClickListener {
             // Local variables to lastSurvey's entity and questions.
@@ -95,23 +103,25 @@ class QuestionFragmentFinish : Fragment() {
                 lastSurveyQuestions.forEach { question ->
                     mQuestions.add(question)
                 }
-            })
-            Log.d("DEBUG", "The final question variable is: $mQuestions")
-            // Updating pesquisa by pesquisador
-            PesquisaViewModel().searchPesquisa(
-                appContext,
-                mResearcher
-            )?.observeOnce(requireActivity(), {
-                if(it != null) {
-                    finishQuestions(it.last())
-                }
-            })
+            }).run {
+                Log.d("DEBUG", "The final question variable is: $mQuestions")
+                // Updating pesquisa by pesquisador
+                PesquisaViewModel().searchPesquisa(
+                    appContext,
+                    mResearcher
+                )?.observeOnce(requireActivity(), {
+                    if (it != null) {
+                        finishQuestions(it.last())
+                    }
+                })
+            }
         }// On click continuar listener
         mButtonReturn.setOnClickListener {
             val fragmentManager: FragmentManager = requireActivity().supportFragmentManager
             fragmentManager.popBackStack()
         }
     }
+
     private fun finishQuestions(lastSurvey: PesquisaEntity) {
         PesquisaViewModel().updatePesquisa(
             context = appContext,
@@ -119,76 +129,10 @@ class QuestionFragmentFinish : Fragment() {
             questoes = mQuestions
         ).run {
             activityIniciarPesquisa = Intent(activity, ActivityIniciarPesquisa::class.java).apply {
+                putExtra(ActivityIniciarPesquisa.RESEARCHER, gson.toJson(mResearcher))
                 putExtra(ActivityIniciarPesquisa.QUESTOES, gson.toJson(mQuestions))
             }
             startActivity(activityIniciarPesquisa as Intent)
         }
     }
-
-
- /*   override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(PesquisaViewModel::class.java)
-
-        val fragmentManager: FragmentManager = requireActivity().supportFragmentManager
-        val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
-
-        val mQuestoes: MutableList<QuestaoEntity> = emptyList<QuestaoEntity>().toMutableList()
-
-        mButtonContinuar = view?.findViewById<Button>(R.id.btn_continuar_finish)!!
-        mButtonVoltar = view?.findViewById<Button>(R.id.btn_voltar_finish)!!
-
-        val intent = activity?.intent
-        val mPesquisadorEntity = intent?.getStringExtra("RESEARCHER")!!
-        val mPacienteEntity = intent.getStringExtra("CLIENT")!!
-        mPaciente = Json.decodeFromString<PacienteEntity>(mPacienteEntity)
-        // Parsing to dataclass to be used by registerPesquisa()
-        mPesquisador = Json.decodeFromString<PesquisadorEntity>(mPesquisadorEntity)
-
-        mButtonContinuar.setOnClickListener {
-
-            mPesquisa = PesquisaEntity(
-                gson.toJson(mPesquisador),
-                gson.toJson(mQuestoes),
-                gson.toJson(mPaciente),
-                gson.toJson(getCurrentDate())
-            )
-            // Creating zero questao entity
-            PesquisaViewModel().updatePesquisa(
-                context = activity?.application!!.applicationContext,
-                id = mPesquisa.id,
-                questoes = mQuestoes
-            )
-
-            PesquisaViewModel().searchPesquisa(
-                context = activity?.application!!.applicationContext,
-                pesquisador = mPesquisador
-            )!!.observe(requireActivity(), {
-                val pesquisasQuantidade = it.size
-                PesquisadorRepository.updatePesquisador(requireActivity(), mPesquisador.name, pesquisasQuantidade)
-            })
-
-            PesquisadorRepository.searchPesquisador(
-                activity?.application!!.applicationContext,
-                mPesquisador.name,
-                mPesquisador.password
-            )!!.observe(requireActivity(), {
-                Log.d("DEBUG", "A quantidade de pesquisa final é ${it.pesquisas_quantidade}")
-            })
-
-            run {
-                activityIniciarPesquisa = Intent(activity, ActivityIniciarPesquisa::class.java).apply {
-                    putExtra(ActivityIniciarPesquisa.QUESTOES, gson.toJson(mQuestoes))
-                }
-                startActivity(activityIniciarPesquisa as Intent)
-            }
-        }
-        mButtonVoltar.setOnClickListener {
-            nextFragment = QuestionFragmentGeral()
-            fragmentTransaction.hide(lastFragment)
-            fragmentTransaction.show(nextFragment)
-            fragmentTransaction.addToBackStack(null)
-            fragmentTransaction.commit()
-        }
-    }*/
 }
