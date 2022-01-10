@@ -8,11 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.CheckBox
-import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
-import com.google.android.material.slider.Slider
 import com.google.gson.Gson
 import com.jimmystarling.providapesquisasatisfacao.R
 import com.jimmystarling.providapesquisasatisfacao.data.model.PacienteEntity
@@ -22,7 +18,6 @@ import com.jimmystarling.providapesquisasatisfacao.data.model.QuestaoEntity
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.lifecycleScope
 import com.jimmystarling.providapesquisasatisfacao.R.*
 import com.jimmystarling.providapesquisasatisfacao.data.utils.Constants
 import com.jimmystarling.providapesquisasatisfacao.data.utils.fromJson
@@ -96,25 +91,17 @@ class QuestionFragmentFinish : Fragment() {
             PesquisaViewModel().searchPesquisa(
                 context = activity?.application!!.applicationContext,
                 pesquisador = mResearcher
-            )!!.observe(requireActivity(), { surveys ->
+            )!!.observeOnce(requireActivity(), { surveys ->
                 lastSurvey = surveys.last()
                 lastSurveyQuestions =
                     Gson().fromJson<MutableList<QuestaoEntity>>(lastSurvey.questoes)
                 lastSurveyQuestions.forEach { question ->
                     mQuestions.add(question)
                 }
-            }).run {
+                PesquisaViewModel()
                 Log.d("DEBUG", "The final question variable is: $mQuestions")
-                // Updating pesquisa by pesquisador
-                PesquisaViewModel().searchPesquisa(
-                    appContext,
-                    mResearcher
-                )?.observeOnce(requireActivity(), {
-                    if (it != null) {
-                        finishQuestions(it.last())
-                    }
-                })
-            }
+                finishQuestions(lastSurvey, mQuestions)
+            })
         }// On click continuar listener
         mButtonReturn.setOnClickListener {
             val fragmentManager: FragmentManager = requireActivity().supportFragmentManager
@@ -122,15 +109,15 @@ class QuestionFragmentFinish : Fragment() {
         }
     }
 
-    private fun finishQuestions(lastSurvey: PesquisaEntity) {
+    private fun finishQuestions(lastSurvey: PesquisaEntity, questions: MutableList<QuestaoEntity>) {
         PesquisaViewModel().updatePesquisa(
             context = appContext,
             id = lastSurvey.id,
-            questoes = mQuestions
+            questoes = questions
         ).run {
             activityIniciarPesquisa = Intent(activity, ActivityIniciarPesquisa::class.java).apply {
                 putExtra(ActivityIniciarPesquisa.RESEARCHER, gson.toJson(mResearcher))
-                putExtra(ActivityIniciarPesquisa.QUESTOES, gson.toJson(mQuestions))
+                putExtra(ActivityIniciarPesquisa.QUESTOES, gson.toJson(this@QuestionFragmentFinish.mQuestions))
             }
             startActivity(activityIniciarPesquisa as Intent)
         }
