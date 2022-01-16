@@ -6,7 +6,7 @@ import retrofit2.http.FormUrlEncoded
 import retrofit2.http.POST
 
 interface GoogleSpreadsheetService {
-    @POST("1FAIpQLScFKGmmYPAZZS41JtqhI2urDhmYdv5NpEDKSsb4OnscTwe2bA/viewform?usp=pp_url&")
+    @POST("1FAIpQLScFKGmmYPAZZS41JtqhI2urDhmYdv5NpEDKSsb4OnscTwe2bA/viewform")//?usp=pp_url&
     @FormUrlEncoded
     fun completeFormPesquisaDeSatisfacao(
         @Field("entry.1565867496") satisfacao_atendimento_enfermagem: String,

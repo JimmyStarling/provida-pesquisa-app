@@ -25,7 +25,7 @@ class PesquisaRepository {
         var pesquisaEntity: LiveData<PesquisaEntity>? = null
         var pesquisas: LiveData<List<PesquisaEntity>>? = null
 
-        private fun initializeDB(context: Context) : ProvidaDatabase {
+        fun initializeDB(context: Context) : ProvidaDatabase {
             return ProvidaDatabase.getDataseClient(context)
         }
 
