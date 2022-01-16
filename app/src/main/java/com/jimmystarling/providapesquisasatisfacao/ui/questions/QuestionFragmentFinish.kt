@@ -98,7 +98,6 @@ class QuestionFragmentFinish : Fragment() {
                 lastSurveyQuestions.forEach { question ->
                     mQuestions.add(question)
                 }
-                PesquisaViewModel()
                 Log.d("DEBUG", "The final question variable is: $mQuestions")
                 finishQuestions(lastSurvey, mQuestions)
             })
