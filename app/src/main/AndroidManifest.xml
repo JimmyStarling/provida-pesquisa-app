@@ -11,7 +11,7 @@
         android:theme="@style/Theme.ProvidaPesquisaSatisfacao">
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.android.example.provider"
+            android:authorities="com.jimmystarling.providapesquisasatisfacao"
             android:exported="false"
             android:enabled="true"
             android:grantUriPermissions="true">

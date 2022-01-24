@@ -18,12 +18,14 @@ import com.jimmystarling.providapesquisasatisfacao.data.model.QuestaoEntity
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import androidx.fragment.app.FragmentManager
+import com.github.doyaaaaaken.kotlincsv.dsl.csvWriter
 import com.jimmystarling.providapesquisasatisfacao.R.*
 import com.jimmystarling.providapesquisasatisfacao.data.utils.Constants
 import com.jimmystarling.providapesquisasatisfacao.data.utils.fromJson
 import com.jimmystarling.providapesquisasatisfacao.data.utils.observeOnce
 import com.jimmystarling.providapesquisasatisfacao.ui.ActivityIniciarPesquisa
 import com.jimmystarling.providapesquisasatisfacao.ui.ActivityIniciarPesquisa.Companion.activityIniciarPesquisa
+import java.io.File
 import java.util.*
 
 

@@ -109,4 +109,7 @@
     <string name="name">Seu Nome e Sobrenome</string>
     <string name="question_content_reclamacao">RECLAMACAO</string>
     <string name="question_content_sugestao">SUGESTAO</string>
+    <string name="cancel">Cancelar</string>
+    <string name="save">Salvar</string>
+    <string name="dialog_pesquisa_title">Baixar e Importar Pesquisas</string>
 </resources>

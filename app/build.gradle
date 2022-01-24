@@ -79,4 +79,5 @@ dependencies {
     testImplementation "androidx.room:room-testing:$room_version"
     // optional - Paging 3 Integration
     implementation "androidx.room:room-paging:2.4.0-beta01"
+    implementation "com.github.doyaaaaaken:kotlin-csv-jvm:0.9.0"
 }
