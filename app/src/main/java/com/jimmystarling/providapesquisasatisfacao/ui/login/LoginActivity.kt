@@ -9,24 +9,23 @@ import androidx.appcompat.app.AppCompatActivity
 import android.widget.Toast
 
 import com.google.gson.Gson
+import com.jimmystarling.providapesquisasatisfacao.R
 import com.jimmystarling.providapesquisasatisfacao.data.model.PesquisaEntity
 import com.jimmystarling.providapesquisasatisfacao.data.model.PesquisadorEntity
-import kotlinx.serialization.json.Json
 import com.jimmystarling.providapesquisasatisfacao.databinding.ActivityLoginBinding
 import com.jimmystarling.providapesquisasatisfacao.ui.ActivityIniciarPesquisa
 
 import com.jimmystarling.providapesquisasatisfacao.ui.login.viewmodel.LoginViewModel
-import com.jimmystarling.providapesquisasatisfacao.ui.questions.PesquisaActivity
-import kotlinx.serialization.decodeFromString
 
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var loginViewModel: LoginViewModel
     private lateinit var binding: ActivityLoginBinding
 
-    lateinit var pesquisador: PesquisadorEntity
+    lateinit var pesquisa: PesquisaEntity
 
     lateinit var context: Context
+    lateinit var activityIniciarPesquisa: Intent
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,88 +37,114 @@ class LoginActivity : AppCompatActivity() {
 
         loginViewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
 
-        val username = binding.username
-        val password = binding.password
+        val name = binding.nameResearcher
+        val password = binding.passwordResearcher
         val login = binding.login
-        val cadastrar = binding.cadastrar
-        //val loading = binding.loading
+        val signup = binding.cadastrar
+
+        var mPesquisador: PesquisadorEntity?
+        var pesquisasCount: Int? = 0
+
+        val pesquisadorName = name.text
+        val pesquisadorPassword = password.text
 
         login.setOnClickListener {
-            loginViewModel.getPesquisador(
-                context,
-                username.text.toString().trim(),
-                password.text.toString().trim()
-            )!!.observe(this, {
-                if (it == null){
-                    Toast.makeText(
-                        context,
-                        "Usuario ou senha incorretos!",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                } else {
-                    pesquisador = it
-
-                    val strName = it.name
-
-                    val mpesquisas = pesquisador.pesquisas.dropLast(1)
-                    val pesquisas = mpesquisas.drop(1)
-                    val pesquisas_data = Json.decodeFromString<PesquisaEntity>(pesquisas)
-
-                    Toast.makeText(
-                        context,
-                        "Bem vindo novamente! Sr(a) ${strName}, suas pesquisas são ${pesquisas_data}",
-                        Toast.LENGTH_SHORT
-                    ).show()
-
-                    val intent = Intent(this, ActivityIniciarPesquisa::class.java).apply {
-                        putExtra(PESQUISADOR, gson.toJson(pesquisador))
-                    }
-                    startActivity(intent)
-                }
-            })
-        }
-        cadastrar.setOnClickListener{
-            if(password.text.isEmpty() || username.text.isEmpty()){
+            if (name.text.isEmpty() || password.text.isEmpty()) {
                 Toast.makeText(
                     context,
-                    "Porfavor, preencha todos os campos.",
-                    Toast.LENGTH_SHORT
-                ).show()
-            } else if (it == null){
-                Toast.makeText(
-                    context,
-                    "Você já está cadastrado(a)! Porfavor realize o login com sua senha.",
+                    R.string.empty_fills_message,
                     Toast.LENGTH_SHORT
                 ).show()
             } else {
-                val nome: String = username.text.toString().trim()
-                val credencial: String = password.text.toString().trim()
-                pesquisador = PesquisadorEntity(
-                    nome,
-                    pesquisas = gson.toJson(listOf(
-                        PesquisaEntity(nome, "", "")
-                    )),
-                    pesquisas_quantidade = 0,
-                    credencial
-                )
-
-                loginViewModel.registerPesquisador(context, pesquisador)
-                Toast.makeText(context, "Você foi cadastrado com sucesso!", Toast.LENGTH_SHORT)
-                    .show()
-
-                val intent = Intent(this, ActivityIniciarPesquisa::class.java).apply {
-                    putExtra(PESQUISADOR, gson.toJson(pesquisador))
-                }
-                startActivity(intent)
+                loginViewModel.searchPesquisador(
+                    context,
+                    pesquisadorName.toString().trim(),
+                    pesquisadorPassword.toString().trim()
+                )!!.observe(this, { pesquisador ->
+                    if (pesquisador == null) {
+                        Toast.makeText(
+                            context,
+                            getString(R.string.wrong_user_inputs),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    } else {
+                        loginViewModel.searchPesquisadorPesquisas(context, pesquisador)!!
+                            .observe(this, { pesquisas ->
+                                Toast.makeText(
+                                    context,
+                                    "Bem vindo novamente! Sr(a) ${pesquisador.name}, suas pesquisas são ${gson.toJson(pesquisas)}",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                Log.d("DEBUG", "Pesquisas do Pesquisador : ${gson.toJson(pesquisas)}")
+                                pesquisas.forEach{
+                                    pesquisasCount = pesquisasCount?.plus(1)
+                                }
+                            })
+                        mPesquisador = PesquisadorEntity(
+                            pesquisadorName.toString().trim(),
+                            pesquisadorPassword.toString().trim(),
+                            pesquisasCount!!
+                        )
+                        Log.d("DEBUG", "Pesquisador: ${gson.toJson(pesquisador)}")
+                        activityIniciarPesquisa =
+                            Intent(this, ActivityIniciarPesquisa::class.java).apply {
+                                putExtra(RESEARCHER, gson.toJson(mPesquisador))
+                            }
+                        startActivity(activityIniciarPesquisa)
+                    }
+                })
             }
         }
 
-
+        signup.setOnClickListener {
+            if (name.text.isEmpty() || password.text.isEmpty()) {
+                Toast.makeText(
+                    context,
+                    R.string.empty_fills_message,
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else {
+                loginViewModel.searchPesquisador(
+                    context,
+                    pesquisadorName.trim().toString(),
+                    pesquisadorPassword.trim().toString()
+                )!!.observe(this, { pesquisador ->
+                    if (pesquisador != null) {
+                        Toast.makeText(
+                            context,
+                            R.string.already_registered_message,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    } else {
+                        signupPesquisador(pesquisadorName.trim().toString(), pesquisadorPassword.trim().toString())
+                        activityIniciarPesquisa =
+                            Intent(this, ActivityIniciarPesquisa::class.java).apply {
+                                putExtra(RESEARCHER, gson.toJson(pesquisador))
+                            }
+                        startActivity(intent)
+                    }
+                })
+            }
+        }
     }
+    private fun signupPesquisador(name: String, password: String) {
+        val mPesquisadorEntity = PesquisadorEntity(
+            name,
+            password,
+            0,
+        )
+        loginViewModel.registerPesquisador(context, mPesquisadorEntity)
+        Toast.makeText(context, getString(R.string.sucessful_signup), Toast.LENGTH_SHORT)
+            .show()
 
+        activityIniciarPesquisa =
+            Intent(this, ActivityIniciarPesquisa::class.java).apply {
+                putExtra(RESEARCHER, gson.toJson(mPesquisadorEntity))
+            }
+        startActivity(activityIniciarPesquisa)
+    }
     companion object {
-
         var gson = Gson()
-        const val PESQUISADOR = "PESQUISADOR"
+        const val RESEARCHER = "RESEARCHER"
     }
 }

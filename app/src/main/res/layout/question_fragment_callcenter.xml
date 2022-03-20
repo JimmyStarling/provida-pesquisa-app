@@ -26,13 +26,13 @@
         app:layout_constraintVertical_bias="0.251" />
 
     <TextView
-        android:id="@+id/title_atendimento"
+        android:id="@+id/title_callcenter"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="100dp"
+        android:layout_marginStart="36dp"
         android:layout_marginTop="36dp"
-        android:layout_marginEnd="100dp"
-        android:text="@string/title_question_agilidade"
+        android:layout_marginEnd="36dp"
+        android:text="@string/title_question_atendimento_callcenter"
         android:textAlignment="center"
         android:textColor="@color/blue_700"
         android:textSize="20sp"
@@ -50,25 +50,25 @@
         android:src="@drawable/enfermagem"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title_content" />
+        app:layout_constraintTop_toBottomOf="@+id/title_content_callcenter" />
 
     <TextView
-        android:id="@+id/title_content"
+        android:id="@+id/title_content_callcenter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="@string/title_question_enf"
+        android:text="@string/title_question_atendimento_callcenter_2"
         android:textAlignment="center"
         android:textColor="@color/blue_700"
-        android:textSize="34sp"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title_atendimento"
+        app:layout_constraintTop_toBottomOf="@+id/title_callcenter"
         app:layout_constraintVertical_bias="0.0" />
 
     <com.google.android.material.slider.Slider
-        android:id="@+id/slider_quality"
+        android:id="@+id/slider_quality_callcenter"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -83,12 +83,11 @@
         android:id="@+id/question_classification"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/slider_quality">
+        app:layout_constraintTop_toBottomOf="@+id/slider_quality_callcenter">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -129,7 +128,7 @@
                 android:id="@+id/txt_boa"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/boa" />
+                android:text="@string/regular" />
         </LinearLayout>
 
         <Space
@@ -152,7 +151,7 @@
                 android:id="@+id/txt_regular"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/regular" />
+                android:text="@string/boa" />
         </LinearLayout>
 
         <Space
@@ -180,7 +179,7 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/btn_continuar"
+        android:id="@+id/btn_continuar_callcenter"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
@@ -194,11 +193,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/question_classification"
-        app:layout_constraintVertical_bias="0.218" />
+        app:layout_constraintTop_toBottomOf="@+id/checkbox_callcenter"
+        app:layout_constraintVertical_bias="0.309" />
 
     <Button
-        android:id="@+id/btn_voltar"
+        android:id="@+id/btn_voltar_callcenter"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
@@ -214,6 +213,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_continuar"
+        app:layout_constraintTop_toBottomOf="@+id/btn_continuar_callcenter"
         app:layout_constraintVertical_bias="0.146" />
+
+    <CheckBox
+        android:id="@+id/checkbox_callcenter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="149dp"
+        android:layout_marginEnd="170dp"
+        android:text="@string/yes_callcenter"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/question_classification" />
 </androidx.constraintlayout.widget.ConstraintLayout>

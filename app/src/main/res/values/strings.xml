@@ -6,7 +6,7 @@
     <string name="action_sign_in">Entre ou cadastre-se</string>
     <string name="action_sign_in_short">Entrar</string>
     <string name="welcome">"Bem vindo(a) !"</string>
-    <string name="invalid_username">Seu usuário é invalido.</string>
+    <string name="invalid_name">Seu usuário é invalido.</string>
     <string name="invalid_password">A sua senha precisa ter >5 caracteres</string>
     <string name="login_failed">"Login falhou!</string>
     <string name="title_login_string">Faça login para começar as pesquisas</string>
@@ -19,6 +19,12 @@
         Em uma escala de 10 a 0
         QUAL A SUA AVALIAÇÃO
         QUANTO À AGILIDADE NO ATENDIMENTO
+    </string>
+    <string name="title_question_estrutura">
+        Qual sua satisfação com relação à estrutura do Multicentro Dr. Adriano Pondé?
+    </string>
+    <string name="title_question_limpeza">
+        Qual sua satisfação com relação à limpeza do Multicentro Dr. Adriano Pondé?
     </string>
     <string name="title_question_atendimento_callcenter">
         JÁ FEZ USO DO ATENDIMENTO DO SERVIÇO DE CALL CENTER?
@@ -59,8 +65,8 @@
         DESEJA REGISTRAR ALGUMA SUGESTÃO?
     </string>
     <string name="title_finish">
-        AGRADECEMOS SUA COLABORAÇÃO.
-        ESTES DADOS SERVIRÃO PARA MELHORARMOS O ATENDIMENTO PARA VOCÊ.
+        Agradecemos sua colaboração!
+        Estes dados servirão para melhorarmos o atendimento para você.
     </string>
     <string name="provida_logomarca">Provida logomarca</string>
     <string name="imagem_da_enfermagem">Imagem da Enfermagem - Ilustração</string>
@@ -82,4 +88,28 @@
     <string name="contato">Contato</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="already_registered_message">Você já está cadastrado(a)! Por favor realize o login com sua senha.</string>
+    <string name="empty_fills_message">Por favor, preencha todos os campos.</string>
+    <string name="wrong_user_inputs">Usuario ou senha incorretos!</string>
+    <string name="sucessful_signup">Você foi cadastrado com sucesso!</string>
+    <string name="logotype">Logotype</string>
+    <string name="campo_para_registro_de_sugest_o_se_houver">Campo para registro de sugestão (se houver)</string>
+    <string name="campo_para_registro_de_reclama_o_se_houver">Campo para registro de reclamação (se houver)</string>
+    <string name="finalizar">Finalizar</string>
+    <string name="carregar_pesquisas">Carregar Pesquisas</string>
+    <string name="sua_quantidade_de_pesquisas_s_o">Sua quantidade de pesquisas são:</string>
+    <string name="yes_callcenter">Sim já utilizei os serviços de callcenter.</string>
+    <string name="estrutura_title">ESTRUTURA</string>
+    <string name="title_content_limpeza">LIMPEZA</string>
+    <string name="answer_nulo">Nulo</string>
+    <string name="not_answering">Não respondeu</string>
+    <string name="callcenter_title">CALLCENTER</string>
+    <string name="limpeza_title">LIMPEZA</string>
+    <string name="geral_title">GERAL</string>
+    <string name="name">Seu Nome e Sobrenome</string>
+    <string name="question_content_reclamacao">RECLAMACAO</string>
+    <string name="question_content_sugestao">SUGESTAO</string>
+    <string name="cancel">Cancelar</string>
+    <string name="save">Salvar</string>
+    <string name="dialog_pesquisa_title">Baixar e Importar Pesquisas</string>
 </resources>

@@ -11,6 +11,8 @@ import com.jimmystarling.providapesquisasatisfacao.data.model.QuestaoEntity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.encodeToJsonElement
 
 class PesquisaRepository {
 
@@ -21,53 +23,63 @@ class PesquisaRepository {
         var providaDatabase: ProvidaDatabase? = null
 
         var pesquisaEntity: LiveData<PesquisaEntity>? = null
+        var pesquisas: LiveData<List<PesquisaEntity>>? = null
 
         fun initializeDB(context: Context) : ProvidaDatabase {
             return ProvidaDatabase.getDataseClient(context)
         }
 
-        fun registerPesquisa(context: Context, pesquisador: PesquisadorEntity, questoes: List<QuestaoEntity>, paciente: PacienteEntity) {
+        fun registerPesquisa(context: Context, pesquisa: PesquisaEntity) {
 
             providaDatabase = initializeDB(context)
 
             CoroutineScope(Dispatchers.IO).launch {
-                val pesquisaDetails = PesquisaEntity(gson.toJson(pesquisador), gson.toJson(questoes), gson.toJson(paciente))
-                providaDatabase!!.databaseDao().registerPesquisa(pesquisaDetails)
+                val mPesquisa = PesquisaEntity(
+                    pesquisa.pesquisador,
+                    pesquisa.questoes,
+                    pesquisa.paciente,
+                    pesquisa.date
+                )
+                providaDatabase!!.databaseDao().registerPesquisa(
+                    mPesquisa
+                )
             }
 
         }
 
         // Here will pass the appended variable to questoes list and convert it to json
-        fun updatePesquisa(context: Context, pesquisa: PesquisaEntity, pesquisador: PesquisadorEntity, questoes: List<QuestaoEntity>, paciente: PacienteEntity) {
+        fun updatePesquisa(
+            context: Context,
+            id: Int?,
+            questoes: MutableList<QuestaoEntity>
+        ) {
+            val questoesJson: String = Json.encodeToJsonElement(questoes).toString()
 
             providaDatabase = initializeDB(context)
 
             CoroutineScope(Dispatchers.IO).launch {
-                providaDatabase!!.databaseDao().updatePesquisa(pesquisa.id, gson.toJson(pesquisador), gson.toJson(questoes), gson.toJson(paciente))
+                providaDatabase!!.databaseDao().updatePesquisa(id, questoesJson)
             }
 
         }
 
-        fun getPesquisa(context: Context,  pesquisador: PesquisadorEntity): LiveData<PesquisaEntity>? {
+        fun searchPesquisa(context: Context,  pesquisador: PesquisadorEntity): LiveData<List<PesquisaEntity>>? {
 
             providaDatabase = initializeDB(context)
 
-            pesquisaEntity = providaDatabase!!.databaseDao().getPesquisa(gson.toJson(pesquisador))
+            pesquisas = providaDatabase!!.databaseDao().searchPesquisa(gson.toJson(pesquisador))
 
-            return pesquisaEntity
+            return pesquisas
 
         }
 
         // Update Pesquisador
         // Here will pass the variable pesquisa appended to pesquisas converted to json to updatePesquisador
-        fun updatePesquisador(context: Context, pesquisador: PesquisadorEntity, pesquisas: List<PesquisaEntity>, quantidade_pesquisa: Int){
+        fun updatePesquisador(context: Context, pesquisador: PesquisadorEntity, pesquisas_quanidade: Int){
             providaDatabase = initializeDB(context)
 
-            val pesquisas_json = gson.toJson(pesquisas)
-            val quantidade_pesquisas_json = gson.toJson(quantidade_pesquisa)
-
             CoroutineScope(Dispatchers.IO).launch {
-                providaDatabase!!.databaseDao().updatePesquisador(pesquisador.id, pesquisas_json, quantidade_pesquisas_json)
+                providaDatabase!!.databaseDao().updatePesquisador(pesquisador.name, pesquisas_quanidade)
             }
         }
     }

@@ -10,15 +10,15 @@ import com.jimmystarling.providapesquisasatisfacao.data.model.QuestaoEntity
 import com.jimmystarling.providapesquisasatisfacao.data.repository.PesquisaRepository
 
 class PesquisaViewModel : ViewModel() {
-    fun registerPesquisa(context: Context, pesquisador: PesquisadorEntity, questoes: List<QuestaoEntity>, paciente: PacienteEntity){
-        return PesquisaRepository.registerPesquisa(context, pesquisador, questoes, paciente)
+    fun registerPesquisa(context: Context, pesquisa: PesquisaEntity) {
+        return PesquisaRepository.registerPesquisa(context, pesquisa)
     }
 
-    fun getPesquisa(context: Context, pesquisador: PesquisadorEntity): LiveData<PesquisaEntity>? {
-        return PesquisaRepository.getPesquisa(context, pesquisador)
+    fun searchPesquisa(context: Context, pesquisador: PesquisadorEntity): LiveData<List<PesquisaEntity>>? {
+        return PesquisaRepository.searchPesquisa(context, pesquisador)
     }
 
-    fun updatePesquisa(context: Context, pesquisa: PesquisaEntity, pesquisador: PesquisadorEntity, questoes: List<QuestaoEntity>, paciente: PacienteEntity){
-        return PesquisaRepository.updatePesquisa(context, pesquisa, pesquisador, questoes, paciente)
+    fun updatePesquisa(context: Context, id: Int?, questoes: MutableList<QuestaoEntity>){
+        return PesquisaRepository.updatePesquisa(context, id, questoes)
     }
 }

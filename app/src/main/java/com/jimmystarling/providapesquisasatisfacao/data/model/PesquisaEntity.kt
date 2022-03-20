@@ -18,6 +18,9 @@ data class PesquisaEntity(
     @ColumnInfo(name = "paciente")
     @SerializedName("paciente")
     var paciente: String,
+    @ColumnInfo(name = "date")
+    @SerializedName("date")
+    var date: String,
 ){
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")

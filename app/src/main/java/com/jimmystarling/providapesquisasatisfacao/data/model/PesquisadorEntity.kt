@@ -14,16 +14,12 @@ data class PesquisadorEntity (
     @ColumnInfo(name = "name")
     @SerializedName("name")
     var name: String,
-    @ColumnInfo(name = "pesquisas")
-    @SerializedName("pesquisas")
-    var pesquisas: String,
-    @ColumnInfo(name = "pesquisas_quantidade")
-    @SerializedName("pesquisas_quantidade")
-    var pesquisas_quantidade: Int,
     @ColumnInfo(name = "password")
     @SerializedName("password")
-    var password: String
-
+    var password: String,
+    @ColumnInfo(name = "pesquisas_quantidade")
+    @SerializedName("pesquisas_quantidade")
+    var pesquisas_quantidade: Int
 ) {
 
     @PrimaryKey(autoGenerate = true)
